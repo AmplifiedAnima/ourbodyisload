@@ -11,4 +11,6 @@ export const ButtonStylingForApp = {
     background: "black",
     color: "white",
   },
+  "@media (max-width: 768px)": { fontSize: "12px" },
+  "@media (max-width: 280px)": { fontSize: "8px" },
 };

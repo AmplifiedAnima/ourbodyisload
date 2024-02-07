@@ -13,7 +13,7 @@ export const StyleWrapper = styled.div`
     display: none;
   }
   .fc ::-webkit-scrollbar-track {
-    background-color: white;
+    background-color: #f7f2fa;
     width: 12px;
   }
 
@@ -30,8 +30,10 @@ export const StyleWrapper = styled.div`
   .fc {
     scrollbar-width: thin;
     scrollbar-color: #black;
-    height: 100vh
+    height: 100vh;
+  
   }
+
   .fc .fc-daygrid-day {
     overflow: auto;
     height: 10%;
@@ -69,6 +71,7 @@ export const StyleWrapper = styled.div`
     position: relative;
     z-index: 1;
   }
+
   .fc tr {
     background: #f7f2fa;
   }
@@ -85,8 +88,7 @@ export const StyleWrapper = styled.div`
   }
 
   .fc .fc-daygrid-day-number {
-    display: normal;
-    align-items: center;
+  padding:2px;
 
   }
 
@@ -99,19 +101,23 @@ export const StyleWrapper = styled.div`
     background-color: #f2f0fa;
     color: black;
   }
+
   .fc .fc-prev-button,
   .fc .fc-next-button,
   .fc .fc-timeGridDay-button,
   .fc-dayGridMonth-button,
+  .fc .fc-listMonth-button:not(:disabled).fc-button-active,
   .fc .fc-button-primary:not(:disabled).fc-button-active,
-  .fc .fc-button-primary:not(:disabled):active {
+  .fc .fc-button-primary:not(:disabled):active,
+  .fc-listMonth-button.fc-button.fc-button-primary:not(.fc-button-active),
+  .fc .fc-today-button   {
     background-color: #6a1b9a;
     color: white;
-    padding: 4px 8px;
+    padding: 6px 10px;
     font-size: 16px;
     border-radius: 4px;
     cursor: pointer;
-    margin: 0px 3px;
+    margin: 3px 6px;
     &:hover {
       background-color: #7e57c2;
       border-color: #673ab7;
@@ -124,11 +130,6 @@ export const StyleWrapper = styled.div`
 
   .fc .fc-toolbar-title {
     color: #6a1b9a;
-  }
-
-  .fc .fc-today-button {
-    background-color: #6a1b9a;
-    color: white;
   }
 
   .fc .fc-list-event-dot {
@@ -168,8 +169,8 @@ export const StyleWrapper = styled.div`
       font-size: 2px;
     }
     .fc .fc-daygrid-day-number {
-      font-size: 8px;
-   
+      font-size: 12px;
+      margin-left:4px;
     }
     .fc .fc-toolbar-title {
       font-size: 16px;
@@ -177,23 +178,36 @@ export const StyleWrapper = styled.div`
   }
 
   @media (max-width: 280px) {
+    .fc {
+      height: 100vh;
+      width 100vw;
+    }
+
     .fc .fc-today-button {
       margin: 0;
       padding: 5px 5px;
       font-size: 8px;
     }
+
+    .fc .fc-button,
+    .fc .fc-today-button,
     .fc .fc-prev-button,
     .fc .fc-next-button,
     .fc .fc-timeGridDay-button,
-    .fc-dayGridMonth-button {
-      margin: 10px 10px;
-      padding: 6px 6px;
-      font-size: 4px;
+    .fc-dayGridMonth-button,
+    .fc .fc-listMonth-button:not(:disabled).fc-button-active,
+    .fc .fc-button-primary:not(:disabled).fc-button-active,
+    .fc .fc-button-primary:not(:disabled):active {
+      margin: 4px;
+      padding: 4px;
+      font-size: 9px; 
     }
+
     .fc-daygrid-day-events {
       height: 0px;
       font-size: 0px;
     }
+
     .fc-dayGridMonth-view fc-view fc-daygrid {
       height: 653px;
     }
@@ -207,10 +221,7 @@ export const StyleWrapper = styled.div`
       overflow: auto;
       height: auto;
     }
-    .fc {
-      height: 100vh;
-      width 100vw;
-    }
+
 
     .fc-daygrid-day {
       height: 40px;
@@ -222,10 +233,9 @@ export const StyleWrapper = styled.div`
     }
    
     .fc .fc-toolbar-title {
-      font-size: 18px;
-    }
-    .fc-day fc-day-wed fc-day-past fc-day-other fc-daygrid-day {
-      height:40px;
+      font-size: 14px;
+      margin: 6px
     }
   }
+
 `;

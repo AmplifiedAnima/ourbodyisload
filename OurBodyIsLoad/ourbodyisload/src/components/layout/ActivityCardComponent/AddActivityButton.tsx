@@ -16,7 +16,7 @@ export const AddActivityButton: React.FC<AddActivityButtonProps> = ({
         sx={ButtonStylingForApp}
         aria-label="Add Activity"
       >
-        <AddIcon /> Add Activity
+        <AddIcon /> ADD ACTIVITY
       </Button>
     </>
   );
@@ -32,7 +32,7 @@ export const AddTrainingPlanButton: React.FC<AddActivityButtonProps> = ({
         sx={{ ...ButtonStylingForApp, margin: "0px 5px" }}
         aria-label="Add Activity"
       >
-        <AddIcon /> Add training plan
+        <AddIcon />ADD TRAINING PLAN
       </Button>
     </>
   );

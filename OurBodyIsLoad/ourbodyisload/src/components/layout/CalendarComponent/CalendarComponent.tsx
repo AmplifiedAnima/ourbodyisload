@@ -6,7 +6,7 @@ import interactionPlugin from "@fullcalendar/interaction";
 import FullCalendar from "@fullcalendar/react";
 
 import { StyleWrapper } from "./CalendarStylings";
-import { Box } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { AppDispatch, RootState } from "../../../store/store";
 import { useSelector } from "react-redux";
@@ -26,11 +26,9 @@ import { AuthState } from "../../../store/slices/authSlice";
 import { ClassVideoModal } from "./ClassVideoModal";
 import { LoginToAccessThisPartComponent } from "../LoginToAccessThisPartComponent/LoginToAccessThisPartComponent";
 import { TrainingPlanModal } from "../ActivityCardComponent/TrainingPlanModal";
-import {
-  LegendComponent,
-  eventsProp,
-  renderEventInsides,
-} from "./CalendarComponentUtils";
+import { eventsProp, renderEventInsides } from "./CalendarComponentUtils";
+import { LegendComponent } from "./CalendarComponentIconsAndLegend";
+import { ButtonStylingForApp } from "../../../globalStyles/ButtonStylingForApp";
 
 const CalendarComponent: React.FC = () => {
   const preExistingClasses = useSelector<
@@ -50,12 +48,14 @@ const CalendarComponent: React.FC = () => {
   const [showAddTrainingPlanModal, setshowAddTrainingPlanModal] =
     useState(false);
   const [showVideoClassModal, setShowVideoClassModal] = useState(false);
-  const [selectedClass, setSelectedClass] =
-    useState<UserChosenClassesInterface>();
+
+  const [openLegend, setOpenLegend] = useState(false);
 
   const [isCalendarView, setIsCalendarView] = useState(true);
   const [isListView, setIsListView] = useState(false);
 
+  const [selectedClass, setSelectedClass] =
+    useState<UserChosenClassesInterface>();
   useEffect(() => {
     if (authState.isLoggedIn) {
       dispatch(fetchUserChosenClasses());
@@ -100,10 +100,13 @@ const CalendarComponent: React.FC = () => {
       setShowVideoClassModal,
       userChosenClasses,
     });
+    
   const handleDayClick = () => {
     console.log();
   };
-
+  const toggleLegend = () => {
+    setOpenLegend(!openLegend);
+  };
   return (
     <>
       {authState.isLoggedIn ? (
@@ -123,10 +126,13 @@ const CalendarComponent: React.FC = () => {
                 <AddTrainingPlanButton
                   OpenModal={() => setshowAddTrainingPlanModal(true)}
                 />
-                <LegendComponent />
               </Box>
+              <LegendComponent open={openLegend} />
             </>
           )}
+          <Button sx={ButtonStylingForApp} onClick={toggleLegend}>
+            LEGEND
+          </Button>
           {showAddActivityModal && (
             <ActivityModal
               open={showAddActivityModal}
