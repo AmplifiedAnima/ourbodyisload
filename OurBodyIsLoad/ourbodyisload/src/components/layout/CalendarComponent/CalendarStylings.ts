@@ -30,6 +30,7 @@ export const StyleWrapper = styled.div`
   .fc {
     scrollbar-width: thin;
     scrollbar-color: #black;
+    height: 100vh
   }
   .fc .fc-daygrid-day {
     overflow: auto;
@@ -86,6 +87,7 @@ export const StyleWrapper = styled.div`
   .fc .fc-daygrid-day-number {
     display: normal;
     align-items: center;
+
   }
 
   .fc td {
@@ -94,8 +96,8 @@ export const StyleWrapper = styled.div`
 
   .fc-day-selected,
   .fc .fc-day-today {
-    background-color: #7d4b99;
-    color: white;
+    background-color: #f2f0fa;
+    color: black;
   }
   .fc .fc-prev-button,
   .fc .fc-next-button,
@@ -138,7 +140,7 @@ export const StyleWrapper = styled.div`
     height: 100%;
 
     fc-daygrid-day-frame fc-scrollgrid-sync-inner {
-      height: 100%;
+      height: 0px;
     }
     .fc ::-webkit-scrollbar {
       width: 8px;
@@ -152,15 +154,22 @@ export const StyleWrapper = styled.div`
       width: 8px;
     }
     .fc {
-      height: 100%;
+      height: auto;
     }
-
+    .fc-daygrid-day-events {
+      height: 0px;
+      font-size: 0px;
+    }
     .fc-daygrid-day {
-      height: 100%;
+      height: auto;
     }
     .fc-daygrid-day-frame {
-      height: 100%;
+      height: auto;
       font-size: 2px;
+    }
+    .fc .fc-daygrid-day-number {
+      font-size: 8px;
+   
     }
     .fc .fc-toolbar-title {
       font-size: 16px;
@@ -182,26 +191,41 @@ export const StyleWrapper = styled.div`
       font-size: 4px;
     }
     .fc-daygrid-day-events {
-      height: 0%;
+      height: 0px;
+      font-size: 0px;
     }
+    .fc-dayGridMonth-view fc-view fc-daygrid {
+      height: 653px;
+    }
+
     .fc .fc-toolbar-title {
       font-size: 20px;
     }
+
+ 
     .fc .fc-daygrid-day {
-      overflow: hidden;
+      overflow: auto;
+      height: auto;
     }
     .fc {
-      height: 100%;
+      height: 100vh;
+      width 100vw;
     }
 
     .fc-daygrid-day {
-      height: 100%;
+      height: 40px;
+      width 100vw;
     }
-    .fc-daygrid-day-frame {
-      height: 100%;
+    .fc .fc-daygrid-day-frame {
+      height: 40px;
+      width: 100%;
     }
+   
     .fc .fc-toolbar-title {
       font-size: 18px;
+    }
+    .fc-day fc-day-wed fc-day-past fc-day-other fc-daygrid-day {
+      height:40px;
     }
   }
 `;

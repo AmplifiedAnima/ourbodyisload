@@ -30,6 +30,8 @@ export const ActivityModal: React.FC<ActivityModalProps> = ({
 }) => {
   const [isSchedulingModalOpen, setSchedulingModalOpen] = useState(false);
   const [selectedActivityId, setSelectedActivityId] = useState<string>("");
+  const [selectedName, setSelectedName] = useState<string>("");
+  const [selectedDescription, setSelectedDecsription] = useState<string>("");
   const [selectedActivityThumbnail, setSelectedActivityThumbnail] =
     useState<string>("");
 
@@ -42,6 +44,8 @@ export const ActivityModal: React.FC<ActivityModalProps> = ({
       setSelectedActivityThumbnail(
         getYouTubeThumbnail(selectedActivity.videoUrl)
       );
+      setSelectedName(selectedActivity.name);
+      setSelectedDecsription(selectedActivity.description);
       setSchedulingModalOpen(true);
     }
   };
@@ -54,6 +58,7 @@ export const ActivityModal: React.FC<ActivityModalProps> = ({
     if (!videoId) return "";
     return `https://img.youtube.com/vi/${videoId}/${quality}.jpg`;
   };
+
   return (
     <Modal
       open={open}
@@ -87,7 +92,7 @@ export const ActivityModal: React.FC<ActivityModalProps> = ({
             letterSpacing: "10px",
             "@media (max-width: 768px)": {
               fontSize: "18px",
-            letterSpacing:'5px'
+              letterSpacing: "5px",
             },
           }}
         >
@@ -95,26 +100,23 @@ export const ActivityModal: React.FC<ActivityModalProps> = ({
         </Typography>
         <GridContainer>
           {preExistingClassesProps?.map((activity) => (
-            <>
-              <ActivityCard
-                key={`activity_${activity.id}`}
-                title={activity.name}
-                imageUrl={getYouTubeThumbnail(activity.videoUrl)}
-                onSelect={() => handleSelectActivity(activity.id)}
-              />
-
-              <ActivityModalScheduling
-                key={activity.id}
-                open={isSchedulingModalOpen}
-                onClose={() => setSchedulingModalOpen(false)}
-                selectedActivityId={selectedActivityId}
-                onClosePreviousModal={handleClose}
-                imageUrl={selectedActivityThumbnail}
-                title={activity.name}
-                description={activity.description}
-              />
-            </>
+            <ActivityCard
+              key={`activity_${activity.id}`}
+              title={activity.name}
+              imageUrl={getYouTubeThumbnail(activity.videoUrl)}
+              onSelect={() => handleSelectActivity(activity.id)}
+            />
           ))}
+          <ActivityModalScheduling
+            key={selectedActivityId}
+            open={isSchedulingModalOpen}
+            onClose={() => setSchedulingModalOpen(false)}
+            selectedActivityId={selectedActivityId}
+            onClosePreviousModal={handleClose}
+            imageUrl={selectedActivityThumbnail}
+            title={selectedName}
+            description={selectedDescription}
+          />
         </GridContainer>
         <Button
           onClick={handleClose}

@@ -96,6 +96,7 @@ export const ActivityModalScheduling: React.FC<ScheduleActivityModalProps> = ({
         }}
       >
         <Typography variant="h5">{title}</Typography>
+        <Typography variant="body1">{description}</Typography>
 
         <CardMedia
           image={imageUrl}

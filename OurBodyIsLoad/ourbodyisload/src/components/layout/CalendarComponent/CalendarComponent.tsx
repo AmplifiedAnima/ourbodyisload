@@ -26,7 +26,11 @@ import { AuthState } from "../../../store/slices/authSlice";
 import { ClassVideoModal } from "./ClassVideoModal";
 import { LoginToAccessThisPartComponent } from "../LoginToAccessThisPartComponent/LoginToAccessThisPartComponent";
 import { TrainingPlanModal } from "../ActivityCardComponent/TrainingPlanModal";
-import { eventsProp, renderEventInsides } from "./CalendarComponentUtils";
+import {
+  LegendComponent,
+  eventsProp,
+  renderEventInsides,
+} from "./CalendarComponentUtils";
 
 const CalendarComponent: React.FC = () => {
   const preExistingClasses = useSelector<
@@ -106,12 +110,21 @@ const CalendarComponent: React.FC = () => {
         <Box sx={{ padding: "20px", background: "white", margin: "0px 15px" }}>
           {authState.isLoggedIn && (
             <>
-              <AddActivityButton
-                OpenModal={() => setShowAddActivityModal(true)}
-              />
-              <AddTrainingPlanButton
-                OpenModal={() => setshowAddTrainingPlanModal(true)}
-              />
+              <Box
+                sx={{
+                  justifyContent: "center",
+                  alignItems: "center",
+                  display: "flex",
+                }}
+              >
+                <AddActivityButton
+                  OpenModal={() => setShowAddActivityModal(true)}
+                />
+                <AddTrainingPlanButton
+                  OpenModal={() => setshowAddTrainingPlanModal(true)}
+                />
+                <LegendComponent />
+              </Box>
             </>
           )}
           {showAddActivityModal && (
