@@ -180,15 +180,12 @@ export const StyleWrapper = styled.div`
   @media (max-width: 280px) {
     .fc {
       height: 100vh;
-      width 100vw;
+      width: 100%;
     }
-
-    .fc .fc-today-button {
-      margin: 0;
-      padding: 5px 5px;
-      font-size: 8px;
+    .fc .fc-scrollgrid  fc-scrollgrid-liquid {
+      font-size:10px;
     }
-
+    
     .fc .fc-button,
     .fc .fc-today-button,
     .fc .fc-prev-button,
@@ -203,15 +200,7 @@ export const StyleWrapper = styled.div`
       font-size: 9px; 
     }
 
-    .fc-daygrid-day-events {
-      height: 0px;
-      font-size: 0px;
-    }
-
-    .fc-dayGridMonth-view fc-view fc-daygrid {
-      height: 653px;
-    }
-
+  
     .fc .fc-toolbar-title {
       font-size: 20px;
     }

@@ -1,14 +1,13 @@
-import { Box, Paper, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  fetchExercises,
-  searchFunctionalityInterface,
-} from "../../../store/slices/searchSlice";
+import { fetchExercises } from "../../../store/slices/searchSlice";
+import { searchFunctionalityInterface } from "../../../interfaces/search.interface";
 import { AppDispatch, RootState } from "../../../store/store";
 import { Link } from "react-router-dom";
-import { AuthState } from "../../../store/slices/authSlice";
+import { AuthState } from "../../../interfaces/auth.interface";
 import { LoginToAccessThisPartComponent } from "../LoginToAccessThisPartComponent/LoginToAccessThisPartComponent";
+import { ActivityCard } from "../ActivityCardComponent/ActivityCard";
 
 export const ExercisesLibraryComponent = () => {
   const authState = useSelector<RootState, AuthState>((state) => state.auth);

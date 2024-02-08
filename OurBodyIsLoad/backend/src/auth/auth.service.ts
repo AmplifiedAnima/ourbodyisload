@@ -17,6 +17,7 @@ import { Model } from 'mongoose';
 export class AuthService {
   private mailTransporter;
 
+  //authservice
   constructor(
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
@@ -35,11 +36,13 @@ export class AuthService {
       },
     });
   }
+  // to be continued email send
   scopes = [
     'https://www.googleapis.com/auth/gmail.send',
     'https://www.googleapis.com/auth/gmail.compose',
     'https://www.googleapis.com/auth/gmail.labels',
   ];
+
   userDataFunction = (user: UserDocument) => {
     const userData = {
       username: user.username,
@@ -178,7 +181,7 @@ export class AuthService {
     const passwordMatch = await Hash.compare(signinDto.password, user.password);
 
     if (!passwordMatch) {
-      throw new UnauthorizedException('Invalid password');
+      throw new UnauthorizedException('Invalid Credentials');
     }
 
     return user;

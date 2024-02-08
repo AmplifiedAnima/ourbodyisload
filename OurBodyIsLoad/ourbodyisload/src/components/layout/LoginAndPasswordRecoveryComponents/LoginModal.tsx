@@ -14,12 +14,19 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../store/store";
 import { Link } from "react-router-dom";
 
+interface ErrorResponse {
+  message: string;
+  error: string;
+  statusCode: number;
+}
+
 const LoginModal = () => {
   const [open, setOpen] = useState(false);
   const [credentials, setCredentials] = useState({
     username: "",
     password: "",
   });
+  const [errorLogin, setErrorLogin] = useState("");
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -35,19 +42,25 @@ const LoginModal = () => {
     const { name, value } = e.target;
     setCredentials({ ...credentials, [name]: value });
   };
-
   const handleLogin = async () => {
-    try {
-      await dispatch(
-        signIn({
-          username: credentials.username,
-          password: credentials.password,
-        })
-      );
-    } catch (error) {
-      console.error("Login failed:", error);
+    const actionResult = await dispatch(
+      signIn({
+        username: credentials.username,
+        password: credentials.password,
+      })
+    );
+    if (actionResult.meta.requestStatus === "fulfilled") {
+      if (actionResult.payload && actionResult.payload.message) {
+        setErrorLogin(actionResult.payload.message);
+        console.log(actionResult.payload.message);
+        console.log(errorLogin);
+      } else {
+        handleClose();
+        setErrorLogin("");
+      }
+    } else {
+      setErrorLogin("An unexpected error occurred.");
     }
-    handleClose();
   };
 
   const inputStylingSx = {
@@ -169,6 +182,15 @@ const LoginModal = () => {
             Login
           </Button>
         </DialogActions>
+        {errorLogin && (
+          <Typography
+            color="error"
+            variant="body1"
+            sx={{ textAlign: "center" }}
+          >
+            {errorLogin}
+          </Typography>
+        )}
         <LinkWithStyles
           to="/registration-page"
           label="Not signed up? Register here"

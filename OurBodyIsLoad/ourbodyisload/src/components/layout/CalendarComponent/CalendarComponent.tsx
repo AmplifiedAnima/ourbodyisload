@@ -17,12 +17,15 @@ import {
 } from "../ActivityCardComponent/AddActivityButton";
 import { ActivityModal } from "../ActivityCardComponent/ActivityModal";
 import {
-  fetchPreExistingClasses,
-  fetchUserChosenClasses,
   preExistingClassesInterface,
+  UserChosenClassesInterface,
+} from "../../../interfaces/calendar.interface";
+import {
+  fetchUserChosenClasses,
+  fetchPreExistingClasses,
+  deleteUserActivity,
 } from "../../../store/slices/CalendarAppSlice";
-import { UserChosenClassesInterface } from "../../../store/slices/CalendarAppSlice";
-import { AuthState } from "../../../store/slices/authSlice";
+import { AuthState } from "../../../interfaces/auth.interface";
 import { ClassVideoModal } from "./ClassVideoModal";
 import { LoginToAccessThisPartComponent } from "../LoginToAccessThisPartComponent/LoginToAccessThisPartComponent";
 import { TrainingPlanModal } from "../ActivityCardComponent/TrainingPlanModal";
@@ -60,7 +63,7 @@ const CalendarComponent: React.FC = () => {
     if (authState.isLoggedIn) {
       dispatch(fetchUserChosenClasses());
     }
-  }, [authState.isLoggedIn, !showAddActivityModal]);
+  }, [authState.isLoggedIn, !showAddActivityModal, !showVideoClassModal]);
 
   useEffect(() => {
     if (authState.isLoggedIn) {
@@ -100,13 +103,20 @@ const CalendarComponent: React.FC = () => {
       setShowVideoClassModal,
       userChosenClasses,
     });
-    
+
   const handleDayClick = () => {
     console.log();
   };
   const toggleLegend = () => {
     setOpenLegend(!openLegend);
   };
+
+  const handleDeletionOfFile = (id: string) => {
+    dispatch(deleteUserActivity({ activityId: id }));
+  };
+
+  const handleActivityEdition = (id: string) => {};
+
   return (
     <>
       {authState.isLoggedIn ? (

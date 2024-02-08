@@ -1,5 +1,5 @@
 import { Box, Button, Tooltip, Typography } from "@mui/material";
-import { UserChosenClassesInterface } from "../../../store/slices/CalendarAppSlice";
+import { UserChosenClassesInterface } from "../../../interfaces/calendar.interface";
 import {
   carsIconVariable,
   mobilityIconVariable,

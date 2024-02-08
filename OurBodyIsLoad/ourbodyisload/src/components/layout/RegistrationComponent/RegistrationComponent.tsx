@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { signUp } from "../../../store/slices/authSlice";
@@ -6,19 +6,10 @@ import { Box, Button, FormControl, TextField, Typography } from "@mui/material";
 import { AppDispatch } from "../../../store/store";
 import { ButtonStylingForApp } from "../../../globalStyles/ButtonStylingForApp";
 import { useNavigate } from "react-router-dom";
-import Stepper from "@mui/material";
-
-interface formData {
-  username: string;
-  password: string;
-  confirmPassword: string;
-  email: string;
-}
-
-interface errorMessage {
-  message: string[];
-  statusCode?: number;
-}
+import {
+  errorMessage,
+  formData,
+} from "../../../interfaces/registration.interface";
 
 export const RegistrationComponent = () => {
   const {

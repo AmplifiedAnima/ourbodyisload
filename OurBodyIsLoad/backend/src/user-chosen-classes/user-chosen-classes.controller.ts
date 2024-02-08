@@ -7,18 +7,18 @@ import {
   Delete,
   Request,
   UseGuards,
-  // UseGuards,
+  Patch,
 } from '@nestjs/common';
 import { UserChosenClassesService } from './user-chosen-classes.service';
 import { CreateUserChosenClassDto } from './dto/create-user-chosen-class.dto';
 import { RequestWithUser } from 'src/user/user.interface';
 import { AuthGuard } from '@nestjs/passport';
-// import { preExistingClassesService } from 'src/classes/preExistingClasses.service';
+import { UpdateUserChosenClassDto } from './dto/update-user-chosen-class.dto';
 
 @Controller('user-chosen-classes')
 export class UserChosenClassesController {
   constructor(
-    private readonly userChosenClassesService: UserChosenClassesService, // private readonly classesToBeUsedService: preExistingClassesService,
+    private readonly userChosenClassesService: UserChosenClassesService,
   ) {}
 
   @UseGuards(AuthGuard())
@@ -48,8 +48,26 @@ export class UserChosenClassesController {
     return this.userChosenClassesService.findOne(+id);
   }
 
+  @UseGuards(AuthGuard())
+  @Patch(':id')
+  edit(
+    @Request() request: RequestWithUser,
+    @Param('id') id: string,
+    @Body() updateUserChosenClassDto: UpdateUserChosenClassDto,
+  ) {
+    return this.userChosenClassesService.editUserChosenClass(
+      +id,
+      updateUserChosenClassDto,
+      request.user,
+    );
+  }
+
+  @UseGuards(AuthGuard())
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userChosenClassesService.remove(+id);
+  remove(@Request() request: RequestWithUser, @Param('id') id: string) {
+    return this.userChosenClassesService.removeUserChosenClass(
+      id,
+      request.user,
+    );
   }
 }

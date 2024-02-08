@@ -1,7 +1,8 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import { AuthState, updateProfile } from "../../../store/slices/authSlice";
+import { updateProfile } from "../../../store/slices/authSlice";
+import { AuthState } from "../../../interfaces/auth.interface";
 import { Box, Button, FormControl, TextField, Typography } from "@mui/material";
 import { AppDispatch, RootState } from "../../../store/store";
 import { useSelector } from "react-redux";

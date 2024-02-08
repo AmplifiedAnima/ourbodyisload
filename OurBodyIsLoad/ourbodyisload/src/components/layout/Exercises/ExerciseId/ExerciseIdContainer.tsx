@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Typography } from "@mui/material";
 import { HeaderWithoutSearch } from "../../HeaderComponent/HeaderWithoutSearch";
-import { exerciseInterface } from "../../../../interfaces/interfaces";
+import { exerciseInterface } from "../../../../interfaces/calendar.interface";
 import { useParams } from "react-router-dom";
 
 export const ExerciseIdContainer: React.FC = () => {

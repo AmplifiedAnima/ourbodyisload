@@ -1,31 +1,9 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { exerciseInterface } from "../../interfaces/interfaces";
-
-export interface preExistingClassesInterface {
-  _id: string;
-  id: string;
-  name: string;
-  description: string;
-  videoUrl: string;
-}
-
-export interface UserChosenClassesInterface {
-  _id: string;
-  preExistingClassName: string;
-  preExistingClassVideoUrl: string;
-  userOwnerId: string;
-  scheduleTime: string;
-  createdAt: string;
-  updatedAt: string;
-  __v: number;
-}
-
-export interface calendarAppFunctionalityInterface {
-  classes: preExistingClassesInterface[];
-  userChosenClasses: UserChosenClassesInterface[];
-  exercises: exerciseInterface[];
-  status: string;
-}
+import {
+  UpdateUserChosenClassInterface,
+  calendarAppFunctionalityInterface,
+  preExistingClassesInterface,
+} from "../../interfaces/calendar.interface";
 
 export const calendarAppInitialState: calendarAppFunctionalityInterface = {
   classes: [],
@@ -84,12 +62,12 @@ export const fetchPreExistingClasses = createAsyncThunk(
 );
 
 export const fetchUserChosenClasses = createAsyncThunk(
-  "fetchUserChosenClasses", 
+  "fetchUserChosenClasses",
   async (userId, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(
-        `http://localhost:3000/user-chosen-classes/user-classes`, 
+        `http://localhost:3000/user-chosen-classes/user-classes`,
         {
           method: "GET",
           headers: {
@@ -127,7 +105,7 @@ export const postUserActivitiesToBackend = createAsyncThunk(
       scheduleTime: formattedScheduleTime,
     };
     const token = localStorage.getItem("token");
-    console.log("Sending data:", dataToSend); // Debugging line
+    console.log("Sending data:", dataToSend);
 
     try {
       const response = await fetch(
@@ -159,6 +137,68 @@ export const postUserActivitiesToBackend = createAsyncThunk(
   }
 );
 
+export const deleteUserActivity = createAsyncThunk(
+  "userActivity/deleteUserActivity",
+  async ({ activityId }: { activityId: string }, { rejectWithValue }) => {
+    const token = localStorage.getItem("token");
+
+    try {
+      const response = await fetch(
+        `http://localhost:3000/user-chosen-classes/${activityId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        return await response.json();
+      }
+
+      return { activityId };
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
+export const editUserChosenClass = createAsyncThunk(
+  "userChosenClasses/edit",
+  async (
+    {
+      id,
+      updateUserChosenClassDto,
+    }: { id: string; updateUserChosenClassDto: UpdateUserChosenClassInterface },
+    { rejectWithValue }
+  ) => {
+    try {
+      const token = localStorage.getItem("token"); // Assuming you store the token in localStorage
+      const response = await fetch(
+        `http://localhost:3000/user-chosen-classes/${id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // Assuming Bearer token authentication
+          },
+          body: JSON.stringify(updateUserChosenClassDto),
+        }
+      );
+
+      if (!response.ok) {
+        return await response.json();
+      }
+
+      const updatedClass = await response.json();
+      return updatedClass;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
 export const { setClasses } = calendarAppStateManagementSlice.actions;
 
 export const calendarAppSlice = {

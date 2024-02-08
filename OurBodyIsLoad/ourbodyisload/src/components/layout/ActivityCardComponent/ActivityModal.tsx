@@ -4,7 +4,7 @@ import { ActivityCard } from "./ActivityCard";
 import styled from "@emotion/styled";
 import { useState } from "react";
 import { ActivityModalScheduling } from "./ActivityModalScheduling";
-import { preExistingClassesInterface } from "../../../store/slices/CalendarAppSlice";
+import { preExistingClassesInterface } from "../../../interfaces/calendar.interface";
 
 interface ActivityModalProps {
   open: boolean;

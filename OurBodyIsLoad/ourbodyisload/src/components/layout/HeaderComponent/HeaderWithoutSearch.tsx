@@ -34,8 +34,8 @@ export const HeaderWithoutSearch = () => {
               "@media (max-width: 768px)": {
                 marginLeft: "5px",
                 marginTop: "26px",
-                fontSize: "22px",
-                marginRight: "15px",
+                fontSize: "18px",
+                marginRight: "10px",
               },
               "@media (max-width: 280px)": {
                 display: "none",

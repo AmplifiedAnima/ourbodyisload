@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { exerciseInterface } from "../../interfaces/interfaces";
+import { exerciseInterface } from "../../interfaces/calendar.interface";
+import { searchFunctionalityInterface } from "../../interfaces/search.interface";
 
 export const searchQueryinitialState = {
   status: "idle",
@@ -7,14 +8,6 @@ export const searchQueryinitialState = {
   posts: [],
   searchQuery: "",
   selectedOffer: null,
-};
-
-export type searchFunctionalityInterface = {
-  exercises: exerciseInterface[];
-  posts: {};
-  searchQuery: string;
-  status: string;
-  selectedOffer: exerciseInterface | null;
 };
 
 export const searchFunctionalitySlice = createSlice({

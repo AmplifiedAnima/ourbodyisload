@@ -3,15 +3,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { AppDispatch } from "../store";
 import { jwtDecode } from "jwt-decode";
 import { UpdateProfileData } from "../../components/layout/EditProfileComponent/EditProfileComponent";
-
-export interface AuthState {
-  username: string;
-  isLoggedIn: boolean;
-  accessToken: string;
-  email: string;
-  roles: string[];
-  avatarImageUrl: string;
-}
+import { AuthState } from "../../interfaces/auth.interface";
 
 export const initialAuthState: AuthState = {
   username: "",
@@ -130,7 +122,9 @@ export const signIn = createAsyncThunk(
       });
 
       if (!response.ok) {
-        throw new Error("Error signing in");
+        const errorData = await response.json();
+        console.log(errorData);
+        return errorData;
       }
 
       if (response.ok) {
@@ -258,7 +252,7 @@ export const updateAvatarImage = createAsyncThunk(
 
       if (response.ok) {
         const data = await response.json();
-        console.log(data)
+        console.log(data);
         dispatch(setAvatarImageUrl({ avatarImageUrl: data.avatarImageUrl }));
         return data;
       } else {
