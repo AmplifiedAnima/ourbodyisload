@@ -8,7 +8,7 @@ import {
 export const calendarAppInitialState: calendarAppFunctionalityInterface = {
   classes: [],
   userChosenClasses: [],
-  exercises: [],
+
   status: "idle",
 };
 
@@ -164,7 +164,6 @@ export const deleteUserActivity = createAsyncThunk(
     }
   }
 );
-
 export const editUserChosenClass = createAsyncThunk(
   "userChosenClasses/edit",
   async (
@@ -175,27 +174,33 @@ export const editUserChosenClass = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const token = localStorage.getItem("token"); // Assuming you store the token in localStorage
+      const token = localStorage.getItem("token");
       const response = await fetch(
         `http://localhost:3000/user-chosen-classes/${id}`,
         {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`, // Assuming Bearer token authentication
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify(updateUserChosenClassDto),
         }
       );
-
+      console.log(id, updateUserChosenClassDto);
       if (!response.ok) {
-        return await response.json();
+        const errorData = await response.json();
+        return rejectWithValue(
+          errorData.message || "An unknown error occurred"
+        );
       }
 
       const updatedClass = await response.json();
       return updatedClass;
     } catch (error) {
-      return rejectWithValue(error);
+      if (error instanceof Error) {
+        return rejectWithValue(error.message);
+      }
+      return rejectWithValue("An unexpected error occurred");
     }
   }
 );

@@ -51,12 +51,12 @@ export class UserChosenClassesController {
   @UseGuards(AuthGuard())
   @Patch(':id')
   edit(
-    @Request() request: RequestWithUser,
     @Param('id') id: string,
+    @Request() request: RequestWithUser,
     @Body() updateUserChosenClassDto: UpdateUserChosenClassDto,
   ) {
     return this.userChosenClassesService.editUserChosenClass(
-      +id,
+      id,
       updateUserChosenClassDto,
       request.user,
     );

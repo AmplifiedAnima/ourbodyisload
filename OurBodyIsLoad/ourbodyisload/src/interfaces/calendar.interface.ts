@@ -30,6 +30,5 @@ export interface UpdateUserChosenClassInterface {
 export interface calendarAppFunctionalityInterface {
   classes: preExistingClassesInterface[];
   userChosenClasses: UserChosenClassesInterface[];
-  exercises: exerciseInterface[];
   status: string;
 }

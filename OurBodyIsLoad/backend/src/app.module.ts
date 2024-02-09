@@ -9,6 +9,7 @@ import { BlogPostsModule } from './blog-posts/blog-posts.module';
 import { UserChosenClassesModule } from './user-chosen-classes/user-chosen-classes.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
+import { TrainingPlansModule } from './training-plans/training-plans.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { AuthModule } from './auth/auth.module';
     UserChosenClassesModule,
     UserModule,
     AuthModule,
+    TrainingPlansModule,
   ],
   controllers: [AppController],
   providers: [AppService],

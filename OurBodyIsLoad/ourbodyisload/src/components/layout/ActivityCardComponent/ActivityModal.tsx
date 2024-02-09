@@ -5,6 +5,7 @@ import styled from "@emotion/styled";
 import { useState } from "react";
 import { ActivityModalScheduling } from "./ActivityModalScheduling";
 import { preExistingClassesInterface } from "../../../interfaces/calendar.interface";
+import { boxModalStyles } from "./ActivityModalSchedulingStyles";
 
 interface ActivityModalProps {
   open: boolean;
@@ -67,17 +68,7 @@ export const ActivityModal: React.FC<ActivityModalProps> = ({
       aria-describedby="modal-modal-description"
     >
       <Box
-        sx={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          width: "80%",
-          height: "80%",
-          bgcolor: "background.paper",
-          overflowY: "auto",
-          borderRadius: "8px",
-        }}
+        sx={boxModalStyles}
       >
         <Typography
           variant="h5"

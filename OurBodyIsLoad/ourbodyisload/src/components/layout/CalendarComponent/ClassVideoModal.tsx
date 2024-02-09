@@ -151,6 +151,7 @@ export const ClassVideoModal: React.FC<ClassCommencingActivityModalProps> = ({
         open={editModalOpen}
         handleClose={() => setEditModalOpen(false)}
         initialScheduleTime={new Date()}
+        handleClosePreviousModal={handleClose}
       />
     </>
   );

@@ -67,6 +67,7 @@ export const StyleWrapper = styled.div`
     position: relative;
     z-index: 2;
   }
+
   .fc-list-event {
     position: relative;
     z-index: 1;
@@ -92,12 +93,18 @@ export const StyleWrapper = styled.div`
 
   }
 
-  .fc td {
+  .fc td{
+    color: none;
     background: #f7f2fa;
   }
-
+  .fc-h-event{
+    margin-left:22px;
+    background:none;
+    border:none;
+  }
   .fc-day-selected,
   .fc .fc-day-today {
+
     background-color: #f2f0fa;
     color: black;
   }

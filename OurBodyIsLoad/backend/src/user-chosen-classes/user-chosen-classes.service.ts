@@ -65,7 +65,7 @@ export class UserChosenClassesService {
     return `This action returns a #${id} userChosenClass`;
   }
   async editUserChosenClass(
-    id: number,
+    id: string,
     updateUserChosenClassDto: UpdateUserChosenClassDto,
     user: UserDocument,
   ) {

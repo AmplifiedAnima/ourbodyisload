@@ -16,6 +16,10 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs, { Dayjs } from "dayjs"; // Import Dayjs
 import { activityModalSchedulingDatePickerStyles } from "../ActivityCardComponent/ActivityModalSchedulingStyles";
+import { ButtonStylingForApp } from "../../../globalStyles/ButtonStylingForApp";
+import { StyledModalBox } from "../ActivityCardComponent/ActivityModalScheduling";
+import { DateTimePicker } from "@mui/x-date-pickers";
+import { Box } from "@mui/material";
 interface DeleteActivityModalProps {
   activityId: string;
   open: boolean;
@@ -51,11 +55,14 @@ export const DeleteActivityModal: React.FC<DeleteActivityModalProps> = ({
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleClose} sx={{ ...ButtonStylingForApp }}>
+            Cancel
+          </Button>
           <Button
             onClick={() => handleDelete(activityId)}
             autoFocus
             color="error"
+            sx={{ ...ButtonStylingForApp }}
           >
             Delete
           </Button>
@@ -69,6 +76,7 @@ interface EditActivityModalProps {
   activityId: string;
   open: boolean;
   handleClose: () => void;
+  handleClosePreviousModal: () => void;
   initialScheduleTime: Date;
 }
 
@@ -76,6 +84,7 @@ export const EditActivityModal: React.FC<EditActivityModalProps> = ({
   activityId,
   open,
   handleClose,
+  handleClosePreviousModal,
   initialScheduleTime,
 }) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -84,16 +93,16 @@ export const EditActivityModal: React.FC<EditActivityModalProps> = ({
   );
 
   const handleEdit = () => {
-    console.log(activityId)
     dispatch(
       editUserChosenClass({
-        id: activityId, // Confirm this is correctly sourced and not NaN
+        id: activityId,
         updateUserChosenClassDto: {
           scheduleTime: scheduleTime!.toISOString(),
         },
       })
     );
     handleClose();
+    handleClosePreviousModal();
   };
   return (
     <Dialog
@@ -101,23 +110,31 @@ export const EditActivityModal: React.FC<EditActivityModalProps> = ({
       onClose={handleClose}
       aria-labelledby="edit-dialog-title"
     >
-      <DialogTitle id="edit-dialog-title">Reschedule Activity</DialogTitle>
-      <DialogContent>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DatePicker
-            label="Scheduled Date"
-            value={scheduleTime}
-            onChange={(newValue) => setScheduleTime(newValue)}
-            sx={activityModalSchedulingDatePickerStyles}
-          />
-        </LocalizationProvider>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={handleEdit} color="primary">
-          Save Changes
-        </Button>
-      </DialogActions>
+      <Box sx={{ top: "50", left: "50" }}>
+        <DialogTitle id="edit-dialog-title">Reschedule Activity</DialogTitle>
+        <DialogContent>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DateTimePicker
+              label="Scheduled Date"
+              value={scheduleTime}
+              onChange={(newValue) => setScheduleTime(newValue)}
+              sx={{ ...activityModalSchedulingDatePickerStyles, margin: "5px" }}
+            />
+          </LocalizationProvider>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} sx={{ ...ButtonStylingForApp }}>
+            Cancel
+          </Button>
+          <Button
+            onClick={handleEdit}
+            sx={{ ...ButtonStylingForApp }}
+            color="primary"
+          >
+            Save Changes
+          </Button>
+        </DialogActions>
+      </Box>
     </Dialog>
   );
 };

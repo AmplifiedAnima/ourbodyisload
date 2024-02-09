@@ -3,8 +3,6 @@ import {
   Box,
   Button,
   CardMedia,
-  CardContent,
-  Card,
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
@@ -16,7 +14,7 @@ import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { activityModalSchedulingDatePickerStyles } from "./ActivityModalSchedulingStyles";
 
-const StyledModalBox = styled(Box)`
+export const StyledModalBox = styled(Box)`
   position: absolute;
   top: 50%;
   left: 50%;
@@ -103,7 +101,6 @@ export const ActivityModalScheduling: React.FC<ScheduleActivityModalProps> = ({
           sx={{
             width: "400px",
             height: "250px",
-
             "@media (max-width: 280px)": { width: "100%" },
           }}
         />
