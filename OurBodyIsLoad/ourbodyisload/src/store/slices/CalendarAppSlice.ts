@@ -1,37 +1,50 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {
   UpdateUserChosenClassInterface,
-  calendarAppFunctionalityInterface,
+  CalendarAppState,
   preExistingClassesInterface,
 } from "../../interfaces/calendar.interface";
 
-export const calendarAppInitialState: calendarAppFunctionalityInterface = {
+export const calendarAppInitialState: CalendarAppState = {
   classes: [],
   userChosenClasses: [],
-
   status: "idle",
+  error: null,
 };
-
+interface errorResponse {
+  status: number;
+  error: string;
+}
 export const calendarAppStateManagementSlice = createSlice({
   name: "fetchPreExistingClassesFromBackend",
   initialState: calendarAppInitialState,
 
   reducers: {
     setClasses: (
-      state: calendarAppFunctionalityInterface,
+      state: CalendarAppState,
       action: PayloadAction<preExistingClassesInterface[]>
     ) => {
       state.classes = action.payload;
       state.status = "succeeded";
     },
+    setError: (
+      state: CalendarAppState,
+      action: PayloadAction<string | null>
+    ) => {
+      state.error = action.payload;
+    },
   },
-
   extraReducers: (builder) => {
     builder.addCase(fetchPreExistingClasses.fulfilled, (state, action) => {
       state.classes = action.payload;
     });
     builder.addCase(fetchUserChosenClasses.fulfilled, (state, action) => {
       state.userChosenClasses = action.payload;
+    });
+    builder.addCase(postUserActivitiesToBackend.rejected, (state, action) => {
+      console.log("Error payload:", action.payload);
+      const payload = action.payload as errorResponse;
+      state.error = payload.error;
     });
   },
 });
@@ -86,7 +99,7 @@ export const fetchUserChosenClasses = createAsyncThunk(
       return data;
     } catch (error) {
       console.error(error);
-      return rejectWithValue(error || "An error occurred");
+      return rejectWithValue(error);
     }
   }
 );
@@ -98,7 +111,10 @@ interface UserActivityData {
 
 export const postUserActivitiesToBackend = createAsyncThunk(
   "postUserActivitiesToBackend",
-  async ({ activityId, scheduleTime }: UserActivityData) => {
+  async (
+    { activityId, scheduleTime }: UserActivityData,
+    { rejectWithValue }
+  ) => {
     const formattedScheduleTime = scheduleTime.toISOString();
     const dataToSend = {
       activityId,
@@ -109,7 +125,7 @@ export const postUserActivitiesToBackend = createAsyncThunk(
 
     try {
       const response = await fetch(
-        `http://localhost:3000/user-chosen-classes`,
+        "http://localhost:3000/user-chosen-classes",
         {
           method: "POST",
           headers: {
@@ -120,19 +136,22 @@ export const postUserActivitiesToBackend = createAsyncThunk(
         }
       );
 
+      if (!response.ok) {
+        const errorData = await response.json();
+        return rejectWithValue(errorData);
+      }
+
       const contentType = response.headers.get("Content-Type");
       if (contentType && contentType.includes("application/json")) {
         const data = await response.json();
         console.log("Response data:", data);
         return data;
       } else {
-        const errorText = await response.text();
-        console.error("Non-JSON Error response:", errorText);
-        throw new Error(`Non-JSON Error: ${errorText}`);
+        throw new Error("Received non-JSON response");
       }
     } catch (error) {
       console.error("Error in postUserActivitiesToBackend:", error);
-      throw error;
+      return rejectWithValue(`Request failed: ${error}`);
     }
   }
 );
@@ -189,6 +208,7 @@ export const editUserChosenClass = createAsyncThunk(
       console.log(id, updateUserChosenClassDto);
       if (!response.ok) {
         const errorData = await response.json();
+
         return rejectWithValue(
           errorData.message || "An unknown error occurred"
         );

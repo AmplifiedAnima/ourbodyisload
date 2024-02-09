@@ -35,7 +35,7 @@ export const StyleWrapper = styled.div`
   }
 
   .fc .fc-daygrid-day {
-    overflow: auto;
+    overflow-y: auto;
     height: 10%;
   }
 

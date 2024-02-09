@@ -6,24 +6,23 @@ import interactionPlugin from "@fullcalendar/interaction";
 import FullCalendar from "@fullcalendar/react";
 
 import { StyleWrapper } from "./CalendarStylings";
-import { Box, Button } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { AppDispatch, RootState } from "../../../store/store";
 import { useSelector } from "react-redux";
-
 import {
   AddActivityButton,
   AddTrainingPlanButton,
 } from "../ActivityCardComponent/AddActivityButton";
 import { ActivityModal } from "../ActivityCardComponent/ActivityModal";
 import {
+  CalendarAppState,
   preExistingClassesInterface,
   UserChosenClassesInterface,
 } from "../../../interfaces/calendar.interface";
 import {
   fetchUserChosenClasses,
   fetchPreExistingClasses,
-  deleteUserActivity,
 } from "../../../store/slices/CalendarAppSlice";
 import { AuthState } from "../../../interfaces/auth.interface";
 import { ClassVideoModal } from "./ClassVideoModal";
@@ -45,6 +44,12 @@ const CalendarComponent: React.FC = () => {
   >((state) => state.calendarApp.userChosenClasses);
 
   const authState = useSelector<RootState, AuthState>((state) => state.auth);
+
+  const calendarState: CalendarAppState = useSelector<
+    RootState,
+    CalendarAppState
+  >((state) => state.calendarApp);
+
   const dispatch = useDispatch<AppDispatch>();
 
   const [showAddActivityModal, setShowAddActivityModal] = useState(false);
@@ -59,9 +64,12 @@ const CalendarComponent: React.FC = () => {
 
   const [selectedClass, setSelectedClass] =
     useState<UserChosenClassesInterface>();
+
   useEffect(() => {
     if (authState.isLoggedIn) {
       dispatch(fetchUserChosenClasses());
+      console.log(calendarState);
+      console.log(`auth`, authState);
     }
   }, [authState.isLoggedIn, !showAddActivityModal, !showVideoClassModal]);
 
@@ -89,6 +97,7 @@ const CalendarComponent: React.FC = () => {
   const eventsWithClasses = userChosenClasses?.map((userChosenClass) => ({
     title: userChosenClass.preExistingClassName,
     start: new Date(userChosenClass.scheduleTime),
+    end: new Date(userChosenClass.scheduleTime),
     content: userChosenClass.preExistingClassName,
     timeOfTheClass: userChosenClass.scheduleTime,
     classId: userChosenClass._id,
@@ -110,12 +119,6 @@ const CalendarComponent: React.FC = () => {
   const toggleLegend = () => {
     setOpenLegend(!openLegend);
   };
-
-  const handleDeletionOfFile = (id: string) => {
-    dispatch(deleteUserActivity({ activityId: id }));
-  };
-
-  const handleActivityEdition = (id: string) => {};
 
   return (
     <>
@@ -143,6 +146,11 @@ const CalendarComponent: React.FC = () => {
           <Button sx={ButtonStylingForApp} onClick={toggleLegend}>
             LEGEND
           </Button>
+          {calendarState.error && (
+            <Typography variant="body1" color="error">
+              {calendarState.error}
+            </Typography>
+          )}
           {showAddActivityModal && (
             <ActivityModal
               open={showAddActivityModal}
@@ -183,6 +191,7 @@ const CalendarComponent: React.FC = () => {
               eventContent={eventContentRenderer}
               dateClick={handleDayClick}
               viewDidMount={handleViewDidMount}
+              slotEventOverlap={false}
             />
           </StyleWrapper>
         </Box>

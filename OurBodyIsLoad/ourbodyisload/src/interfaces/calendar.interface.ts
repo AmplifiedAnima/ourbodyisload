@@ -27,8 +27,9 @@ export interface UserChosenClassesInterface {
 export interface UpdateUserChosenClassInterface {
   scheduleTime: string;
 }
-export interface calendarAppFunctionalityInterface {
+export interface CalendarAppState {
   classes: preExistingClassesInterface[];
   userChosenClasses: UserChosenClassesInterface[];
   status: string;
+  error: string | null;
 }

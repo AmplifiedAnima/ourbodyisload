@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateUserChosenClassDto } from './dto/create-user-chosen-class.dto';
 import { userChosenClass } from './schemas/user-chosen-class.schema';
 import { InjectModel } from '@nestjs/mongoose';
@@ -20,32 +25,71 @@ export class UserChosenClassesService {
     createUserChosenClassDto: CreateUserChosenClassDto,
     user: UserDocument,
   ) {
-    const { activityId, scheduleTime } = createUserChosenClassDto;
-    const preExistingClass = await this.preExistingClassModel.findOne({
-      id: activityId,
-    });
-    console.log('Incoming data:', createUserChosenClassDto, user);
-
-    if (!preExistingClass) {
-      throw new Error('Class not found');
-    }
-
-    const newUserChosenClass = new this.userChosenClassModel({
-      preExistingClassName: preExistingClass.name,
-      preExistingClassVideoUrl: preExistingClass.videoUrl,
-      userOwnerId: user._id,
-      scheduleTime: scheduleTime,
-    });
-
-    console.log('New userChosenClass document:', newUserChosenClass);
-
     try {
+      const { activityId, scheduleTime } = createUserChosenClassDto;
+      const preExistingClass = await this.preExistingClassModel.findOne({
+        id: activityId,
+      });
+
+      if (!preExistingClass) {
+        throw new Error('Class not found!');
+      }
+
+      const parsedScheduleTime = new Date(scheduleTime);
+      const proximityStartTime = new Date(
+        parsedScheduleTime.getTime() - 30 * 60 * 1000,
+      );
+      const proximityEndTime = new Date(
+        parsedScheduleTime.getTime() + 30 * 60 * 1000,
+      );
+
+      const existingClassesInProximity = await this.userChosenClassModel.find({
+        scheduleTime: {
+          $gte: proximityStartTime,
+          $lte: proximityEndTime,
+        },
+      });
+
+      if (existingClassesInProximity.length > 0) {
+        throw new Error(
+          'Class already scheduled within 30 minutes of the specified time.',
+        );
+      }
+
+      const startOfDay = new Date(parsedScheduleTime);
+      startOfDay.setHours(0, 0, 0, 0);
+      const endOfDay = new Date(parsedScheduleTime);
+      endOfDay.setHours(23, 59, 59, 999);
+      const classesScheduledToday = await this.userChosenClassModel.find({
+        scheduleTime: {
+          $gte: startOfDay,
+          $lte: endOfDay,
+        },
+      });
+
+      if (classesScheduledToday.length >= 3) {
+        throw new Error('Maximum number of classes for the day reached.');
+      }
+
+      const newUserChosenClass = new this.userChosenClassModel({
+        preExistingClassName: preExistingClass.name,
+        preExistingClassVideoUrl: preExistingClass.videoUrl,
+        userOwnerId: user._id,
+        scheduleTime: parsedScheduleTime,
+      });
+
       const savedDocument = await newUserChosenClass.save();
       console.log('Saved document:', savedDocument);
       return savedDocument;
     } catch (error) {
-      console.error('Error saving document:', error);
-      throw new Error('Error saving user chosen class');
+      console.error('Error in create:', error);
+      throw new HttpException(
+        {
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          error: error.message,
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
   async findClassesByUserId(userId: string): Promise<userChosenClass[]> {
@@ -53,7 +97,6 @@ export class UserChosenClassesService {
       .find({ userOwnerId: userId })
       .exec();
     console.log(userId);
-    console.log(classes);
     return classes;
   }
 
