@@ -34,6 +34,9 @@ export const calendarAppStateManagementSlice = createSlice({
     ) => {
       state.error = action.payload;
     },
+    clearError(state) {
+      state.error = null;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchPreExistingClasses.fulfilled, (state, action) => {
@@ -114,7 +117,7 @@ export const postUserActivitiesToBackend = createAsyncThunk(
   "postUserActivitiesToBackend",
   async (
     { activityId, scheduleTime }: UserActivityData,
-    { rejectWithValue }
+    { rejectWithValue, dispatch }
   ) => {
     const formattedScheduleTime = scheduleTime.toISOString();
     const dataToSend = {
@@ -146,6 +149,7 @@ export const postUserActivitiesToBackend = createAsyncThunk(
       if (contentType && contentType.includes("application/json")) {
         const data = await response.json();
         console.log("Response data:", data);
+        dispatch(clearError());
         return data;
       } else {
         throw new Error("Received non-JSON response");
@@ -191,15 +195,8 @@ export const editUserChosenClass = createAsyncThunk(
       id,
       updateUserChosenClassDto,
     }: { id: string; updateUserChosenClassDto: UpdateUserChosenClassInterface },
-    { rejectWithValue }
+    { rejectWithValue, dispatch }
   ) => {
-    const formattedScheduleTime =
-      updateUserChosenClassDto.scheduleTime.toISOString();
-    const updatedDto = {
-      ...updateUserChosenClassDto,
-      scheduleTime: updateUserChosenClassDto.scheduleTime,
-    };
-
     try {
       console.log(`updated dto edit`, updateUserChosenClassDto.scheduleTime);
       const token = localStorage.getItem("token");
@@ -211,7 +208,7 @@ export const editUserChosenClass = createAsyncThunk(
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify(updatedDto),
+          body: JSON.stringify(updateUserChosenClassDto),
         }
       );
 
@@ -222,6 +219,7 @@ export const editUserChosenClass = createAsyncThunk(
       }
 
       const updatedClass = await response.json();
+      dispatch(clearError());
       return updatedClass;
     } catch (error) {
       if (error instanceof Error) {
@@ -231,7 +229,8 @@ export const editUserChosenClass = createAsyncThunk(
     }
   }
 );
-export const { setClasses } = calendarAppStateManagementSlice.actions;
+export const { setClasses, clearError } =
+  calendarAppStateManagementSlice.actions;
 
 export const calendarAppSlice = {
   ...calendarAppStateManagementSlice.actions,

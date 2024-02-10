@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import {
   deleteUserActivity,
@@ -13,10 +13,14 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { AppDispatch } from "../../../store/store";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { activityModalSchedulingDatePickerStyles } from "../ActivityCardComponent/ActivityModalSchedulingStyles";
+import {
+  activityModalSchedulingDatePickerStyles,
+  boxModalStyles,
+} from "../ActivityCardComponent/ActivityModalSchedulingStyles";
 import { ButtonStylingForApp } from "../../../globalStyles/ButtonStylingForApp";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import { Box } from "@mui/material";
+import { NotificationHandlerDisplayComponent } from "../ErrorAndNotificationHandlers/NotificationHandlerDisplayComponent";
 interface DeleteActivityModalProps {
   activityId: string;
   open: boolean;
@@ -84,7 +88,7 @@ export const EditActivityModal: React.FC<EditActivityModalProps> = ({
 }) => {
   const dispatch = useDispatch<AppDispatch>();
   const [scheduleTime, setScheduleTime] = useState<Date | null>(null);
-
+  const [notification, setNotification] = useState(true);
   const handleEdit = () => {
     dispatch(
       editUserChosenClass({
@@ -99,13 +103,26 @@ export const EditActivityModal: React.FC<EditActivityModalProps> = ({
     handleClosePreviousModal();
   };
 
+  const modalCloseHandler = () => {
+    handleClose();
+  };
   return (
     <Dialog
       open={open}
-      onClose={handleClose}
+      onClose={modalCloseHandler}
       aria-labelledby="edit-dialog-title"
+      sx={{
+        top: 0,
+        bottom: 330,
+      }}
     >
-      <Box sx={{ top: "50", left: "50" }}>
+      {" "}
+      <NotificationHandlerDisplayComponent
+        open={notification}
+        handleClose={() => setNotification(false)}
+        notification="please schedule between 6:00 and 22:00"
+      />
+      <Box sx={{}}>
         <DialogTitle id="edit-dialog-title">Reschedule Activity</DialogTitle>
         <DialogContent>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -113,12 +130,15 @@ export const EditActivityModal: React.FC<EditActivityModalProps> = ({
               label="Scheduled Date"
               value={scheduleTime}
               onChange={(newValue) => setScheduleTime(newValue)}
-              sx={{ ...activityModalSchedulingDatePickerStyles, margin: "5px" }}
+              sx={{
+                ...activityModalSchedulingDatePickerStyles,
+                margin: "5px",
+              }}
             />
           </LocalizationProvider>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} sx={{ ...ButtonStylingForApp }}>
+          <Button onClick={modalCloseHandler} sx={{ ...ButtonStylingForApp }}>
             Cancel
           </Button>
           <Button
@@ -129,7 +149,7 @@ export const EditActivityModal: React.FC<EditActivityModalProps> = ({
             Save Changes
           </Button>
         </DialogActions>
-      </Box>
+      </Box>{" "}
     </Dialog>
   );
 };

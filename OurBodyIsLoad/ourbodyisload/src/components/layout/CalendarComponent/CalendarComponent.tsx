@@ -23,6 +23,7 @@ import {
 import {
   fetchUserChosenClasses,
   fetchPreExistingClasses,
+  clearError,
 } from "../../../store/slices/CalendarAppSlice";
 import { AuthState } from "../../../interfaces/auth.interface";
 import { ClassVideoModal } from "./ClassVideoModal";
@@ -31,6 +32,7 @@ import { TrainingPlanModal } from "../ActivityCardComponent/TrainingPlanModal";
 import { eventsProp, renderEventInsides } from "./CalendarComponentUtils";
 import { LegendComponent } from "./CalendarComponentIconsAndLegend";
 import { ButtonStylingForApp } from "../../../globalStyles/ButtonStylingForApp";
+import ErrorHandlerDisplayComponent from "../ErrorAndNotificationHandlers/ErrorHandlerDisplayComponent";
 
 const CalendarComponent: React.FC = () => {
   const preExistingClasses = useSelector<
@@ -58,6 +60,7 @@ const CalendarComponent: React.FC = () => {
   const [showVideoClassModal, setShowVideoClassModal] = useState(false);
 
   const [openLegend, setOpenLegend] = useState(false);
+  const [openError, setOpenError] = useState(false);
 
   const [isCalendarView, setIsCalendarView] = useState(true);
   const [isListView, setIsListView] = useState(false);
@@ -80,9 +83,17 @@ const CalendarComponent: React.FC = () => {
   }, [authState.isLoggedIn]);
 
   useEffect(() => {
-    console.log(userChosenClasses);
-  }, [userChosenClasses]);
+    if (calendarState.error) {
+      setOpenError(true);
+    } else {
+      setOpenError(false);
+    }
+  }, [calendarState.error]);
 
+  const handleCloseError = () => {
+    setOpenError(false);
+    dispatch(clearError());
+  };
   const handleViewDidMount = (viewInfo: { view: { type: string } }) => {
     if (viewInfo.view.type.includes("list")) {
       setIsCalendarView(false);
@@ -147,9 +158,11 @@ const CalendarComponent: React.FC = () => {
             LEGEND
           </Button>
           {calendarState.error && (
-            <Typography variant="body1" color="error">
-              {calendarState.error}
-            </Typography>
+            <ErrorHandlerDisplayComponent
+              open={openError}
+              handleClose={handleCloseError}
+              error={calendarState.error}
+            />
           )}
           {showAddActivityModal && (
             <ActivityModal

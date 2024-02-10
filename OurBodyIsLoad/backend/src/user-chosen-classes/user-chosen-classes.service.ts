@@ -35,6 +35,10 @@ export class UserChosenClassesService {
       if (!preExistingClass) {
         throw new Error('Class not found!');
       }
+      const forbiddenHours = new Date();
+      const forbiddenMorningHours = new Date();
+      forbiddenHours.setHours(22, 0, 0, 0);
+      forbiddenMorningHours.setHours(6, 0, 0, 0);
 
       const parsedScheduleTime = new Date(scheduleTime);
       const proximityStartTime = new Date(
@@ -70,6 +74,12 @@ export class UserChosenClassesService {
 
       if (classesScheduledToday.length >= 3) {
         throw new Error('Maximum number of classes for the day reached.');
+      }
+      if (
+        parsedScheduleTime >= forbiddenHours ||
+        parsedScheduleTime <= forbiddenMorningHours
+      ) {
+        throw new Error('Scheduling between 10 PM and 6 AM is not allowed.');
       }
       console.log(`after parsing create`, parsedScheduleTime);
       const newUserChosenClass = new this.userChosenClassModel({
@@ -123,12 +133,6 @@ export class UserChosenClassesService {
         },
       });
 
-      if (existingClassesInProximity.length > 0) {
-        throw new Error(
-          'Class already scheduled within 30 minutes of the specified time.',
-        );
-      }
-
       const startOfDay = new Date(parsedScheduleTime);
       startOfDay.setHours(0, 0, 0, 0);
       const endOfDay = new Date(parsedScheduleTime);
@@ -139,16 +143,32 @@ export class UserChosenClassesService {
           $lte: endOfDay,
         },
       });
+      const forbiddenHours = new Date();
+      const forbiddenMorningHours = new Date();
+      forbiddenHours.setHours(22, 0, 0, 0);
+      forbiddenMorningHours.setHours(6, 0, 0, 0);
 
       if (classesScheduledToday.length >= 3) {
         throw new Error('Maximum number of classes for the day reached.');
       }
 
+      if (existingClassesInProximity.length > 0) {
+        throw new Error(
+          'Class already scheduled within 30 minutes of the specified time.',
+        );
+      }
+      if (
+        parsedScheduleTime >= forbiddenHours ||
+        parsedScheduleTime <= forbiddenMorningHours
+      ) {
+        throw new Error('Scheduling between 10 PM and 6 AM is not allowed.');
+      }
       const editedClass = await this.userChosenClassModel.findOneAndUpdate(
         { _id: id, userOwnerId: user.id },
         { $set: updatedDto },
         { new: true },
       );
+
       if (!editedClass) {
         throw new NotFoundException(
           `Class with ID ${id} not found or you're not the owner.`,
