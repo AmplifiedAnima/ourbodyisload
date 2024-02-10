@@ -3,6 +3,7 @@ import {
   UpdateUserChosenClassInterface,
   CalendarAppState,
   preExistingClassesInterface,
+  UserActivityData,
 } from "../../interfaces/calendar.interface";
 
 export const calendarAppInitialState: CalendarAppState = {
@@ -42,7 +43,12 @@ export const calendarAppStateManagementSlice = createSlice({
       state.userChosenClasses = action.payload;
     });
     builder.addCase(postUserActivitiesToBackend.rejected, (state, action) => {
-      console.log("Error payload:", action.payload);
+      console.log("create Error payload:", action.payload);
+      const payload = action.payload as errorResponse;
+      state.error = payload.error;
+    });
+    builder.addCase(editUserChosenClass.rejected, (state, action) => {
+      console.log(`edit error payload`, action.payload);
       const payload = action.payload as errorResponse;
       state.error = payload.error;
     });
@@ -103,11 +109,6 @@ export const fetchUserChosenClasses = createAsyncThunk(
     }
   }
 );
-
-interface UserActivityData {
-  activityId: string;
-  scheduleTime: Date;
-}
 
 export const postUserActivitiesToBackend = createAsyncThunk(
   "postUserActivitiesToBackend",
@@ -192,7 +193,15 @@ export const editUserChosenClass = createAsyncThunk(
     }: { id: string; updateUserChosenClassDto: UpdateUserChosenClassInterface },
     { rejectWithValue }
   ) => {
+    const formattedScheduleTime =
+      updateUserChosenClassDto.scheduleTime.toISOString();
+    const updatedDto = {
+      ...updateUserChosenClassDto,
+      scheduleTime: updateUserChosenClassDto.scheduleTime,
+    };
+
     try {
+      console.log(`updated dto edit`, updateUserChosenClassDto.scheduleTime);
       const token = localStorage.getItem("token");
       const response = await fetch(
         `http://localhost:3000/user-chosen-classes/${id}`,
@@ -202,16 +211,14 @@ export const editUserChosenClass = createAsyncThunk(
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify(updateUserChosenClassDto),
+          body: JSON.stringify(updatedDto),
         }
       );
-      console.log(id, updateUserChosenClassDto);
+
       if (!response.ok) {
         const errorData = await response.json();
 
-        return rejectWithValue(
-          errorData.message || "An unknown error occurred"
-        );
+        return rejectWithValue(errorData);
       }
 
       const updatedClass = await response.json();

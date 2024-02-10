@@ -150,7 +150,6 @@ export const ClassVideoModal: React.FC<ClassCommencingActivityModalProps> = ({
         activityId={userChosenClass!._id}
         open={editModalOpen}
         handleClose={() => setEditModalOpen(false)}
-        initialScheduleTime={new Date()}
         handleClosePreviousModal={handleClose}
       />
     </>

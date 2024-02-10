@@ -1,10 +1,4 @@
-import {
-  Modal,
-  Box,
-  Button,
-  CardMedia,
-  Typography,
-} from "@mui/material";
+import { Modal, Box, Button, CardMedia, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import { useDispatch } from "react-redux";
@@ -62,7 +56,9 @@ export const ActivityModalScheduling: React.FC<ScheduleActivityModalProps> = ({
 
   const handleCommenceActivity = () => {
     const currentDate = new Date();
+
     if (selectedDate) {
+      console.log(`modal schedule selected date`, selectedDate);
       dispatch(
         postUserActivitiesToBackend({
           activityId: selectedActivityId,
@@ -76,7 +72,9 @@ export const ActivityModalScheduling: React.FC<ScheduleActivityModalProps> = ({
           scheduleTime: currentDate,
         })
       );
+      console.log(`modal schedule current date`, currentDate);
     }
+
     onClose();
     onClosePreviousModal();
   };

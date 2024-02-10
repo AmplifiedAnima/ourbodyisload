@@ -13,11 +13,8 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { AppDispatch } from "../../../store/store";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import dayjs, { Dayjs } from "dayjs"; // Import Dayjs
 import { activityModalSchedulingDatePickerStyles } from "../ActivityCardComponent/ActivityModalSchedulingStyles";
 import { ButtonStylingForApp } from "../../../globalStyles/ButtonStylingForApp";
-import { StyledModalBox } from "../ActivityCardComponent/ActivityModalScheduling";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import { Box } from "@mui/material";
 interface DeleteActivityModalProps {
@@ -77,7 +74,6 @@ interface EditActivityModalProps {
   open: boolean;
   handleClose: () => void;
   handleClosePreviousModal: () => void;
-  initialScheduleTime: Date;
 }
 
 export const EditActivityModal: React.FC<EditActivityModalProps> = ({
@@ -85,25 +81,24 @@ export const EditActivityModal: React.FC<EditActivityModalProps> = ({
   open,
   handleClose,
   handleClosePreviousModal,
-  initialScheduleTime,
 }) => {
   const dispatch = useDispatch<AppDispatch>();
-  const [scheduleTime, setScheduleTime] = useState<Dayjs | null>(
-    dayjs(initialScheduleTime)
-  );
+  const [scheduleTime, setScheduleTime] = useState<Date | null>(null);
 
   const handleEdit = () => {
     dispatch(
       editUserChosenClass({
         id: activityId,
         updateUserChosenClassDto: {
-          scheduleTime: scheduleTime!.toISOString(),
+          scheduleTime: scheduleTime!,
         },
       })
     );
+    console.log(`editmodal`, scheduleTime);
     handleClose();
     handleClosePreviousModal();
   };
+
   return (
     <Dialog
       open={open}

@@ -27,6 +27,7 @@ export class UserChosenClassesService {
   ) {
     try {
       const { activityId, scheduleTime } = createUserChosenClassDto;
+      console.log(`before parsing create`, scheduleTime);
       const preExistingClass = await this.preExistingClassModel.findOne({
         id: activityId,
       });
@@ -70,7 +71,7 @@ export class UserChosenClassesService {
       if (classesScheduledToday.length >= 3) {
         throw new Error('Maximum number of classes for the day reached.');
       }
-
+      console.log(`after parsing create`, parsedScheduleTime);
       const newUserChosenClass = new this.userChosenClassModel({
         preExistingClassName: preExistingClass.name,
         preExistingClassVideoUrl: preExistingClass.videoUrl,
@@ -92,39 +93,82 @@ export class UserChosenClassesService {
       );
     }
   }
-  async findClassesByUserId(userId: string): Promise<userChosenClass[]> {
-    const classes = await this.userChosenClassModel
-      .find({ userOwnerId: userId })
-      .exec();
-    console.log(userId);
-    return classes;
-  }
-
-  findAll() {
-    return `This action returns all userChosenClasses`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} userChosenClass`;
-  }
   async editUserChosenClass(
     id: string,
     updateUserChosenClassDto: UpdateUserChosenClassDto,
     user: UserDocument,
   ) {
-    const editedClass = await this.userChosenClassModel.findOneAndUpdate(
-      { _id: id, userOwnerId: user.id },
-      { $set: updateUserChosenClassDto },
-      { new: true },
-    );
+    try {
+      const { scheduleTime } = updateUserChosenClassDto;
 
-    if (!editedClass) {
-      throw new NotFoundException(
-        `Class with ID ${id} not found or you're not the owner.`,
+      const parsedScheduleTime = new Date(scheduleTime);
+      console.log(`edit schedule`, parsedScheduleTime);
+      const updatedDto = {
+        ...updateUserChosenClassDto,
+        scheduleTime: parsedScheduleTime,
+      };
+
+      const proximityStartTime = new Date(
+        parsedScheduleTime.getTime() - 30 * 60 * 1000,
       );
-    }
+      const proximityEndTime = new Date(
+        parsedScheduleTime.getTime() + 30 * 60 * 1000,
+      );
 
-    return editedClass;
+      const existingClassesInProximity = await this.userChosenClassModel.find({
+        _id: { $ne: id },
+        scheduleTime: {
+          $gte: proximityStartTime,
+          $lte: proximityEndTime,
+        },
+      });
+
+      if (existingClassesInProximity.length > 0) {
+        throw new Error(
+          'Class already scheduled within 30 minutes of the specified time.',
+        );
+      }
+
+      const startOfDay = new Date(parsedScheduleTime);
+      startOfDay.setHours(0, 0, 0, 0);
+      const endOfDay = new Date(parsedScheduleTime);
+      endOfDay.setHours(23, 59, 59, 999);
+      const classesScheduledToday = await this.userChosenClassModel.find({
+        scheduleTime: {
+          $gte: startOfDay,
+          $lte: endOfDay,
+        },
+      });
+
+      if (classesScheduledToday.length >= 3) {
+        throw new Error('Maximum number of classes for the day reached.');
+      }
+
+      const editedClass = await this.userChosenClassModel.findOneAndUpdate(
+        { _id: id, userOwnerId: user.id },
+        { $set: updatedDto },
+        { new: true },
+      );
+      if (!editedClass) {
+        throw new NotFoundException(
+          `Class with ID ${id} not found or you're not the owner.`,
+        );
+      }
+      return editedClass;
+    } catch (error) {
+      console.error('Error in edit:', error);
+      if (error instanceof NotFoundException) {
+        throw error;
+      } else {
+        throw new HttpException(
+          {
+            status: HttpStatus.INTERNAL_SERVER_ERROR,
+            error: error.message,
+          },
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
+    }
   }
 
   async removeUserChosenClass(id: string, user: UserDocument): Promise<string> {
@@ -142,5 +186,21 @@ export class UserChosenClassesService {
       throw new Error(`error removing a class`);
     }
     return `This action removed a #${id} userChosenClass`;
+  }
+
+  async findClassesByUserId(userId: string): Promise<userChosenClass[]> {
+    const classes = await this.userChosenClassModel
+      .find({ userOwnerId: userId })
+      .exec();
+    console.log(userId);
+    return classes;
+  }
+
+  findAll() {
+    return `This action returns all userChosenClasses`;
+  }
+
+  findOne(id: number) {
+    return `This action returns a #${id} userChosenClass`;
   }
 }

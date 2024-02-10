@@ -25,7 +25,12 @@ export interface UserChosenClassesInterface {
   __v: number;
 }
 export interface UpdateUserChosenClassInterface {
-  scheduleTime: string;
+  scheduleTime: Date;
+}
+
+export interface UserActivityData {
+  activityId: string;
+  scheduleTime: Date;
 }
 export interface CalendarAppState {
   classes: preExistingClassesInterface[];
