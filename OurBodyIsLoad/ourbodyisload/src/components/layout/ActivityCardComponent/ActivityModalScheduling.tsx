@@ -1,37 +1,15 @@
-import { Modal, Box, Button, CardMedia, Typography } from "@mui/material";
+import { Modal, Button, CardMedia, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import styled from "@emotion/styled";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../store/store";
 import { postUserActivitiesToBackend } from "../../../store/slices/CalendarAppSlice";
 import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { activityModalSchedulingDatePickerStyles } from "./ActivityModalSchedulingStyles";
+import {
+  StyledModalBox,
+  activityModalSchedulingDatePickerStyles,
+} from "./ActivityModalAndSchedulingStyles";
 import { NotificationHandlerDisplayComponent } from "../ErrorAndNotificationHandlers/NotificationHandlerDisplayComponent";
-
-export const StyledModalBox = styled(Box)`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 400px;
-  background-color: #f7f2fa;
-  border-radius: 8px;
-  padding: 25px;
-
-  .MuiButton-root {
-    margin-top: 10px;
-    background-color: #6a1b9a;
-    color: white;
-    &:hover {
-      background-color: #7e57c2;
-    }
-  }
-
-  .MuiTextField-root {
-    width: 100%;
-  }
-`;
 
 interface ScheduleActivityModalProps {
   open: boolean;
@@ -89,7 +67,15 @@ export const ActivityModalScheduling: React.FC<ScheduleActivityModalProps> = ({
 
   return (
     <>
-      <Modal open={open} onClose={onClose}>
+      <Modal
+        open={open}
+        onClose={onClose}
+        sx={{
+          top: 0,
+          bottom: 20,
+          "@media (max-width: 768px)": { top: 50 },
+        }}
+      >
         <StyledModalBox
           sx={{
             "@media (max-width: 768px)": { width: "60%" },
@@ -108,7 +94,11 @@ export const ActivityModalScheduling: React.FC<ScheduleActivityModalProps> = ({
               "@media (max-width: 280px)": { width: "100%" },
             }}
           />
-
+          <NotificationHandlerDisplayComponent
+            open={notification}
+            handleClose={() => setNotification(false)}
+            notification="please schedule between 04:00 and 23:00"
+          />
           {!isDatePickerOpened && (
             <Button fullWidth onClick={() => setIsDatePickerOpened(true)}>
               Choose specific time
@@ -132,11 +122,6 @@ export const ActivityModalScheduling: React.FC<ScheduleActivityModalProps> = ({
           <Button onClick={onClose} fullWidth>
             Close
           </Button>
-          <NotificationHandlerDisplayComponent
-            open={notification}
-            handleClose={() => setNotification(false)}
-            notification="please schedule between 6:00 and 22:00"
-          />
         </StyledModalBox>
       </Modal>
     </>

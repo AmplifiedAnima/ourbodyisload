@@ -13,10 +13,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { AppDispatch } from "../../../store/store";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import {
-  activityModalSchedulingDatePickerStyles,
-  boxModalStyles,
-} from "../ActivityCardComponent/ActivityModalSchedulingStyles";
+import { activityModalSchedulingDatePickerStyles } from "../ActivityCardComponent/ActivityModalAndSchedulingStyles";
 import { ButtonStylingForApp } from "../../../globalStyles/ButtonStylingForApp";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import { Box } from "@mui/material";
@@ -117,12 +114,7 @@ export const EditActivityModal: React.FC<EditActivityModalProps> = ({
       }}
     >
       {" "}
-      <NotificationHandlerDisplayComponent
-        open={notification}
-        handleClose={() => setNotification(false)}
-        notification="please schedule between 6:00 and 22:00"
-      />
-      <Box sx={{}}>
+      <Box>
         <DialogTitle id="edit-dialog-title">Reschedule Activity</DialogTitle>
         <DialogContent>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -136,6 +128,13 @@ export const EditActivityModal: React.FC<EditActivityModalProps> = ({
               }}
             />
           </LocalizationProvider>
+          <Box sx={{ width: "400px" }}>
+            <NotificationHandlerDisplayComponent
+              open={notification}
+              handleClose={() => setNotification(false)}
+              notification="please schedule between 04:00 and 23:00"
+            />
+          </Box>
         </DialogContent>
         <DialogActions>
           <Button onClick={modalCloseHandler} sx={{ ...ButtonStylingForApp }}>
@@ -149,7 +148,7 @@ export const EditActivityModal: React.FC<EditActivityModalProps> = ({
             Save Changes
           </Button>
         </DialogActions>
-      </Box>{" "}
+      </Box>
     </Dialog>
   );
 };

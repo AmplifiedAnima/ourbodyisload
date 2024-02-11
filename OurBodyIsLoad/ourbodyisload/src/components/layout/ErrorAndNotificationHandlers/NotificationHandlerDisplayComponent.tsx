@@ -1,5 +1,4 @@
 import { Alert, AlertTitle, Snackbar, Typography } from "@mui/material";
-import { CustomBackdrop } from "./ErrorHandlerDisplayComponent";
 
 interface notificationDisplayProps {
   open: boolean;
@@ -26,6 +25,7 @@ export const NotificationHandlerDisplayComponent: React.FC<
           severity="error"
           sx={{
             width: "400px",
+            maxWidth:'auto',
             textAlign: "center",
             backgroundColor: "#f7f2fa",
             ".MuiSvgIcon-root": {

@@ -1,5 +1,6 @@
 import { Box, Button, Modal } from "@mui/material";
 import { ButtonStylingForApp } from "../../../globalStyles/ButtonStylingForApp";
+import { trainingPlanModalStyles } from "./ActivityModalAndSchedulingStyles";
 
 interface TrainingPlanModalProps {
   open: boolean;
@@ -19,19 +20,7 @@ export const TrainingPlanModal: React.FC<TrainingPlanModalProps> = ({
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box
-          sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: "80%",
-            height: "80%",
-            bgcolor: "background.paper",
-            overflowY: "auto",
-            borderRadius: "8px",
-          }}
-        >
+        <Box sx={trainingPlanModalStyles}>
           <Button
             onClick={handleClose}
             sx={{

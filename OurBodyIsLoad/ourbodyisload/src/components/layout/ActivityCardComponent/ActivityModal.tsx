@@ -1,28 +1,20 @@
 import { Box, Button, Modal, Typography } from "@mui/material";
 import { ButtonStylingForApp } from "../../../globalStyles/ButtonStylingForApp";
 import { ActivityCard } from "./ActivityCard";
-import styled from "@emotion/styled";
 import { useState } from "react";
 import { ActivityModalScheduling } from "./ActivityModalScheduling";
 import { preExistingClassesInterface } from "../../../interfaces/calendar.interface";
-import { boxModalStyles } from "./ActivityModalSchedulingStyles";
+import {
+  GridContainer,
+  TypographyStylingInModal,
+  boxModalStyles,
+} from "./ActivityModalAndSchedulingStyles";
 
 interface ActivityModalProps {
   open: boolean;
   handleClose: () => void;
   preExistingClassesProps: preExistingClassesInterface[] | undefined;
 }
-
-export const GridContainer = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 25px;
-  padding: 0px 20px;
-  @media (max-width: 768px) {
-    display: flex;
-    flex-direction: column;
-  }
-`;
 
 export const ActivityModal: React.FC<ActivityModalProps> = ({
   open,
@@ -67,26 +59,8 @@ export const ActivityModal: React.FC<ActivityModalProps> = ({
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
-      <Box
-        sx={boxModalStyles}
-      >
-        <Typography
-          variant="h5"
-          sx={{
-            textAlign: "center",
-            margin: "10px",
-            background:
-              "linear-gradient(to right, white 42%, rgba(94, 0, 140, 1) 90%)",
-            fontFamily: 'Helvetica, "Trebuchet MS", Verdana, sans-serif',
-            fontWeight: "bold",
-            textShadow: "2px 2px 8px rgba(94, 0, 140, 0.2)",
-            letterSpacing: "10px",
-            "@media (max-width: 768px)": {
-              fontSize: "18px",
-              letterSpacing: "5px",
-            },
-          }}
-        >
+      <Box sx={boxModalStyles}>
+        <Typography variant="h5" sx={TypographyStylingInModal}>
           SCHEDULE ACTIVITY
         </Typography>
         <GridContainer>
