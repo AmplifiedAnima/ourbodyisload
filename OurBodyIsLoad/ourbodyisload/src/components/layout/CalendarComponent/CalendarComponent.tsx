@@ -24,6 +24,7 @@ import {
   fetchUserChosenClasses,
   fetchPreExistingClasses,
   clearError,
+  resetPostSuccessFlag,
 } from "../../../store/slices/CalendarAppSlice";
 import { AuthState } from "../../../interfaces/auth.interface";
 import { ClassVideoModal } from "./ClassVideoModal";
@@ -51,7 +52,7 @@ const CalendarComponent: React.FC = () => {
     RootState,
     CalendarAppState
   >((state) => state.calendarApp);
-
+  const postSuccess = calendarState.postSuccess;
   const dispatch = useDispatch<AppDispatch>();
 
   const [showAddActivityModal, setShowAddActivityModal] = useState(false);
@@ -71,16 +72,22 @@ const CalendarComponent: React.FC = () => {
   useEffect(() => {
     if (authState.isLoggedIn) {
       dispatch(fetchUserChosenClasses());
+      dispatch(fetchPreExistingClasses());
       console.log(calendarState);
       console.log(`auth`, authState);
     }
-  }, [authState.isLoggedIn, !showAddActivityModal, !showVideoClassModal]);
+  }, [authState.isLoggedIn, dispatch]);
 
   useEffect(() => {
-    if (authState.isLoggedIn) {
-      dispatch(fetchPreExistingClasses());
+    let didCancel = false;
+    if (postSuccess && !didCancel) {
+      dispatch(fetchUserChosenClasses());
+      dispatch(resetPostSuccessFlag());
     }
-  }, [authState.isLoggedIn]);
+    return () => {
+      didCancel = true;
+    };
+  }, [postSuccess, dispatch]);
 
   useEffect(() => {
     if (calendarState.error) {

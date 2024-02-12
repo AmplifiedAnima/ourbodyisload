@@ -11,6 +11,7 @@ export const calendarAppInitialState: CalendarAppState = {
   userChosenClasses: [],
   status: "idle",
   error: null,
+  postSuccess: false,
 };
 interface errorResponse {
   status: number;
@@ -37,6 +38,9 @@ export const calendarAppStateManagementSlice = createSlice({
     clearError(state) {
       state.error = null;
     },
+    resetPostSuccessFlag(state) {
+      state.postSuccess = false;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchPreExistingClasses.fulfilled, (state, action) => {
@@ -44,6 +48,15 @@ export const calendarAppStateManagementSlice = createSlice({
     });
     builder.addCase(fetchUserChosenClasses.fulfilled, (state, action) => {
       state.userChosenClasses = action.payload;
+    });
+    builder.addCase(postUserActivitiesToBackend.fulfilled, (state) => {
+      state.postSuccess = true;
+    });
+    builder.addCase(editUserChosenClass.fulfilled, (state) => {
+      state.postSuccess = true;
+    });
+    builder.addCase(deleteUserActivity.fulfilled, (state) => {
+      state.postSuccess = true;
     });
     builder.addCase(postUserActivitiesToBackend.rejected, (state, action) => {
       console.log("create Error payload:", action.payload);
@@ -229,7 +242,7 @@ export const editUserChosenClass = createAsyncThunk(
     }
   }
 );
-export const { setClasses, clearError } =
+export const { setClasses, clearError, resetPostSuccessFlag } =
   calendarAppStateManagementSlice.actions;
 
 export const calendarAppSlice = {

@@ -25,18 +25,17 @@ export const NotificationHandlerDisplayComponent: React.FC<
           severity="error"
           sx={{
             width: "400px",
-            maxWidth:'auto',
+            maxWidth: "auto",
             textAlign: "center",
             backgroundColor: "#f7f2fa",
             ".MuiSvgIcon-root": {
               color: "#7d4b99",
             },
             "@media (max-width: 768px)": {
-                width: "100%",
-              },
+              width: "100%",
+            },
           }}
         >
-          <AlertTitle sx={{ color: "#7d4b99" }}>Notification</AlertTitle>
           <Typography
             variant="body1"
             sx={{

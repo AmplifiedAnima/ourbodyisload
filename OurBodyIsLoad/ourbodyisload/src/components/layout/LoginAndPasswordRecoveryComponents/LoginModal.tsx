@@ -8,17 +8,18 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { ButtonStylingForApp } from "../../../globalStyles/ButtonStylingForApp";
 import { signIn } from "../../../store/slices/authSlice";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../store/store";
 import { Link } from "react-router-dom";
-
-interface ErrorResponse {
-  message: string;
-  error: string;
-  statusCode: number;
-}
+import { SimpleErrorInlineHandler } from "../ErrorAndNotificationHandlers/ErrorHandlerDisplayComponent";
+import {
+  closeButtonStyles,
+  inputStylingSx,
+  linkWithStylesSx,
+  loginButtonStyles,
+} from "./loginModalStyles";
+import { ImageOfLoginArrow } from "../HeaderComponent/MenuDashboard/ImagesExported";
 
 const LoginModal = () => {
   const [open, setOpen] = useState(false);
@@ -26,8 +27,8 @@ const LoginModal = () => {
     username: "",
     password: "",
   });
-  const [errorLogin, setErrorLogin] = useState("");
 
+  const [errorLogin, setErrorLogin] = useState("");
   const dispatch = useDispatch<AppDispatch>();
 
   const handleOpen = () => {
@@ -42,6 +43,7 @@ const LoginModal = () => {
     const { name, value } = e.target;
     setCredentials({ ...credentials, [name]: value });
   };
+
   const handleLogin = async () => {
     const actionResult = await dispatch(
       signIn({
@@ -63,15 +65,6 @@ const LoginModal = () => {
     }
   };
 
-  const inputStylingSx = {
-    width: "260px",
-    padding: "10px 0px",
-    marginBottom: "0px",
-    "@media (max-width: 280px)": {
-      width: "auto",
-    },
-  };
-
   interface ButtonWithLinkProps {
     to: string;
     label: string;
@@ -84,51 +77,24 @@ const LoginModal = () => {
         style={{
           textDecoration: "none",
           color: "black",
-          padding: "10px 15px",
         }}
       >
-        <Typography
-          sx={{
-            fontFamily: "Poppins",
-
-            fontSize: "20px",
-            color: "black",
-            textAlign: "center",
-          }}
-        >
-          {label}
-        </Typography>
+        <Typography sx={linkWithStylesSx}>{label}</Typography>
       </Link>
     );
   };
   return (
     <Box>
-      <Button
-        onClick={handleOpen}
-        sx={{
-          ...ButtonStylingForApp,
-          padding: "6px 15px",
-          margin: "30px",
-          letterSpacing: "1.5px",
-          fontWeight: "bold",
-          "@media (max-width: 768px)": {
-            marginTop: "25px",
-            padding: "3px 15px",
-          },
-          "@media (max-width: 280px)": {
-            marginLeft: "10px",
-            padding: "4px 15px",
-          },
-        }}
-      >
-        LOGIN
+      <Button onClick={handleOpen} sx={{margin:'2px'}}>
+        {ImageOfLoginArrow}
       </Button>
+
       <Dialog
         open={open}
         onClose={handleClose}
-        sx={{ background: "rgba(94, 0, 140, 0.3)", zIndex: "10000" }}
+        sx={{ background: "rgba(94, 0, 140, 0.3)", zIndex: 10000 }}
       >
-        <DialogContent>
+        <DialogContent sx={{ border: "3px solid rgba(94, 0, 140, 0.8)" }}>
           <form>
             <Box>
               <TextField
@@ -151,54 +117,31 @@ const LoginModal = () => {
               />
             </Box>
           </form>
-        </DialogContent>
 
-        <DialogActions>
-          <Button
-            onClick={handleClose}
-            sx={{
-              ...ButtonStylingForApp,
-              marginRight: "auto",
-              marginLeft: "20px",
-              "&:hover": {
-                background: "red",
-                color: "white",
-              },
-            }}
-          >
-            Cancel
-          </Button>
-          <Button
-            onClick={handleLogin}
-            sx={{
-              ...ButtonStylingForApp,
-              marginRight: "20px",
-              "&:hover": {
-                background: "green",
-                color: "white",
-              },
-            }}
-          >
-            Login
-          </Button>
-        </DialogActions>
-        {errorLogin && (
-          <Typography
-            color="error"
-            variant="body1"
-            sx={{ textAlign: "center" }}
-          >
-            {errorLogin}
-          </Typography>
-        )}
-        <LinkWithStyles
-          to="/registration-page"
-          label="Not signed up? Register here"
-        />
-        <LinkWithStyles
-          to="/password-recovery"
-          label="Forgot password? click here"
-        />
+          <DialogActions>
+            <Button onClick={handleClose} sx={closeButtonStyles}>
+              Cancel
+            </Button>
+
+            <Button onClick={handleLogin} sx={loginButtonStyles}>
+              Login
+            </Button>
+          </DialogActions>
+          {errorLogin && (
+            <SimpleErrorInlineHandler
+              error={errorLogin}
+              handleCloseError={() => setErrorLogin("")}
+            />
+          )}
+          <LinkWithStyles
+            to="/registration-page"
+            label="Not signed up? Register here"
+          />
+          <LinkWithStyles
+            to="/password-recovery"
+            label="Forgot password? Click here"
+          />
+        </DialogContent>
       </Dialog>
     </Box>
   );

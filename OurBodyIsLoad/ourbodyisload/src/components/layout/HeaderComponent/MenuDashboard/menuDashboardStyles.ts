@@ -54,7 +54,7 @@ export const getDashboardBoxStyle = (isOpen: boolean) => ({
   background: "white",
   width: "400px",
   height: "100%",
-  zIndex: 10000,
+  zIndex: 99999,
   color: "white",
   transition: "left 3s ease",
   "@media (max-width: 768px)": {

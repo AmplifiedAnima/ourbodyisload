@@ -13,7 +13,6 @@ export const initialAuthState: AuthState = {
   roles: [],
   avatarImageUrl: "",
 };
-
 const authSlice = createSlice({
   name: "auth",
   initialState: initialAuthState,
@@ -49,60 +48,60 @@ export const initializeIsLoggedInState =
     const token = localStorage.getItem("token");
     const userData = localStorage.getItem("userData");
 
-    const isTokenExpired = (token: string): boolean => {
+    const refreshAuthToken = async (token: string) => {
+      console.log(token);
       try {
-        const decodedToken = jwtDecode<{ exp: number }>(token);
-
-        if (!decodedToken || !decodedToken.exp) {
-          console.error("Token is invalid or malformed");
-          return true;
-        }
-
-        const currentTime = Date.now() / 1000;
-        return decodedToken.exp < currentTime;
-      } catch (error) {
-        console.error("Error decoding token:", error);
-        return true;
-      }
-    };
-    if (token && isTokenExpired(token)) {
-      try {
-        const refreshedTokenResponse = await fetch(
-          "/localhost:3000/auth/refresh-token",
+        const response = await fetch(
+          "http://localhost:3000/auth/refresh-token",
           {
             method: "POST",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+            headers: { Authorization: `Bearer ${token}` },
           }
         );
 
-        if (!refreshedTokenResponse.ok) {
+        if (!response.ok) {
+          const errorData = await response.json();
+          console.error("Failed to refresh token:", errorData);
           throw new Error("Failed to refresh token");
         }
 
-        const { accessToken: newToken } = await refreshedTokenResponse.json();
+        const { accessToken: newToken } = await response.json();
+        console.log(`Token refreshed successfully. New token:`, newToken);
         localStorage.setItem("token", newToken);
+        return newToken;
+      } catch (error) {
+        console.error("Error refreshing token:", error);
+        throw error;
+      }
+    };
+
+    if (token) {
+      console.log("Attempting to refresh token...");
+      try {
+        const newToken = await refreshAuthToken(token);
         dispatch(setToken({ accessToken: newToken }));
         dispatch(setIsLoggedIn());
       } catch (error) {
-        console.error("Error refreshing token:", error);
+        console.log("Refreshing token failed, logging out...");
         dispatch(performLogout());
-        return;
       }
-    } else if (token) {
-      dispatch(setIsLoggedIn());
-      dispatch(setToken({ accessToken: token }));
+    } else {
+      console.log("No token found, user is not logged in.");
+      dispatch(performLogout());
     }
 
     if (userData) {
-      const user = JSON.parse(userData);
-      dispatch(setUsername({ username: user.username }));
-      dispatch(setEmail({ email: user.email }));
-      dispatch(setAvatarImageUrl({ avatarImageUrl: user.avatarImageUrl }));
+      try {
+        const user = JSON.parse(userData);
+        console.log("Setting user data from localStorage:", user);
+        dispatch(setUsername({ username: user.username }));
+        dispatch(setEmail({ email: user.email }));
+        dispatch(setAvatarImageUrl({ avatarImageUrl: user.avatarImageUrl }));
+      } catch (error) {
+        console.error("Error parsing user data:", error);
+      }
     }
   };
-
 export const performLogout = () => (dispatch: AppDispatch) => {
   localStorage.removeItem("token");
   localStorage.removeItem("userData");

@@ -1,7 +1,7 @@
 import { styled } from "@mui/material/styles";
 import menuBurger from "../../../../static/images/menu-burger.png";
-import wolfLogo from "../../../../static/images/WolfLogo.png"
-
+import wolfLogo from "../../../../static/images/WolfLogo.png";
+import loginArrowImage from "../../../../static/images/enterArrow.png";
 const StyledImg = styled("img")({});
 
 export const ImageOfLogo = (
@@ -23,6 +23,25 @@ export const ImageOfLogo = (
   />
 );
 
+export const ImageOfLoginArrow = (
+  <StyledImg
+    src={loginArrowImage}
+    alt="my Image"
+    sx={{
+      marginTop: "3px",
+      width: 80,
+      height: 80,
+      "@media (max-width: 768px)": {
+        marginTop: "3px",
+        width: 55,
+        height: 55,
+      },
+      "@media (max-width: 280px)": {
+        marginTop: "5px",
+      },
+    }}
+  />
+);
 export const menuBurgerIcon = (
   <StyledImg
     src={menuBurger}

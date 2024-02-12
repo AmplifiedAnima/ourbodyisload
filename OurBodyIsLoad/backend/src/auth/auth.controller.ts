@@ -101,11 +101,14 @@ export class AuthController {
     console.log(`auth`, updatedUser);
   }
 
+  @UseGuards(AuthGuard()) // Assuming you have a dedicated strategy for refresh tokens
   @Post('refresh-token')
-  async refreshToken(@Request() user: RequestWithUser) {
-    const refreshedToken = await this.authService.refreshToken(user.body);
-    console.log(refreshedToken);
-    console.log(user);
+  async refreshToken(@Request() req: RequestWithUser) {
+    // Extract user information from req.user, populated by AuthGuard
+    console.log(`User from request: `, req.user);
+
+    const refreshedToken = await this.authService.refreshToken(req.user);
+    console.log('Refreshed token details: ', refreshedToken);
     return refreshedToken;
   }
 

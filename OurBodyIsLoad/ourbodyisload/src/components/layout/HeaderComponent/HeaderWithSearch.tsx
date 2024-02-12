@@ -5,9 +5,13 @@ import { MenuDashboard } from "./MenuDashboard/MenuDashboard";
 import { HeaderContainerStyle } from "./headerStyles";
 import { SearchInput } from "./SearchInput";
 import { useState } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../store/store";
+import LoginModal from "../LoginAndPasswordRecoveryComponents/LoginModal";
 
 export const HeaderWithSearch = () => {
   const dispatch = useDispatch();
+  const authState = useSelector((state: RootState) => state.auth);
 
   const [searchingQuery, setSearchingQuery] = useState("");
 
@@ -24,7 +28,7 @@ export const HeaderWithSearch = () => {
   return (
     <>
       <Box sx={HeaderContainerStyle}>
-        <MenuDashboard />
+        {authState.isLoggedIn ? <MenuDashboard /> : <LoginModal />}
         <SearchInput
           handleInputValue={handleInputValue}
           onHandleSearchSubmit={handleSearchSubmit}

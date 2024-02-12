@@ -128,15 +128,12 @@ export const EditActivityModal: React.FC<EditActivityModalProps> = ({
               }}
             />
           </LocalizationProvider>
-          <Box sx={{ width: "400px" }}>
-            <NotificationHandlerDisplayComponent
-              open={notification}
-              handleClose={() => setNotification(false)}
-              notification="please schedule between 04:00 and 23:00"
-            />
-          </Box>
-        </DialogContent>
-        <DialogActions>
+          <NotificationHandlerDisplayComponent
+            open={notification}
+            handleClose={() => setNotification(false)}
+            notification="please schedule between 04:00 and 23:00"
+          />
+            <DialogActions>
           <Button onClick={modalCloseHandler} sx={{ ...ButtonStylingForApp }}>
             Cancel
           </Button>
@@ -148,6 +145,8 @@ export const EditActivityModal: React.FC<EditActivityModalProps> = ({
             Save Changes
           </Button>
         </DialogActions>
+        </DialogContent>
+      
       </Box>
     </Dialog>
   );

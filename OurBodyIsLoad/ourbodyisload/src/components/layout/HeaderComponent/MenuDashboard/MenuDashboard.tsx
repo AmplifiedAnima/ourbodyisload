@@ -83,107 +83,98 @@ export const MenuDashboard = () => {
             <Box
               sx={{
                 ...itemStyles,
-                margin: "20px",
                 display: "flex",
                 justifyContent: "center",
+                alignItems: "center",
+                "@media(max-width:768px)": {
+                  margin: "0px 0px",
+                },
+                "@media(max-width:280px)": {
+                  margin: "20px 0px",
+                },
               }}
             >
               {isLoggedIn && (
                 <Avatar
                   src={avatarImageUrl}
                   alt=""
-                  sx={{ width: "100px", height: "100px" }}
+                  sx={{
+                    width: "100px",
+                    height: "100px",
+                  }}
                 />
               )}
             </Box>
             <Box sx={boxMenuStyles}>
               <List>
-                {isLoggedIn ? (
-                  <>
-                    <Typography
-                      sx={{
-                        ...fontStyling,
-                        paddingLeft: "24px",
-                        marginBottom: "13px",
-                        fontSize: "14px",
-                        color: "purple",
-                      }}
-                    >
-                      Logged in as: {username}
-                    </Typography>
-                    <ListItem>
-                      <Link to="/">
-                        <Button>
-                          <Typography sx={fontStyling}>
-                            Our Body Is Love
-                          </Typography>
-                        </Button>
-                      </Link>
-                    </ListItem>
-                    <ListItem>
-                      <Link to="/exercise-library">
-                        <Button>
-                          <Typography sx={fontStyling}>
-                            Exercise Library
-                          </Typography>
-                        </Button>
-                      </Link>
-                    </ListItem>
-                    <ListItem>
-                      <Link to="/blog-post">
-                        <Button>
-                          <Typography sx={fontStyling}>Blogpost</Typography>
-                        </Button>
-                      </Link>
-                    </ListItem>
-                    <ListItem>
-                      <Link to="/profile">
-                        <Button>
-                          <Typography sx={fontStyling}>Profile</Typography>
-                        </Button>
-                      </Link>
-                    </ListItem>
-                    <ListItem>
-                      <Link to="/about-creator">
-                        <Button>
-                          <Typography sx={fontStyling}>
-                            About Creator
-                          </Typography>
-                        </Button>
-                      </Link>
-                    </ListItem>
-                    <ListItem>
-                      <Button
-                        sx={{
-                          ...ButtonStylingForApp,
-                          padding: 1,
-                          "&:hover": {
-                            background: "red",
-                            color: "white",
-                          },
-                        }}
-                        onClick={handleLogout}
-                      >
-                        Logout
+                <>
+                  <Typography
+                    sx={{
+                      ...fontStyling,
+                      paddingLeft: "24px",
+                      marginBottom: "13px",
+                      fontSize: "14px",
+                      color: "purple",
+                    }}
+                  >
+                    username : {username}
+                  </Typography>
+                  <ListItem>
+                    <Link to="/">
+                      <Button>
+                        <Typography sx={fontStyling}>
+                          Our Body Is Love
+                        </Typography>
                       </Button>
-                    </ListItem>
-                  </>
-                ) : (
-                  <>
-                    <ListItem>
-                      <Link to="/about-creator">
-                        <Button>
-                          <Typography sx={fontStyling}>
-                            About Creator
-                          </Typography>
-                        </Button>
-                      </Link>
-                    </ListItem>
-                    <ListItem>
-                      <LoginModal />
-                    </ListItem>
-                  </>
-                )}
+                    </Link>
+                  </ListItem>
+                  <ListItem>
+                    <Link to="/exercise-library">
+                      <Button>
+                        <Typography sx={fontStyling}>
+                          Exercise Library
+                        </Typography>
+                      </Button>
+                    </Link>
+                  </ListItem>
+                  <ListItem>
+                    <Link to="/blog-post">
+                      <Button>
+                        <Typography sx={fontStyling}>Blogpost</Typography>
+                      </Button>
+                    </Link>
+                  </ListItem>
+                  <ListItem>
+                    <Link to="/profile">
+                      <Button>
+                        <Typography sx={fontStyling}>Profile</Typography>
+                      </Button>
+                    </Link>
+                  </ListItem>
+                  <ListItem>
+                    <Link to="/about-creator">
+                      <Button>
+                        <Typography sx={fontStyling}>About Creator</Typography>
+                      </Button>
+                    </Link>
+                  </ListItem>
+                  <ListItem>
+                    <Button
+                      sx={{
+                        ...ButtonStylingForApp,
+                        margin: "auto",
+                        padding: 1,
+                        "&:hover": {
+                          background: "red",
+                          color: "white",
+                        },
+                      }}
+                      onClick={handleLogout}
+                    >
+                      Logout
+                    </Button>
+                  </ListItem>
+                </>
               </List>
             </Box>
           </Box>

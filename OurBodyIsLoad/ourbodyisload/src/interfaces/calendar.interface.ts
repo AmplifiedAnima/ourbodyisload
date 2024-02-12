@@ -37,4 +37,5 @@ export interface CalendarAppState {
   userChosenClasses: UserChosenClassesInterface[];
   status: string;
   error: string | null;
+  postSuccess: boolean;
 }

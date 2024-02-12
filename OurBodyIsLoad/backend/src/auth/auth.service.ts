@@ -46,7 +46,7 @@ export class AuthService {
   userDataFunction = (user: UserDocument) => {
     const userData = {
       username: user.username,
-      id: user._id.toString(),
+      id: user._id,
       roles: user.roles,
       exercises: user.exercises,
       userChosenClasses: user.userChosenClasses,
@@ -63,7 +63,7 @@ export class AuthService {
       exercises: user.exercises,
       userChosenClasses: user.userChosenClasses,
       roles: user.roles,
-      id: user._id.toString(),
+      id: user._id,
       avatarImageUrl: user.avatarImageUrl,
     };
   }
@@ -77,9 +77,10 @@ export class AuthService {
   }
 
   async validateToken(accessToken: string): Promise<UserDocument> {
+    console.log('validating token.... authservice...');
     try {
       const decoded = this.jwtService.verify(accessToken);
-      console.log(decoded);
+      console.log(decoded.user.username);
       const user = await this.userService.findOneByUsername(
         decoded.user.username,
       );
@@ -96,7 +97,9 @@ export class AuthService {
   }
 
   async refreshToken(user: UserDocument) {
+    console.log(user._id, `auth service`);
     const userData = this.transformToSafeData(user);
+    console.log(`refreshing the token for user ...`, userData.username);
     return {
       expiresIn: '3600',
       accessToken: this.jwtService.sign(userData),
