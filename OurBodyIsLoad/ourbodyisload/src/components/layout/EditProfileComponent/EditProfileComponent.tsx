@@ -12,7 +12,7 @@ import { LoginToAccessThisPartComponent } from "../LoginToAccessThisPartComponen
 export interface UpdateProfileData {
   username?: string;
   email?: string;
-  password?: string;
+  currentPassword?: string;
   newPassword?: string;
 }
 
@@ -59,6 +59,7 @@ export const EditProfileComponent: React.FC = () => {
             alignItems: "center",
             marginTop: 4,
             gap: 2,
+            padding:3
           }}
         >
           <Typography variant="h4">Edit Profile</Typography>
@@ -88,9 +89,12 @@ export const EditProfileComponent: React.FC = () => {
                 label="Current password"
                 type="password"
                 variant="outlined"
-                {...register("password", { minLength: 8, maxLength: 32 })}
-                error={!!errors.password}
-                helperText={errors.password?.message}
+                {...register("currentPassword", {
+                  minLength: 8,
+                  maxLength: 32,
+                })}
+                error={!!errors.currentPassword}
+                helperText={errors.currentPassword?.message}
               />
             </FormControl>
 

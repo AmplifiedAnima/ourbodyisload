@@ -21,7 +21,6 @@ import { UserDocument } from 'src/user/schemas/user.schema';
 import Role from 'src/user/role.enum';
 import { exercise } from 'src/exercises/Schemas/exercise.schema';
 import { userChosenClass } from 'src/user-chosen-classes/schemas/user-chosen-class.schema';
-// import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { UpdateProfileDto } from './dto/updateProfile.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 
@@ -70,6 +69,15 @@ export class AuthController {
   }
 
   @UseGuards(AuthGuard())
+  @Post('refresh-token')
+  async refreshToken(@Request() req: RequestWithUser) {
+    console.log(`User from request: `, req.user);
+
+    const refreshedToken = await this.authService.refreshToken(req.user);
+    console.log('Refreshed token details: ', refreshedToken);
+    return refreshedToken;
+  }
+  @UseGuards(AuthGuard())
   @Patch('editprofile')
   async editProfile(
     @Body() updateProfileDto: UpdateProfileDto,
@@ -99,17 +107,6 @@ export class AuthController {
       updateProfileDto,
     );
     console.log(`auth`, updatedUser);
-  }
-
-  @UseGuards(AuthGuard()) // Assuming you have a dedicated strategy for refresh tokens
-  @Post('refresh-token')
-  async refreshToken(@Request() req: RequestWithUser) {
-    // Extract user information from req.user, populated by AuthGuard
-    console.log(`User from request: `, req.user);
-
-    const refreshedToken = await this.authService.refreshToken(req.user);
-    console.log('Refreshed token details: ', refreshedToken);
-    return refreshedToken;
   }
 
   @Post('recover-password')

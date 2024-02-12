@@ -199,6 +199,7 @@ export const updateProfile = createAsyncThunk(
     }: { credentials: UpdateProfileData; authToken: string },
     { dispatch, rejectWithValue }
   ) => {
+    console.log(credentials);
     try {
       const response = await fetch("http://localhost:3000/auth/editprofile", {
         method: "PATCH",

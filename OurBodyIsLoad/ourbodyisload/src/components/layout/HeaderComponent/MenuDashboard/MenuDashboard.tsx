@@ -137,13 +137,14 @@ export const MenuDashboard = () => {
                       </Button>
                     </Link>
                   </ListItem>
-                  <ListItem>
+                  {/* To be written */}
+                  {/* <ListItem>
                     <Link to="/blog-post">
                       <Button>
                         <Typography sx={fontStyling}>Blogpost</Typography>
                       </Button>
                     </Link>
-                  </ListItem>
+                  </ListItem> */}
                   <ListItem>
                     <Link to="/profile">
                       <Button>

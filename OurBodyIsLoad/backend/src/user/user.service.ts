@@ -2,6 +2,7 @@ import {
   Injectable,
   NotFoundException,
   ConflictException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from './schemas/user.schema';
@@ -87,6 +88,7 @@ export class UserService {
       throw error;
     }
   }
+
   async updateUserInfo(
     username: string,
     updatedInfo: UpdateProfileDto,
@@ -94,6 +96,21 @@ export class UserService {
     const user = await this.userModel.findOne({ username });
     if (!user) {
       throw new NotFoundException('User not found');
+    }
+    console.log(`dto`, updatedInfo, `user`, user);
+    console.log(
+      `oldpassword`,
+      updatedInfo.currentPassword,
+      `newpassword`,
+      updatedInfo.newPassword,
+    );
+    const isCurrentPasswordValid = await bcrypt.compare(
+      updatedInfo.currentPassword,
+      user.password,
+    );
+
+    if (!isCurrentPasswordValid) {
+      throw new UnauthorizedException('Current password is incorrect');
     }
 
     if (updatedInfo.username && updatedInfo.username !== user.username) {
@@ -119,7 +136,7 @@ export class UserService {
     }
 
     await user.save();
-    console.log(`dto`, updatedInfo, `user`, user);
+
     return user;
   }
 
