@@ -5,4 +5,5 @@ export interface AuthState {
   email: string;
   roles: string[];
   avatarImageUrl: string;
+  error: string | null;
 }

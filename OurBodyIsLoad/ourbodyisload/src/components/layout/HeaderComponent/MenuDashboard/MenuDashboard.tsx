@@ -8,7 +8,6 @@ import { AuthState } from "../../../../interfaces/auth.interface";
 import { ButtonStylingForApp } from "../../../../globalStyles/ButtonStylingForApp";
 import { useDispatch } from "react-redux";
 import { ArrowBack } from "@mui/icons-material";
-import LoginModal from "../../LoginAndPasswordRecoveryComponents/LoginModal";
 import {
   itemStyles,
   fontStyling,

@@ -1,9 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { AppDispatch } from "../store";
-import { jwtDecode } from "jwt-decode";
 import { UpdateProfileData } from "../../components/layout/EditProfileComponent/EditProfileComponent";
 import { AuthState } from "../../interfaces/auth.interface";
+import { errorResponse } from "../../interfaces/error.interface";
 
 export const initialAuthState: AuthState = {
   username: "",
@@ -12,6 +12,7 @@ export const initialAuthState: AuthState = {
   email: "",
   roles: [],
   avatarImageUrl: "",
+  error: null,
 };
 const authSlice = createSlice({
   name: "auth",
@@ -40,6 +41,13 @@ const authSlice = createSlice({
       state.roles = initialAuthState.roles;
       state.avatarImageUrl = initialAuthState.avatarImageUrl;
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(updateProfile.rejected, (state, action) => {
+      console.log("create Error payload:", action.payload);
+      const payload = action.payload as errorResponse;
+      state.error = payload.error;
+    });
   },
 });
 
