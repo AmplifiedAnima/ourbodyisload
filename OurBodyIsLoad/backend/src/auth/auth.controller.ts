@@ -19,7 +19,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { RequestWithUser } from 'src/user/user.interface';
 import { UserDocument } from 'src/user/schemas/user.schema';
 import Role from 'src/user/role.enum';
-import { exercise } from 'src/exercises/Schemas/exercise.schema';
+import { ExerciseBlueprint } from 'src/exercises/Schemas/exercise.schema';
 import { userChosenClass } from 'src/user-chosen-classes/schemas/user-chosen-class.schema';
 import { UpdateProfileDto } from './dto/updateProfile.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -27,7 +27,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 type UserSafeData = {
   username: string;
   email?: string;
-  exercises?: Array<exercise>;
+  exercises?: Array<ExerciseBlueprint>;
   userChosenClasses?: Array<userChosenClass>;
   roles?: Role[];
 };

@@ -1,7 +1,7 @@
 import * as mongoose from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
-import { exercise } from 'src/exercises/Schemas/exercise.schema';
+import { ExerciseBlueprint } from 'src/exercises/Schemas/exercise.schema';
 import { userChosenClass } from 'src/user-chosen-classes/schemas/user-chosen-class.schema';
 import Role from '../role.enum';
 
@@ -19,7 +19,7 @@ export class User {
   password: string;
 
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'exercise' }] })
-  exercises?: Types.Array<exercise>;
+  exercises?: Types.Array<ExerciseBlueprint>;
 
   @Prop({
     type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'userChosenClasses' }],

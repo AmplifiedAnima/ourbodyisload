@@ -4,20 +4,24 @@ import { SchemaFactory } from '@nestjs/mongoose/dist/factories';
 @Schema({
   timestamps: true,
 })
-export class exercise {
-  id: string;
-
+export class ExerciseBlueprint {
   @Prop({ nullable: true })
   name: string;
 
-  @Prop({ nullable: true })
+  @Prop({ default: 'Default', nullable: true })
   sets: string;
 
-  @Prop({ nullable: true })
+  @Prop({ default: 'Default', nullable: true })
   reps: string;
 
   @Prop({ nullable: true })
   intensity: string;
+
+  @Prop({ nullable: true })
+  movementPattern: string;
+
+  @Prop({ nullable: true })
+  plane: string;
 }
 
-export const exerciseSchema = SchemaFactory.createForClass(exercise);
+export const ExerciseSchema = SchemaFactory.createForClass(ExerciseBlueprint);

@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Param, Query } from '@nestjs/common';
 import { exerciseService } from './exercise.service';
-import { exercise } from './Schemas/exercise.schema';
+import { ExerciseBlueprint } from './Schemas/exercise.schema';
 import { createSingleExerciseDto } from './dto/createExerciseDto';
 
 export interface querySearchParams {
@@ -14,14 +14,14 @@ export class exerciseController {
   @Get()
   async getAllExercises(
     @Query() queryParams: querySearchParams,
-  ): Promise<exercise[]> {
+  ): Promise<ExerciseBlueprint[]> {
     console.log(queryParams);
 
     return this.exerciseServicePrivate.findAll(queryParams);
   }
 
   @Get(':id')
-  async getExerciseWithId(@Param('id') id: string): Promise<exercise> {
+  async getExerciseWithId(@Param('id') id: string): Promise<ExerciseBlueprint> {
     console.log(id);
     return this.exerciseServicePrivate.getExerciseById(id);
   }
@@ -29,7 +29,7 @@ export class exerciseController {
   @Post('/new-exercise')
   async createExercise(
     @Body() blogPost: createSingleExerciseDto,
-  ): Promise<exercise> {
+  ): Promise<ExerciseBlueprint> {
     return this.exerciseServicePrivate.createExercise(blogPost);
   }
 }

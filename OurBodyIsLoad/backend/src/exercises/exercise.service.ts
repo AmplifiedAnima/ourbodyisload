@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { createSingleExerciseDto } from './dto/createExerciseDto';
-import { exercise } from './Schemas/exercise.schema';
+import { ExerciseBlueprint } from './Schemas/exercise.schema';
 import * as mongoose from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { querySearchParams } from './exercise.controller';
@@ -8,11 +8,13 @@ import { querySearchParams } from './exercise.controller';
 @Injectable()
 export class exerciseService {
   constructor(
-    @InjectModel(exercise.name)
-    private exerciseModels: mongoose.Model<exercise>,
+    @InjectModel(ExerciseBlueprint.name)
+    private exerciseModels: mongoose.Model<ExerciseBlueprint>,
   ) {}
 
-  async findAll(querySearchParams: querySearchParams): Promise<exercise[]> {
+  async findAll(
+    querySearchParams: querySearchParams,
+  ): Promise<ExerciseBlueprint[]> {
     if (querySearchParams.searchQuery !== '') {
       const trimmedQuery = querySearchParams.searchQuery.trim();
       const exercisesSearched = await this.exerciseModels
@@ -40,7 +42,7 @@ export class exerciseService {
     }
   }
 
-  async getExerciseById(id: string): Promise<exercise> {
+  async getExerciseById(id: string): Promise<ExerciseBlueprint> {
     const exerciseById = this.exerciseModels.findById(id);
 
     if (!exerciseById) {
@@ -51,7 +53,7 @@ export class exerciseService {
 
   async createExercise(
     createExerciseDto: createSingleExerciseDto,
-  ): Promise<exercise> {
+  ): Promise<ExerciseBlueprint> {
     const exercise = this.exerciseModels.create(createExerciseDto);
     return exercise;
   }
