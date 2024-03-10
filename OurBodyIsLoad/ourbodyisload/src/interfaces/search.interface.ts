@@ -1,11 +1,11 @@
-import { exerciseInterface } from "./calendar.interface";
+import { exerciseBlueprintsInterface } from "./exercise.interface";
 
 export interface searchFunctionalityInterface {
-  exercises: exerciseInterface[];
+  exercises: exerciseBlueprintsInterface[];
   posts: {};
   searchQuery: string;
   status: string;
-  selectedOffer: exerciseInterface | null;
+  selectedOffer: exerciseBlueprintsInterface | null;
 }
 export interface BlogPostInterface {
   _id: string;

@@ -10,10 +10,8 @@ import { Box, Button, Typography } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { AppDispatch, RootState } from "../../../store/store";
 import { useSelector } from "react-redux";
-import {
-  AddActivityButton,
-  AddTrainingPlanButton,
-} from "../ActivityCardComponent/AddActivityButton";
+import { AddActivityButton } from "../ActivityCardComponent/AddActivityButton";
+import { AddTrainingPlanButton } from "../AddTrainingPlanLogic/AddTrainingPlanButton";
 import { ActivityModal } from "../ActivityCardComponent/ActivityModal";
 import {
   CalendarAppState,
@@ -29,7 +27,7 @@ import {
 import { AuthState } from "../../../interfaces/auth.interface";
 import { ClassVideoModal } from "./ClassVideoModal";
 import { LoginToAccessThisPartComponent } from "../LoginToAccessThisPartComponent/LoginToAccessThisPartComponent";
-import { TrainingPlanModal } from "../ActivityCardComponent/TrainingPlanModal";
+import { TrainingPlanModal } from "../AddTrainingPlanLogic/TrainingPlanModal";
 import { eventsProp, renderEventInsides } from "./CalendarComponentUtils";
 import { LegendComponent } from "./CalendarComponentIconsAndLegend";
 import { ButtonStylingForApp } from "../../../globalStyles/ButtonStylingForApp";
@@ -152,10 +150,10 @@ const CalendarComponent: React.FC = () => {
                 }}
               >
                 <AddActivityButton
-                  OpenModal={() => setShowAddActivityModal(true)}
+                  openModal={() => setShowAddActivityModal(true)}
                 />
                 <AddTrainingPlanButton
-                  OpenModal={() => setshowAddTrainingPlanModal(true)}
+                  openModal={() => setshowAddTrainingPlanModal(true)}
                 />
               </Box>
               <LegendComponent open={openLegend} />

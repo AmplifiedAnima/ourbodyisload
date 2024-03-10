@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, CardContent, Grid, Typography } from "@mui/material";
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchExercises } from "../../../store/slices/searchSlice";
@@ -7,7 +7,7 @@ import { AppDispatch, RootState } from "../../../store/store";
 import { Link } from "react-router-dom";
 import { AuthState } from "../../../interfaces/auth.interface";
 import { LoginToAccessThisPartComponent } from "../LoginToAccessThisPartComponent/LoginToAccessThisPartComponent";
-import { StyledActivityCard } from "../ActivityCardComponent/ActivityCard";
+import { exerciseBlueprintsInterface } from "../../../interfaces/exercise.interface";
 
 export const ExercisesLibraryComponent = () => {
   const authState = useSelector<RootState, AuthState>((state) => state.auth);
@@ -20,6 +20,23 @@ export const ExercisesLibraryComponent = () => {
       state.search.searchQuery
   );
 
+  interface GroupedExercises {
+    [category: string]: exerciseBlueprintsInterface[];
+  }
+
+  const groupedExercises: GroupedExercises = exercises.reduce(
+    (acc: GroupedExercises, exercise) => {
+      const category = exercise.movementPattern;
+
+      if (!acc[category]) {
+        acc[category] = [];
+      }
+      acc[category].push(exercise);
+
+      return acc;
+    },
+    {}
+  );
   useEffect(() => {
     if (authState.isLoggedIn) {
       dispatch(fetchExercises(searchQuery));
@@ -29,60 +46,77 @@ export const ExercisesLibraryComponent = () => {
   return (
     <>
       {authState.isLoggedIn ? (
-        <>
+        <Grid container spacing={2}>
           {exercises.map((exercise, index) => (
-            <StyledActivityCard>
-              <Box
-                key={index}
-                sx={{
-                  borderBottom: "1px solid black",
-                  width: "300px",
-                  margin: "0px 20px",
-                  wordBreak: "break-word",
-                  "@media (max-width: 768px)": {
-                    width: "auto",
-                  },
-                  "@media (max-width: 280px)": {
-                    width: "260px",
-                    margin: "0px 10px",
-                  },
-                }}
-              >
-                <Typography variant="h5" sx={{ margin: "10px 0px" }}>
-                  {exercise.name === undefined ? "lack of info" : exercise.name}
-                </Typography>
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={4}
+              lg={3}
+              key={index}
+              sx={{
+                "@media(max-width: 768px)": {
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: "100vw",
+                },
+                "@media (max-width: 280px)": {
+                  width: "260px",
+                  margin: "0px 10px",
+                },
+              }}
+            >
+              <CardContent>
+                <Box key={index}>
+                  <Typography variant="h5" sx={{ margin: "10px 0px" }}>
+                    {exercise.name === undefined
+                      ? "lack of info"
+                      : exercise.name.toLowerCase()}
+                  </Typography>
 
-                <Typography
-                  variant="body2"
-                  sx={{
-                    margin: "10px 0px",
-                  }}
-                >
-                  {exercise.sets}
-                </Typography>
-                <Typography
-                  variant="body2"
-                  sx={{
-                    margin: "10px 0px",
-                  }}
-                >
-                  {exercise.reps}
-                </Typography>
-
-                <Typography
-                  variant="body2"
-                  sx={{
-                    margin: "10px 0px",
-                  }}
-                >
-                  <Link to={`http://localhost:3001/exercises/${exercise._id}`}>
-                    Check
-                  </Link>
-                </Typography>
-              </Box>
-            </StyledActivityCard>
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      margin: "10px 0px",
+                    }}
+                  >
+                    {exercise.plane}
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      margin: "10px 0px",
+                    }}
+                  >
+                    {exercise.movementPattern}
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      margin: "10px 0px",
+                    }}
+                  >
+                    {exercise.type}
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      margin: "10px 0px",
+                    }}
+                  >
+                    <Link
+                      to={`http://localhost:3001/exercises/${exercise._id}`}
+                    >
+                      Check
+                    </Link>
+                  </Typography>
+                </Box>
+              </CardContent>
+            </Grid>
           ))}
-        </>
+        </Grid>
       ) : (
         <LoginToAccessThisPartComponent />
       )}

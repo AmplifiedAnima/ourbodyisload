@@ -22,6 +22,10 @@ export class ExerciseBlueprint {
 
   @Prop({ nullable: true })
   plane: string;
+
+  @Prop({ nullable: true })
+  type: string;
 }
 
-export const ExerciseSchema = SchemaFactory.createForClass(ExerciseBlueprint);
+export const ExerciseBlueprintSchema =
+  SchemaFactory.createForClass(ExerciseBlueprint);

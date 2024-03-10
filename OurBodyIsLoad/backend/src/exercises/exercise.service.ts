@@ -15,22 +15,31 @@ export class exerciseService {
   async findAll(
     querySearchParams: querySearchParams,
   ): Promise<ExerciseBlueprint[]> {
-    if (querySearchParams.searchQuery !== '') {
+    if (querySearchParams.searchQuery !== '' || null) {
       const trimmedQuery = querySearchParams.searchQuery.trim();
       const exercisesSearched = await this.exerciseModels
         .find({
           $or: [
-            {
-              intensity: { $regex: trimmedQuery, $options: 'i' },
-            },
-            {
-              reps: { $regex: trimmedQuery, $options: 'i' },
-            },
-            {
-              sets: { $regex: trimmedQuery, $options: 'i' },
-            },
+            // {
+            //   intensity: { $regex: trimmedQuery, $options: 'i' },
+            // },
+            // {
+            //   reps: { $regex: trimmedQuery, $options: 'i' },
+            // },
+            // {
+            //   sets: { $regex: trimmedQuery, $options: 'i' },
+            // },
             {
               name: { $regex: trimmedQuery, $options: 'i' },
+            },
+            {
+              plane: { $regex: trimmedQuery, $options: 'i' },
+            },
+            {
+              movementPattern: { $regex: trimmedQuery, $options: 'i' },
+            },
+            {
+              type: { $regex: trimmedQuery, $options: 'i' },
             },
           ],
         })

@@ -1,13 +1,14 @@
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { updateQuery } from "../../../store/slices/searchSlice";
 import { MenuDashboard } from "./MenuDashboard/MenuDashboard";
-import { HeaderContainerStyle } from "./headerStyles";
+import { HeaderContainerStyle, headerTypographyStyles } from "./headerStyles";
 import { SearchInput } from "./SearchInput";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../store/store";
 import LoginModal from "../LoginAndPasswordRecoveryComponents/LoginModal";
+import { ImageOfLogo } from "./MenuDashboard/ImagesExported";
 
 export const HeaderWithSearch = () => {
   const dispatch = useDispatch();
@@ -34,7 +35,19 @@ export const HeaderWithSearch = () => {
           onHandleSearchSubmit={handleSearchSubmit}
           searchQuery={searchingQuery}
         />
-        <Box flexGrow={1} />
+        <Box sx={{ marginLeft: "auto" }}>
+          <Typography
+            sx={{
+              ...headerTypographyStyles,
+              "@media(max-width:768px)": {
+                display: "none",
+              },
+            }}
+          >
+            अस्माकं शरीरम् प्रेम अस्ति
+          </Typography>
+        </Box>
+        {ImageOfLogo}
       </Box>
     </>
   );

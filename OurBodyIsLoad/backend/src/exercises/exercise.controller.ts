@@ -28,8 +28,8 @@ export class exerciseController {
 
   @Post('/new-exercise')
   async createExercise(
-    @Body() blogPost: createSingleExerciseDto,
+    @Body() createSingleExercise: createSingleExerciseDto,
   ): Promise<ExerciseBlueprint> {
-    return this.exerciseServicePrivate.createExercise(blogPost);
+    return this.exerciseServicePrivate.createExercise(createSingleExercise);
   }
 }

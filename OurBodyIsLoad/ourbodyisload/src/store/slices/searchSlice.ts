@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { exerciseInterface } from "../../interfaces/calendar.interface";
+import { exerciseBlueprintsInterface } from "../../interfaces/exercise.interface";
 import { searchFunctionalityInterface } from "../../interfaces/search.interface";
 
 export const searchQueryinitialState = {
@@ -26,7 +26,7 @@ export const searchFunctionalitySlice = createSlice({
     },
     setExercises: (
       state: searchFunctionalityInterface,
-      action: PayloadAction<exerciseInterface[]>
+      action: PayloadAction<exerciseBlueprintsInterface[]>
     ) => {
       state.exercises = action.payload;
       state.status = "suceeded";
@@ -48,6 +48,7 @@ export const fetchExercises = createAsyncThunk(
   async (searchQuery: string, { rejectWithValue }) => {
     try {
       const params = new URLSearchParams({ searchQuery });
+      
       const response = await fetch(
         `http://localhost:3000/exercises?${params}`,
         {
@@ -60,7 +61,7 @@ export const fetchExercises = createAsyncThunk(
       if (!response.ok) {
         throw new Error("Error fetching posts");
       }
-      const data: exerciseInterface[] = await response.json();
+      const data: exerciseBlueprintsInterface[] = await response.json();
       return data;
     } catch (error) {
       return rejectWithValue("error happend");
@@ -82,7 +83,7 @@ export const fetchPosts = createAsyncThunk(
       if (!response.ok) {
         throw new Error("Error fetching posts");
       }
-      const data: exerciseInterface[] = await response.json();
+      const data: exerciseBlueprintsInterface[] = await response.json();
       return data;
     } catch (error) {
       return rejectWithValue("error happend");

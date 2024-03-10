@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import { Typography } from "@mui/material";
 import { HeaderWithoutSearch } from "../../HeaderComponent/HeaderWithoutSearch";
-import { exerciseInterface } from "../../../../interfaces/calendar.interface";
+import { exerciseBlueprintsInterface } from "../../../../interfaces/exercise.interface";
 import { useParams } from "react-router-dom";
 
 export const ExerciseIdContainer: React.FC = () => {
-  const [data, setData] = useState<exerciseInterface>();
+  const [data, setData] = useState<exerciseBlueprintsInterface>();
   const [functionFinishing, setFunctionFinishing] = useState(false);
   const { id } = useParams();
 
@@ -45,9 +45,10 @@ export const ExerciseIdContainer: React.FC = () => {
       {data && functionFinishing ? (
         <>
           <Typography variant="h5">{data!.name}</Typography>
-          <Typography variant="body2">{data!.sets}</Typography>
-          <Typography variant="body2">{data!.reps}</Typography>
-          <Typography variant="body2">{data!.intensity}</Typography>
+          <Typography variant="body2">
+            movement pattern - {data!.movementPattern}
+          </Typography>
+          <Typography variant="body2">movement type - {data!.type}</Typography>
           <Typography variant="body2">{data!._id}</Typography>
         </>
       ) : (
