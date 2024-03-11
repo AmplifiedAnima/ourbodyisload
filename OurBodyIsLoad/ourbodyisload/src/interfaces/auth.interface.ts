@@ -1,4 +1,4 @@
-export interface AuthState {
+export interface authState {
   username: string;
   isLoggedIn: boolean;
   accessToken: string;

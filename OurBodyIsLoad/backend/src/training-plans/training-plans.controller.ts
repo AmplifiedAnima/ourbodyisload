@@ -29,9 +29,18 @@ export class TrainingPlansController {
     return newTrainingPlan;
   }
 
-  @Post(
-    async createPeriodizedTrainingCycle: CreatePeriodizedTrainingCycleDto
-  )
+  @Post('periodized-training')
+  async createPeriodizedTrainingCycle(
+    @Body() createPeriodizedTrainingCycleDto: CreatePeriodizedTrainingCycleDto,
+  ) {
+    console.log(createPeriodizedTrainingCycleDto);
+    const cycleOfTrainingPlans =
+      await this.trainingPlansService.createPeriodizedModel(
+        createPeriodizedTrainingCycleDto,
+      );
+    return cycleOfTrainingPlans;
+  }
+
   @Get()
   findAll() {
     return this.trainingPlansService.findAll();

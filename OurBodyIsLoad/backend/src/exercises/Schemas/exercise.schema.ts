@@ -25,6 +25,9 @@ export class ExerciseBlueprint {
 
   @Prop({ nullable: true })
   type: string;
+
+  @Prop({ nullable: true })
+  videoURL: string;
 }
 
 export const ExerciseBlueprintSchema =

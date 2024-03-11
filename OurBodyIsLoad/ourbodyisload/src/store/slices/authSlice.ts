@@ -2,10 +2,10 @@ import { createSlice } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { AppDispatch } from "../store";
 import { UpdateProfileData } from "../../components/layout/EditProfileComponent/EditProfileComponent";
-import { AuthState } from "../../interfaces/auth.interface";
+import { authState } from "../../interfaces/auth.interface";
 import { errorResponse } from "../../interfaces/error.interface";
 
-export const initialAuthState: AuthState = {
+export const initialAuthState: authState = {
   username: "",
   isLoggedIn: false,
   accessToken: "",

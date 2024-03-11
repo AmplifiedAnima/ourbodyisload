@@ -8,12 +8,17 @@ import { UserModule } from 'src/user/user.module';
 import { AuthModule } from 'src/auth/auth.module';
 
 import { TrainingPlanBlueprintSchema } from './schemas/training-plans.schema';
+import { CycleOfTrainingPlansSchema } from './schemas/cycle-of-training-plans.schema';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: 'TrainingPlanBlueprint', schema: TrainingPlanBlueprintSchema },
       { name: 'ExerciseBlueprint', schema: ExerciseBlueprintSchema },
+      {
+        name: 'CycleOfTrainingPlans',
+        schema: CycleOfTrainingPlansSchema,
+      },
     ]),
     UserModule,
     AuthModule,

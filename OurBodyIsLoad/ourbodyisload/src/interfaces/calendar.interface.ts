@@ -7,7 +7,7 @@ export interface preExistingClassesInterface {
   videoUrl: string;
 }
 
-export interface UserChosenClassesInterface {
+export interface userChosenClassesInterface {
   _id: string;
   preExistingClassName: string;
   preExistingClassVideoUrl: string;
@@ -17,17 +17,17 @@ export interface UserChosenClassesInterface {
   updatedAt: string;
   __v: number;
 }
-export interface UpdateUserChosenClassInterface {
+export interface updateUserChosenClassInterface {
   scheduleTime: Date;
 }
 
-export interface UserActivityData {
+export interface userActivityData {
   activityId: string;
   scheduleTime: Date;
 }
-export interface CalendarAppState {
+export interface calendarAppState {
   classes: preExistingClassesInterface[];
-  userChosenClasses: UserChosenClassesInterface[];
+  userChosenClasses: userChosenClassesInterface[];
   status: string;
   error: string | null;
   postSuccess: boolean;

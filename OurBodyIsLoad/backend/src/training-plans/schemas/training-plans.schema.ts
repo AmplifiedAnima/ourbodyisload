@@ -8,10 +8,10 @@ import {
 @Schema()
 export class TrainingPlanBlueprint {
   @Prop({ type: [ExerciseBlueprintSchema], default: [] })
-  mainExercisesPart: ExerciseBlueprint[] | ExerciseBlueprint;
+  mainExercises: ExerciseBlueprint[]; // Changed from mainExercisesPart
 
   @Prop({ type: [ExerciseBlueprintSchema], default: [] })
-  accesoryExercises: ExerciseBlueprint[] | ExerciseBlueprint;
+  accessoryExercises: ExerciseBlueprint[];
 }
 
 export const TrainingPlanBlueprintSchema = SchemaFactory.createForClass(

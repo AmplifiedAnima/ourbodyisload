@@ -1,7 +1,8 @@
 import { exerciseBlueprintsInterface } from "./exercise.interface";
 
-export interface TrainingPlanInterface {
-  mainExercisesPart: exerciseBlueprintsInterface[];
+export interface trainingPlanInterface {
+  _id: string;
+  mainExercises: exerciseBlueprintsInterface[];
 
-  accesoryExercises: exerciseBlueprintsInterface[];
+  accessoryExercises: exerciseBlueprintsInterface[];
 }

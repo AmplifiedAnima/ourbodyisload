@@ -14,9 +14,9 @@ import { AddActivityButton } from "../ActivityCardComponent/AddActivityButton";
 import { AddTrainingPlanButton } from "../AddTrainingPlanLogic/AddTrainingPlanButton";
 import { ActivityModal } from "../ActivityCardComponent/ActivityModal";
 import {
-  CalendarAppState,
+  calendarAppState,
   preExistingClassesInterface,
-  UserChosenClassesInterface,
+  userChosenClassesInterface,
 } from "../../../interfaces/calendar.interface";
 import {
   fetchUserChosenClasses,
@@ -24,7 +24,7 @@ import {
   clearError,
   resetPostSuccessFlag,
 } from "../../../store/slices/CalendarAppSlice";
-import { AuthState } from "../../../interfaces/auth.interface";
+import { authState } from "../../../interfaces/auth.interface";
 import { ClassVideoModal } from "./ClassVideoModal";
 import { LoginToAccessThisPartComponent } from "../LoginToAccessThisPartComponent/LoginToAccessThisPartComponent";
 import { TrainingPlanModal } from "../AddTrainingPlanLogic/TrainingPlanModal";
@@ -41,14 +41,14 @@ const CalendarComponent: React.FC = () => {
 
   const userChosenClasses = useSelector<
     RootState,
-    UserChosenClassesInterface[]
+    userChosenClassesInterface[]
   >((state) => state.calendarApp.userChosenClasses);
 
-  const authState = useSelector<RootState, AuthState>((state) => state.auth);
+  const authState = useSelector<RootState, authState>((state) => state.auth);
 
-  const calendarState: CalendarAppState = useSelector<
+  const calendarState: calendarAppState = useSelector<
     RootState,
-    CalendarAppState
+    calendarAppState
   >((state) => state.calendarApp);
   const postSuccess = calendarState.postSuccess;
   const dispatch = useDispatch<AppDispatch>();
@@ -65,7 +65,7 @@ const CalendarComponent: React.FC = () => {
   const [isListView, setIsListView] = useState(false);
 
   const [selectedClass, setSelectedClass] =
-    useState<UserChosenClassesInterface>();
+    useState<userChosenClassesInterface>();
 
   useEffect(() => {
     if (authState.isLoggedIn) {

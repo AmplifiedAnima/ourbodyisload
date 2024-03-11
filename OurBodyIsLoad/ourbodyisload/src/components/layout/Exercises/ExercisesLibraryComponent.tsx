@@ -5,12 +5,12 @@ import { fetchExercises } from "../../../store/slices/searchSlice";
 import { searchFunctionalityInterface } from "../../../interfaces/search.interface";
 import { AppDispatch, RootState } from "../../../store/store";
 import { Link } from "react-router-dom";
-import { AuthState } from "../../../interfaces/auth.interface";
+import { authState } from "../../../interfaces/auth.interface";
 import { LoginToAccessThisPartComponent } from "../LoginToAccessThisPartComponent/LoginToAccessThisPartComponent";
 import { exerciseBlueprintsInterface } from "../../../interfaces/exercise.interface";
 
 export const ExercisesLibraryComponent = () => {
-  const authState = useSelector<RootState, AuthState>((state) => state.auth);
+  const authState = useSelector<RootState, authState>((state) => state.auth);
   const exercises = useSelector(
     (state: { search: searchFunctionalityInterface }) => state.search.exercises
   );
@@ -20,23 +20,23 @@ export const ExercisesLibraryComponent = () => {
       state.search.searchQuery
   );
 
-  interface GroupedExercises {
-    [category: string]: exerciseBlueprintsInterface[];
-  }
+  // interface GroupedExercises {
+  //   [category: string]: exerciseBlueprintsInterface[];
+  // }
 
-  const groupedExercises: GroupedExercises = exercises.reduce(
-    (acc: GroupedExercises, exercise) => {
-      const category = exercise.movementPattern;
+  // const groupedExercises: GroupedExercises = exercises.reduce(
+  //   (acc: GroupedExercises, exercise) => {
+  //     const category = exercise.movementPattern;
 
-      if (!acc[category]) {
-        acc[category] = [];
-      }
-      acc[category].push(exercise);
+  //     if (!acc[category]) {
+  //       acc[category] = [];
+  //     }
+  //     acc[category].push(exercise);
 
-      return acc;
-    },
-    {}
-  );
+  //     return acc;
+  //   },
+  //   {}
+  // );
   useEffect(() => {
     if (authState.isLoggedIn) {
       dispatch(fetchExercises(searchQuery));
