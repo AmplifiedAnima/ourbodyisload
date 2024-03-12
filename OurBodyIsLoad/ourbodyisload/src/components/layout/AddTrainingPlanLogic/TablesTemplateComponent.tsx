@@ -23,7 +23,10 @@ export const TablesTemplateComponent: React.FC<
 > = ({ mainExercises, accessoryExercises, dayLabel }) => {
   return (
     <Box sx={{ mb: 4, width: "auto" }}>
-      <Typography variant="subtitle1">{`Training ${dayLabel}`}</Typography>
+      <Typography variant="subtitle1">
+        {`Training day ${dayLabel.replace(/[^\d]/g, "")}`}{" "}
+        {/* Extracts only the digits */}
+      </Typography>
 
       <TableContainer component={Paper} sx={{ mb: 2 }}>
         <Table aria-label="simple table">
@@ -41,7 +44,7 @@ export const TablesTemplateComponent: React.FC<
                 <TableCell>{exercise.name}</TableCell>
                 <TableCell>{exercise.sets}</TableCell>
                 <TableCell>{exercise.reps}</TableCell>
-                <TableCell>{exercise.intensity}</TableCell>
+                <TableCell>{exercise.intensity} kg</TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -63,7 +66,7 @@ export const TablesTemplateComponent: React.FC<
                 <TableCell>{exercise.name}</TableCell>
                 <TableCell>{exercise.sets}</TableCell>
                 <TableCell>{exercise.reps}</TableCell>
-                <TableCell>{exercise.intensity}</TableCell>
+                <TableCell>{exercise.intensity} kg</TableCell>
               </TableRow>
             ))}
           </TableBody>

@@ -15,6 +15,8 @@ export class CycleOfTrainingPlans extends Document {
 
   @Prop({ type: String, default: '2' })
   timesAWeek: string;
+  @Prop({ type: String, default: 'strength' })
+  periodization: string;
 }
 
 export const CycleOfTrainingPlansSchema =

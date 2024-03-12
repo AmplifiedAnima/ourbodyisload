@@ -3,19 +3,20 @@ import { ButtonStylingForApp } from "../../../globalStyles/ButtonStylingForApp";
 import { useEffect, useState } from "react";
 import { trainingPlanInterface } from "../../../interfaces/trainingPlan.interface";
 import { exerciseBlueprintsInterface } from "../../../interfaces/exercise.interface";
-import { cycleOfTrainingPlansInterface } from "../../../interfaces/cycleOfTrainingPlans.interface";
+import { cycleInterface } from "../../../interfaces/cycle.interface";
 import { searchFunctionalityInterface } from "../../../interfaces/search.interface";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { fetchExercises } from "../../../store/slices/searchSlice";
 import { AppDispatch } from "../../../store/store";
-import { ModalWithExercisesChoice } from "./ModalWithExercisesChoice";
-import { v4 as uuidv4 } from "uuid";
+import { ModalForCreatingPeriodizedData } from "./ModalForCreatingPeriodizedData";
 import { TablesTemplateComponent } from "./TablesTemplateComponent";
+import ErrorHandlerDisplayComponent from "../ErrorAndNotificationHandlers/ErrorHandlerDisplayComponent";
+import { NotificationHandlerDisplayComponent } from "../ErrorAndNotificationHandlers/NotificationHandlerDisplayComponent";
 
 export const AddTrainingPlanLogic = () => {
   const [periodizedTraining, savePeriodizedTraining] =
-    useState<cycleOfTrainingPlansInterface | null>();
+    useState<cycleInterface | null>();
   const exercises = useSelector(
     (state: { search: searchFunctionalityInterface }) => state.search.exercises
   );
@@ -24,50 +25,23 @@ export const AddTrainingPlanLogic = () => {
     exerciseBlueprintsInterface[]
   >([]);
 
-  const [isModalOpen, setIsModalOpen] = useState(false); // State to manage modal visibility
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [error, setError] = useState("");
+  const [openError, setOpenError] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
+  const [notification, setNotification] = useState("");
+  const [openNotification, setNotificationOpen] = useState(false);
+
+  const handleCloseError = () => {
+    setOpenError(false);
+  };
+  const handleCloseNotification = () => {
+    setNotificationOpen(false);
+  };
 
   useEffect(() => {
     dispatch(fetchExercises(""));
   }, [dispatch]);
-
-  const mockDataPeriodized = {
-    trainingPlans: [] as trainingPlanInterface[],
-    timesAWeek: "2",
-  };
-
-  exercises.forEach((exercise) => {
-    const exerciseId = uuidv4(); // Generate unique ID for the exercise
-    const trainingPlan: trainingPlanInterface = {
-      _id: uuidv4(), // Generate unique ID for the training plan
-      mainExercises: [
-        {
-          _id: exerciseId, // Assign the generated ID to the exercise
-          name: exercise.name,
-          sets: exercise.sets,
-          reps: exercise.reps,
-          intensity: exercise.intensity,
-          movementPattern: exercise.movementPattern,
-          plane: exercise.plane,
-          type: exercise.type,
-        },
-      ],
-      accessoryExercises: [
-        {
-          _id: exerciseId, // Assign the same ID to accessory exercise
-          name: exercise.name,
-          sets: exercise.sets,
-          reps: exercise.reps,
-          intensity: exercise.intensity,
-          movementPattern: exercise.movementPattern,
-          plane: exercise.plane,
-          type: exercise.type,
-        },
-      ],
-    };
-    mockDataPeriodized.trainingPlans.push(trainingPlan);
-  });
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -82,7 +56,6 @@ export const AddTrainingPlanLogic = () => {
   ) => {
     setUserChosenExercises(chosenExercises);
   };
-  // Assuming exercises contain the list of exercise blueprints
 
   const fetchData = async (endpoint: string, userData: any) => {
     try {
@@ -99,21 +72,23 @@ export const AddTrainingPlanLogic = () => {
         savePeriodizedTraining(data);
 
         console.log(`reponse`, data);
+        setNotification("you created a periodized training structure ! ");
+        setNotificationOpen(true);
+
         console.log(userChosenExercises);
       } else {
-        console.log("Error fetching");
+        const data: { statusCode: number; message: string } =
+          await response.json();
+        console.log(data);
+        setError(data.message);
+        setOpenError(true);
       }
     } catch (error) {
       console.log(error);
     }
   };
 
-  //   const handleCreateTrainingPlan = () => {
-  //     // Assuming this is for non-periodized plans
-  //     fetchData(`http://localhost:3000/training-plans`, mockData);
-  //   };
   const handleCreatePeriodizedTrainingPlan = () => {
-    // Assuming 'formattedExercises' is the data in the same structure as your 'mockTrainingPlansData'
     const payload = userChosenExercises;
     fetchData(
       `http://localhost:3000/training-plans/periodized-training`,
@@ -127,7 +102,20 @@ export const AddTrainingPlanLogic = () => {
   return (
     <>
       <Box sx={{ display: "flex", justifyContent: "right" }}>
-        {/* Button to open modal */}
+        {openError && (
+          <ErrorHandlerDisplayComponent
+            open={openError}
+            handleClose={handleCloseError}
+            error={error}
+          />
+        )}
+        {openNotification && (
+          <NotificationHandlerDisplayComponent
+            open={openNotification}
+            handleClose={handleCloseNotification}
+            notification={notification}
+          />
+        )}
         <Button
           onClick={handleOpenModal}
           sx={{ ...ButtonStylingForApp, margin: "0px 10px" }}
@@ -141,7 +129,7 @@ export const AddTrainingPlanLogic = () => {
           Handle Periodized Creation
         </Button>
       </Box>
-      <ModalWithExercisesChoice
+      <ModalForCreatingPeriodizedData
         exercises={exercises}
         isOpen={isModalOpen}
         onClose={handleCloseModal}
@@ -150,7 +138,9 @@ export const AddTrainingPlanLogic = () => {
 
       {periodizedTraining && (
         <Box sx={{ padding: "10px" }}>
-          <Typography variant="h6" mb={4}>Training Plans</Typography>
+          <Typography variant="h6" mb={4}>
+            Training Plans
+          </Typography>
           <Grid container spacing={4}>
             {periodizedTraining.trainingPlans.map(
               (trainingPlan: trainingPlanInterface, index: number) => (

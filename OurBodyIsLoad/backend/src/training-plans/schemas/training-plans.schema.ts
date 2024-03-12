@@ -12,6 +12,9 @@ export class TrainingPlanBlueprint {
 
   @Prop({ type: [ExerciseBlueprintSchema], default: [] })
   accessoryExercises: ExerciseBlueprint[];
+
+  @Prop({ type: String })
+  day: string;
 }
 
 export const TrainingPlanBlueprintSchema = SchemaFactory.createForClass(

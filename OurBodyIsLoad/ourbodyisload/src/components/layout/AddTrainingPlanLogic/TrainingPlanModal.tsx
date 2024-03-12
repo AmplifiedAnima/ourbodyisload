@@ -1,7 +1,6 @@
 import { Box, Button, Modal } from "@mui/material";
 import { ButtonStylingForApp } from "../../../globalStyles/ButtonStylingForApp";
 import { trainingPlanModalStyles } from "../ActivityCardComponent/ActivityModalAndSchedulingStyles";
-import { AddTrainingPlanButton } from "./AddTrainingPlanButton";
 import { AddTrainingPlanLogic } from "./AddTrainingPlanLogic";
 
 interface TrainingPlanModalProps {

@@ -31,21 +31,20 @@ export class TrainingPlansService {
   async createPeriodizedModel(
     createPeriodizedTrainingCycleDto: CreatePeriodizedTrainingCycleDto,
   ) {
-    const { trainingPlans, timesAWeek } = createPeriodizedTrainingCycleDto;
+    const { trainingPlans, timesAWeek, periodization } =
+      createPeriodizedTrainingCycleDto;
     console.log(`Created Training Plan: `, createPeriodizedTrainingCycleDto);
-    console.log(`service log `, timesAWeek);
+    console.log(`times a week`, timesAWeek);
+    console.log(`periodization`, periodization);
 
-    // Ensure the property names match what's being sent from the frontend
     const newTrainingPlans = trainingPlans.map((trainingPlan) => ({
       ...trainingPlan,
       _id: new mongoose.Types.ObjectId(),
       mainExercises: trainingPlan.mainExercises.map((exercise) => ({
-        // Corrected property name
         ...exercise,
         _id: new mongoose.Types.ObjectId(),
       })),
       accessoryExercises: trainingPlan.accessoryExercises.map((exercise) => ({
-        // Corrected property name and typo
         ...exercise,
         _id: new mongoose.Types.ObjectId(),
       })),
@@ -53,12 +52,51 @@ export class TrainingPlansService {
 
     const newPeriodizedModel = await this.cycleOfTrainingPlansModel.create({
       _id: new mongoose.Types.ObjectId(),
-      trainingPlans: newTrainingPlans,
+      periodization: periodization,
+      trainingPlans: this.periodizeModel(
+        newTrainingPlans,
+        periodization,
+        timesAWeek,
+      ),
       timesAWeek: timesAWeek,
     });
 
     return newPeriodizedModel;
   }
+  public periodizeModel(
+    newTrainingPlans: TrainingPlanBlueprint[],
+    periodization: string,
+    timesAWeek: string,
+  ) {
+    // Iterate over each training plan and then each exercise to log their details
+    newTrainingPlans.forEach((trainingPlan) => {
+      console.log(`Day: ${trainingPlan.day}`);
+
+      const mainExercisesLog = trainingPlan.mainExercises
+        .map(
+          (exercise) =>
+            `name: ${exercise.name}, sets: ${exercise.sets}, reps: ${exercise.reps}`,
+        )
+        .join('; ');
+
+      console.log(`Main Exercises: ${mainExercisesLog}`);
+
+      const accessoryExercisesLog = trainingPlan.accessoryExercises
+        .map(
+          (exercise) =>
+            `name: ${exercise.name}, sets: ${exercise.sets}, reps: ${exercise.reps}`,
+        )
+        .join('; ');
+
+      console.log(`Accessory Exercises: ${accessoryExercisesLog}`);
+    });
+
+    console.log(`Periodization: ${periodization}`);
+    console.log(`Times a Week: ${timesAWeek}`);
+
+    return newTrainingPlans;
+  }
+
   findAll() {
     return `This action returns all trainingPlans`;
   }
