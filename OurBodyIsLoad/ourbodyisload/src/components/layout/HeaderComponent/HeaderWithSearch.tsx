@@ -30,11 +30,20 @@ export const HeaderWithSearch = () => {
     <>
       <Box sx={HeaderContainerStyle}>
         {authState.isLoggedIn ? <MenuDashboard /> : <LoginModal />}
-        <SearchInput
-          handleInputValue={handleInputValue}
-          onHandleSearchSubmit={handleSearchSubmit}
-          searchQuery={searchingQuery}
-        />
+        <Box
+          sx={{
+            marginTop: "33px",
+            "@media (max-width: 768px)": {
+              marginTop: "21px",
+            },
+          }}
+        >
+          <SearchInput
+            handleInputValue={handleInputValue}
+            onHandleSearchSubmit={handleSearchSubmit}
+            searchQuery={searchingQuery}
+          />
+        </Box>
         <Box sx={{ marginLeft: "auto" }}>
           <Typography
             sx={{

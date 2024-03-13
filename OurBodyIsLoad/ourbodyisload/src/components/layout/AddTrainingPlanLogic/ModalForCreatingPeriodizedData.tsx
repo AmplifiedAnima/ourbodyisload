@@ -12,10 +12,15 @@ import { exerciseBlueprintsInterface } from "../../../interfaces/exercise.interf
 import { v4 as uuidv4 } from "uuid";
 import { ButtonStylingForApp } from "../../../globalStyles/ButtonStylingForApp";
 import { TablesTemplateComponent } from "./TablesTemplateComponent";
-import ExerciseTypeModal from "./ExerciseTypeModall";
+import ExerciseTypeModal from "./ExerciseTypeModal";
+import { fetchExercises, updateQuery } from "../../../store/slices/searchSlice";
+import { SearchInput } from "../HeaderComponent/SearchInput";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../store/store";
+import { useSelector } from "react-redux";
+import { searchFunctionalityInterface } from "../../../interfaces/search.interface";
 
 interface ModalWithExercisesChoiceProps {
-  exercises: exerciseBlueprintsInterface[];
   isOpen: boolean;
   onClose: () => void;
   onChooseExercises: (chosenExercises: any) => void;
@@ -23,19 +28,30 @@ interface ModalWithExercisesChoiceProps {
 
 export const ModalForCreatingPeriodizedData: React.FC<
   ModalWithExercisesChoiceProps
-> = ({ exercises, isOpen, onClose, onChooseExercises }) => {
+> = ({ isOpen, onClose, onChooseExercises }) => {
+  const exercises = useSelector(
+    (state: { search: searchFunctionalityInterface }) => state.search.exercises
+  );
+
   const [daysAWeek, setDaysAWeek] = useState("2");
   const [selectedDay, setSelectedDay] = useState("day1");
   const [trainingDays, setTrainingDays] = useState<any>({});
-  const [reps, setReps] = useState<any>();
-  const [sets, setSets] = useState<any>();
-  const [intensity, setIntensity] = useState<any>();
+  const [reps, setReps] = useState<string>("");
+  const [sets, setSets] = useState<string>("");
+  const [intensity, setIntensity] = useState<string>("");
   const [exerciseTypeModalOpen, setExerciseTypeModalOpen] =
     useState<boolean>(false);
   const [selectedExercise, setSelectedExercise] =
     useState<exerciseBlueprintsInterface | null>(null);
   const [periodization, setPeriodization] = useState<string>("strength");
+  const [searchingQuery, setSearchingQuery] = useState("");
 
+  const dispatch = useDispatch<AppDispatch>();
+
+  const searchQuery = useSelector(
+    (state: { search: searchFunctionalityInterface }) =>
+      state.search.searchQuery
+  );
   useEffect(() => {
     const updatedTrainingDays: any = {};
     for (let i = 1; i <= Math.min(parseInt(daysAWeek), 3); i++) {
@@ -43,12 +59,6 @@ export const ModalForCreatingPeriodizedData: React.FC<
     }
     setTrainingDays(updatedTrainingDays);
   }, [daysAWeek]);
-
-  const handleDaysAWeekChange = (event: any) => {
-    const numDays = Math.min(parseInt(event.target.value), 3).toString();
-    setDaysAWeek(numDays);
-    setSelectedDay("day1");
-  };
 
   const handleDaySelectionChange = (event: any) => {
     setSelectedDay(event.target.value as string);
@@ -67,7 +77,7 @@ export const ModalForCreatingPeriodizedData: React.FC<
         mainExercises: trainingDays[day].main,
         accessoryExercises: trainingDays[day].accessory,
       })),
-      periodization: periodization, // Include periodization here
+      periodization: periodization,
     };
     console.log(chosenExercisesData);
     onChooseExercises(chosenExercisesData);
@@ -98,23 +108,35 @@ export const ModalForCreatingPeriodizedData: React.FC<
     setExerciseTypeModalOpen(false);
   };
   const handleSetsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSets(parseInt(event.target.value));
+    setSets(event.target.value);
   };
 
-  // Event handler to update reps
   const handleRepsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setReps(parseInt(event.target.value));
+    setReps(event.target.value);
   };
 
-  // Event handler to update intensity
   const handleIntensityChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setIntensity(parseInt(event.target.value));
+    setIntensity(event.target.value);
   };
   const handlePeriodizationChange = (event: any) => {
     setPeriodization(event.target.value);
   };
+  const handleInputValue = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    const rawValue = e.target.value;
+    setSearchingQuery(rawValue);
+  };
+
+  const handleSearchSubmit = () => {
+    dispatch({ type: updateQuery, payload: searchingQuery });
+  };
+
+  useEffect(() => {
+    dispatch(fetchExercises(searchQuery));
+  }, [dispatch, searchQuery]);
+
   return (
     <Modal open={isOpen} onClose={onClose}>
       <Box
@@ -142,63 +164,103 @@ export const ModalForCreatingPeriodizedData: React.FC<
             Cancel
           </Button>
         </Box>
-        <Box sx={{width: '100%'}}>
-          <Typography variant="h6" gutterBottom>
-            {" "}
-            Select how many days a week you will be training
-          </Typography>
-          <Select
-            label="Days a Week"
-            value={daysAWeek}
-            onChange={handleDaysAWeekChange}
-            displayEmpty
-            fullWidth
-            variant="outlined"
-            sx={{ mb: 2, width: "auto" }}
-          >
-            <MenuItem value="2">2 days</MenuItem>
-            <MenuItem value="3">3 days</MenuItem>
-          </Select>
-          <Typography variant="h6" gutterBottom>
-            {" "}
-            Select what is motor skill is your goal
-          </Typography>
-          <Select
-            value={periodization}
-            onChange={handlePeriodizationChange}
-            displayEmpty
-            fullWidth
-            variant="outlined"
-            sx={{ mb: 2, width: "auto" }}
-          >
-            <MenuItem value="strength">Strength</MenuItem>
-            <MenuItem value="hypertrophy">Hypertrophy</MenuItem>
-            <MenuItem value="power">Power</MenuItem>
-          </Select>
-          <Typography variant="h6" gutterBottom>
-            Assign Exercises to Training Days
-          </Typography>
 
-          <Grid container spacing={4}>
-            <Grid item md={6}>
-              <Typography variant="h6">Available Exercises</Typography>
-              <Select
-                value={selectedDay}
-                onChange={handleDaySelectionChange}
-                displayEmpty
-                fullWidth
+        <Grid container spacing={4}>
+          <Grid item md={6}>
+            <Typography variant="h6" gutterBottom>
+              {" "}
+              Select how many days a week you will be training
+            </Typography>
+            <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+              <Typography variant="body1" mr={2}>
+                Training Days Per Week:
+              </Typography>
+              <Button
                 variant="outlined"
-                sx={{ mb: 2 }}
+                disabled={daysAWeek === "1"}
+                sx={{
+                  ...ButtonStylingForApp,
+                  height: "45px",
+                  width: "45px",
+                  fontSize: "30px",
+                }}
+                onClick={() =>
+                  setDaysAWeek((prev) =>
+                    prev === "1" ? "1" : (parseInt(prev) - 1).toString()
+                  )
+                }
               >
-                {Object.keys(trainingDays).map((day) => {
-                  const dayWithSpace = day.replace(/(\d+)/, " $1");
-                  return (
-                    <MenuItem key={day} value={day}>
-                      {dayWithSpace.toUpperCase()}
-                    </MenuItem>
-                  );
-                })}
-              </Select>
+                -
+              </Button>
+              <Typography variant="body1" mx={1} sx={{ fontSize: "22px" }}>
+                {daysAWeek === "1" && "I"}
+                {daysAWeek === "2" && "II"}
+                {daysAWeek === "3" && "III"}
+              </Typography>
+              <Button
+                variant="outlined"
+                disabled={daysAWeek === "3"}
+                sx={{
+                  ...ButtonStylingForApp,
+                  height: "45px",
+                  width: "45px",
+                  fontSize: "30px",
+                }}
+                onClick={() =>
+                  setDaysAWeek((prev) =>
+                    prev === "3" ? "3" : (parseInt(prev) + 1).toString()
+                  )
+                }
+              >
+                +
+              </Button>
+            </Box>
+            <Typography variant="h6" gutterBottom mb={4}>
+              {" "}
+              Select what goal of periodization you choose
+            </Typography>
+            <Select
+              value={periodization}
+              onChange={handlePeriodizationChange}
+              displayEmpty
+              fullWidth
+              variant="outlined"
+              sx={{ mb: 4, width: "260px" }}
+            >
+              <MenuItem value="strength">Strength</MenuItem>
+              <MenuItem value="hypertrophy">Hypertrophy</MenuItem>
+              <MenuItem value="power">Power</MenuItem>
+            </Select>
+            <Typography variant="h6" gutterBottom mb={4}>
+              Assign Exercises to training days
+            </Typography>
+
+            <Select
+              value={selectedDay}
+              onChange={handleDaySelectionChange}
+              displayEmpty
+              fullWidth
+              variant="outlined"
+              sx={{ mb: 4 }}
+            >
+              {Object.keys(trainingDays).map((day) => {
+                const dayWithSpace = day.replace(/(\d+)/, " $1");
+                return (
+                  <MenuItem key={day} value={day}>
+                    {dayWithSpace.toUpperCase()}
+                  </MenuItem>
+                );
+              })}
+            </Select>
+            <Box>
+              <Typography variant="h6" sx={{mb:'0'}}>
+                Available Exercises
+              </Typography>
+              <SearchInput
+                handleInputValue={handleInputValue}
+                onHandleSearchSubmit={handleSearchSubmit}
+                searchQuery={searchingQuery}
+              />
 
               {exercises.map((exercise) => (
                 <Box
@@ -224,31 +286,33 @@ export const ModalForCreatingPeriodizedData: React.FC<
                   </Button>
                 </Box>
               ))}
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <Typography variant="h6">Training Days</Typography>
-              {Object.keys(trainingDays).map((day) => (
-                <TablesTemplateComponent
-                  key={day}
-                  dayLabel={day}
-                  mainExercises={trainingDays[day].main}
-                  accessoryExercises={trainingDays[day].accessory}
-                />
-              ))}
-            </Grid>
+            </Box>
           </Grid>
-          <ExerciseTypeModal
-            open={exerciseTypeModalOpen}
-            onClose={handleCloseExerciseTypeModal}
-            sets={sets}
-            reps={reps}
-            intensity={intensity}
-            handleSetsChange={handleSetsChange}
-            handleRepsChange={handleRepsChange}
-            handleIntensityChange={handleIntensityChange}
-            handleSetExerciseType={handleSetExerciseType}
-          />
-        </Box>
+          <Grid item xs={12} md={6}>
+            <Typography variant="h6">Training Days</Typography>
+            {Object.keys(trainingDays).map((day) => (
+              <TablesTemplateComponent
+                key={day}
+                dayLabel={day}
+                mainExercises={trainingDays[day].main}
+                accessoryExercises={trainingDays[day].accessory}
+              />
+            ))}
+          </Grid>
+        </Grid>
+
+        <ExerciseTypeModal
+          open={exerciseTypeModalOpen}
+          onClose={handleCloseExerciseTypeModal}
+          selectedExercise={selectedExercise ? selectedExercise : null}
+          sets={sets}
+          reps={reps}
+          intensity={intensity}
+          handleSetsChange={handleSetsChange}
+          handleRepsChange={handleRepsChange}
+          handleIntensityChange={handleIntensityChange}
+          handleSetExerciseType={handleSetExerciseType}
+        />
       </Box>
     </Modal>
   );

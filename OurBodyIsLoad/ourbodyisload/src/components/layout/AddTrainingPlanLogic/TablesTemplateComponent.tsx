@@ -23,50 +23,67 @@ export const TablesTemplateComponent: React.FC<
 > = ({ mainExercises, accessoryExercises, dayLabel }) => {
   return (
     <Box sx={{ mb: 4, width: "auto" }}>
-      <Typography variant="subtitle1">
+      <Typography
+        variant="subtitle1"
+        sx={{ color: "#530185", margin: "15px 20px" }}
+      >
         {`Training day ${dayLabel.replace(/[^\d]/g, "")}`}{" "}
-        {/* Extracts only the digits */}
       </Typography>
 
-      <TableContainer component={Paper} sx={{ mb: 2 }}>
-        <Table aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell>Main Exercises</TableCell>
-              <TableCell>Sets</TableCell>
-              <TableCell>Reps</TableCell>
-              <TableCell>Intensity</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {mainExercises.map((exercise, index) => (
-              <TableRow key={index}>
-                <TableCell>{exercise.name}</TableCell>
-                <TableCell>{exercise.sets}</TableCell>
-                <TableCell>{exercise.reps}</TableCell>
-                <TableCell>{exercise.intensity} kg</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <TableContainer component={Paper}>
+      <TableContainer
+        component={Paper}
+        sx={{
+          margin: "5px 10px",
+
+          background:
+            "linear-gradient(to left, rgba(235, 207, 252, 0.6) 0%, rgba(215, 174, 251, 0.3) 60%, rgba(255, 255, 255, 1) 70%)",
+          width: "auto",
+        }}
+      >
         <Table aria-label="simple table" size="small">
           <TableHead>
             <TableRow>
-              <TableCell>Accessory Exercises</TableCell>
-              <TableCell>Sets</TableCell>
-              <TableCell>Reps</TableCell>
-              <TableCell>Intensity</TableCell>
+              <TableCell>Main </TableCell>
+              <TableCell sx={{ color: "#530185" }}>Sets</TableCell>
+              <TableCell sx={{ color: "#530185" }}>Reps</TableCell>
+              <TableCell sx={{ color: "#530185" }}>Intensity</TableCell>
+              <TableCell sx={{ color: "#530185" }}> Pattern</TableCell>
+              <TableCell sx={{ color: "#530185" }}> Plane</TableCell>
             </TableRow>
           </TableHead>
+          <Box mt={1} />
           <TableBody>
-            {accessoryExercises.map((exercise, index) => (
+            {mainExercises.map((exercise, index) => (
               <TableRow key={index}>
-                <TableCell>{exercise.name}</TableCell>
+                <TableCell sx={{ color: "#530185" }}>{exercise.name}</TableCell>
                 <TableCell>{exercise.sets}</TableCell>
                 <TableCell>{exercise.reps}</TableCell>
                 <TableCell>{exercise.intensity} kg</TableCell>
+                <TableCell>{exercise.movementPattern}</TableCell>
+                <TableCell>{exercise.plane}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+          <Box mt={3} />
+          <TableHead>
+            <TableRow>
+              <TableCell>Accessory </TableCell>
+              <TableCell sx={{ color: "#530185" }}>Sets</TableCell>
+              <TableCell sx={{ color: "#530185" }}>Reps</TableCell>
+              <TableCell sx={{ color: "#530185" }}>Intensity</TableCell>
+              <TableCell sx={{ color: "#530185" }}> pattern </TableCell>
+              <TableCell sx={{ color: "#530185" }}> Plane</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody sx={{ mt: 4 }}>
+            {accessoryExercises.map((exercise, index) => (
+              <TableRow key={index}>
+                <TableCell sx={{ color: "#530185" }}>{exercise.name}</TableCell>
+                <TableCell>{exercise.sets}</TableCell>
+                <TableCell>{exercise.reps}</TableCell>
+                <TableCell>{exercise.intensity} kg</TableCell>
+                <TableCell>{exercise.movementPattern}</TableCell>
+                <TableCell>{exercise.plane}</TableCell>
               </TableRow>
             ))}
           </TableBody>

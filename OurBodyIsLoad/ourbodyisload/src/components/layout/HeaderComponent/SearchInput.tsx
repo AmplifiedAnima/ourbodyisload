@@ -33,22 +33,19 @@ export const SearchInput: React.FC<SearchInputProps> = ({
           width: "auto",
           height: "33px",
           borderRadius: "6px",
-          marginTop: "35px",
+          marginTop: "0",
           padding: "10px",
-          "@media (max-width: 768px)": {
-            marginTop: "25px",
-          },
         }}
       />
-      <Button>
+      <Button onClick={onHandleSearchSubmit}>
         <SearchIcon
           sx={{
-            color: "#5e008c",
+            color: "white",
             fontSize: "25px",
-            marginTop: "10px",
+            marginTop: "0px",
             "@media (max-width: 768px)": {
               fontSize: "20px",
-              marginTop: "10px",
+              marginTop: "0px",
               marginRight: "10px",
             },
           }}
