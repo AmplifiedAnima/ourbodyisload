@@ -75,7 +75,8 @@ export class TrainingPlansService {
       const mainExercisesLog = trainingPlan.mainExercises
         .map(
           (exercise) =>
-            `name: ${exercise.name}, sets: ${exercise.sets}, reps: ${exercise.reps}`,
+            `name: ${exercise.name}, sets: ${exercise.sets}, reps: ${exercise.reps} ,
+          `,
         )
         .join('; ');
 

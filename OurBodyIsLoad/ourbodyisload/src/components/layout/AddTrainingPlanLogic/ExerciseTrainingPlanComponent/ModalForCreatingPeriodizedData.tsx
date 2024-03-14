@@ -8,17 +8,20 @@ import {
   MenuItem,
   Select,
 } from "@mui/material";
-import { exerciseBlueprintsInterface } from "../../../interfaces/exercise.interface";
+import { exerciseBlueprintsInterface } from "../../../../interfaces/exercise.interface";
 import { v4 as uuidv4 } from "uuid";
-import { ButtonStylingForApp } from "../../../globalStyles/ButtonStylingForApp";
-import { TablesTemplateComponent } from "./TablesTemplateComponent";
+import { ButtonStylingForApp } from "../../../../globalStyles/ButtonStylingForApp";
+import { TablesTemplateComponent } from "../TablesTemplateComponent";
 import ExerciseTypeModal from "./ExerciseTypeModal";
-import { fetchExercises, updateQuery } from "../../../store/slices/searchSlice";
-import { SearchInput } from "../HeaderComponent/SearchInput";
+import {
+  fetchExercises,
+  updateQuery,
+} from "../../../../store/slices/searchSlice";
+import { SearchInput } from "../../HeaderComponent/SearchInput";
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../../store/store";
+import { AppDispatch } from "../../../../store/store";
 import { useSelector } from "react-redux";
-import { searchFunctionalityInterface } from "../../../interfaces/search.interface";
+import { searchFunctionalityInterface } from "../../../../interfaces/search.interface";
 
 interface ModalWithExercisesChoiceProps {
   isOpen: boolean;
@@ -36,22 +39,23 @@ export const ModalForCreatingPeriodizedData: React.FC<
   const [daysAWeek, setDaysAWeek] = useState("2");
   const [selectedDay, setSelectedDay] = useState("day1");
   const [trainingDays, setTrainingDays] = useState<any>({});
-  const [reps, setReps] = useState<string>("");
-  const [sets, setSets] = useState<string>("");
+  const [reps, setReps] = useState("");
+  const [sets, setSets] = useState("");
   const [intensity, setIntensity] = useState<string>("");
   const [exerciseTypeModalOpen, setExerciseTypeModalOpen] =
     useState<boolean>(false);
+  const [isExerciseListVisible, setIsExerciseListVisible] = useState(false);
   const [selectedExercise, setSelectedExercise] =
     useState<exerciseBlueprintsInterface | null>(null);
   const [periodization, setPeriodization] = useState<string>("strength");
   const [searchingQuery, setSearchingQuery] = useState("");
 
   const dispatch = useDispatch<AppDispatch>();
-
   const searchQuery = useSelector(
     (state: { search: searchFunctionalityInterface }) =>
       state.search.searchQuery
   );
+
   useEffect(() => {
     const updatedTrainingDays: any = {};
     for (let i = 1; i <= Math.min(parseInt(daysAWeek), 3); i++) {
@@ -120,9 +124,11 @@ export const ModalForCreatingPeriodizedData: React.FC<
   ) => {
     setIntensity(event.target.value);
   };
+
   const handlePeriodizationChange = (event: any) => {
     setPeriodization(event.target.value);
   };
+
   const handleInputValue = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     const rawValue = e.target.value;
@@ -148,33 +154,12 @@ export const ModalForCreatingPeriodizedData: React.FC<
           overflowY: "auto",
         }}
       >
-        <Box sx={{ mt: 2 }}>
-          <Button
-            variant="contained"
-            onClick={handleChooseExercises}
-            sx={{ ...ButtonStylingForApp, ml: 1 }}
-          >
-            Choose Selected
-          </Button>
-          <Button
-            variant="contained"
-            onClick={onClose}
-            sx={{ ...ButtonStylingForApp, ml: 1 }}
-          >
-            Cancel
-          </Button>
-        </Box>
-
         <Grid container spacing={4}>
-          <Grid item md={6}>
-            <Typography variant="h6" gutterBottom>
-              {" "}
-              Select how many days a week you will be training
+          <Grid item md={4}>
+            <Typography variant="h6" mr={2}>
+              Training Days Per Week
             </Typography>
-            <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-              <Typography variant="body1" mr={2}>
-                Training Days Per Week:
-              </Typography>
+            <Grid item sx={{ display: "flex", alignItems: "center", mb: 1 }}>
               <Button
                 variant="outlined"
                 disabled={daysAWeek === "1"}
@@ -183,6 +168,7 @@ export const ModalForCreatingPeriodizedData: React.FC<
                   height: "45px",
                   width: "45px",
                   fontSize: "30px",
+                  marginRight: "12px",
                 }}
                 onClick={() =>
                   setDaysAWeek((prev) =>
@@ -205,6 +191,7 @@ export const ModalForCreatingPeriodizedData: React.FC<
                   height: "45px",
                   width: "45px",
                   fontSize: "30px",
+                  marginLeft: "12px",
                 }}
                 onClick={() =>
                   setDaysAWeek((prev) =>
@@ -214,46 +201,51 @@ export const ModalForCreatingPeriodizedData: React.FC<
               >
                 +
               </Button>
-            </Box>
-            <Typography variant="h6" gutterBottom mb={4}>
-              {" "}
-              Select what goal of periodization you choose
-            </Typography>
-            <Select
-              value={periodization}
-              onChange={handlePeriodizationChange}
-              displayEmpty
-              fullWidth
-              variant="outlined"
-              sx={{ mb: 4, width: "260px" }}
-            >
-              <MenuItem value="strength">Strength</MenuItem>
-              <MenuItem value="hypertrophy">Hypertrophy</MenuItem>
-              <MenuItem value="power">Power</MenuItem>
-            </Select>
-            <Typography variant="h6" gutterBottom mb={4}>
-              Assign Exercises to training days
-            </Typography>
+            </Grid>
+            <Grid container spacing={4}>
+              <Grid item md={6} xs={10}>
+                <Typography variant="h6" gutterBottom mb={0.5}>
+                  Training day
+                </Typography>
+                <Select
+                  value={selectedDay}
+                  onChange={handleDaySelectionChange}
+                  displayEmpty
+                  fullWidth
+                  variant="outlined"
+                  sx={{ mb: 2, width: "200px", height: "30px" }}
+                >
+                  {Object.keys(trainingDays).map((day) => {
+                    const dayWithSpace = day.replace(/(\d+)/, " $1");
+                    return (
+                      <MenuItem key={day} value={day}>
+                        {dayWithSpace.toUpperCase()}
+                      </MenuItem>
+                    );
+                  })}
+                </Select>
+              </Grid>
 
-            <Select
-              value={selectedDay}
-              onChange={handleDaySelectionChange}
-              displayEmpty
-              fullWidth
-              variant="outlined"
-              sx={{ mb: 4 }}
-            >
-              {Object.keys(trainingDays).map((day) => {
-                const dayWithSpace = day.replace(/(\d+)/, " $1");
-                return (
-                  <MenuItem key={day} value={day}>
-                    {dayWithSpace.toUpperCase()}
-                  </MenuItem>
-                );
-              })}
-            </Select>
-            <Box>
-              <Typography variant="h6" sx={{mb:'0'}}>
+              <Grid item md={6} xs={10}>
+                <Typography variant="h6" gutterBottom mb={0.5}>
+                  Periodization
+                </Typography>
+                <Select
+                  value={periodization}
+                  onChange={handlePeriodizationChange}
+                  displayEmpty
+                  fullWidth
+                  variant="outlined"
+                  sx={{ mb: 4, width: "200px", height: "30px" }}
+                >
+                  <MenuItem value="strength">Strength</MenuItem>
+                  <MenuItem value="hypertrophy">Hypertrophy</MenuItem>
+                  <MenuItem value="power">Power</MenuItem>
+                </Select>
+              </Grid>
+            </Grid>
+            <Grid item xs={12} mb={2}>
+              <Typography variant="h6" mb={1}>
                 Available Exercises
               </Typography>
               <SearchInput
@@ -261,46 +253,108 @@ export const ModalForCreatingPeriodizedData: React.FC<
                 onHandleSearchSubmit={handleSearchSubmit}
                 searchQuery={searchingQuery}
               />
+              <Button
+                onClick={() => {
+                  setIsExerciseListVisible((prev) => !prev);
+                }}
+                sx={{ ...ButtonStylingForApp }}
+              >
+                {isExerciseListVisible ? "close" : "open exercise list"}
+              </Button>
+            </Grid>
 
-              {exercises.map((exercise) => (
-                <Box
-                  key={exercise._id}
-                  sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    mt: 1,
-                    width: "auto",
-                  }}
-                >
-                  <Typography sx={{ marginRight: 2 }}>
-                    {exercise.name}
-                  </Typography>
-                  <Button
-                    variant="outlined"
-                    size="small"
-                    onClick={() => handleAddExercise(exercise)}
-                    sx={{ whiteSpace: "nowrap" }}
-                  >
-                    Add
-                  </Button>
-                </Box>
+            {isExerciseListVisible ? (
+              <Grid
+                container
+                spacing={2}
+                sx={{
+                  width: "550px",
+                  height: "300px",
+                  overflow: "auto",
+                  "@media(max-width:768px)": {
+                    width: "100%",
+                  },
+                }}
+              >
+                {exercises.map((exercise) => (
+                  <React.Fragment key={exercise._id}>
+                    <Grid item xs={4}>
+                      {" "}
+                      <Typography>{exercise.name}</Typography>
+                    </Grid>
+                    <Grid item xs={2}>
+                      {" "}
+                      <Typography>{exercise.type}</Typography>
+                    </Grid>
+                    <Grid item xs={3}>
+                      {" "}
+                      <Typography>{exercise.movementPattern}</Typography>
+                    </Grid>
+                    <Grid item xs={3}>
+                      {" "}
+                      <Button
+                        variant="outlined"
+                        size="small"
+                        onClick={() => handleAddExercise(exercise)}
+                        sx={{ ...ButtonStylingForApp, ml: 1, height: "25px" }}
+                      >
+                        ADD
+                      </Button>
+                    </Grid>
+                  </React.Fragment>
+                ))}
+              </Grid>
+            ) : (
+              <Typography variant="body1">
+                {" "}
+                Expand the list to see exercises{" "}
+              </Typography>
+            )}
+            
+          </Grid>
+
+          <Grid item md={6} sx={{ maxHeight: "400px" }}>
+            <Typography variant="h6">Template</Typography>
+            <Box
+              sx={{
+                height: "550px",
+                overflow: "auto",
+                margin:'5px 10px',
+                "@media(max-width:768px)": {
+                  height: "400px",
+                  width: "100%",
+                  margin: "0px 0px",
+                },
+              }}
+            >
+              {Object.keys(trainingDays).map((day) => (
+                <TablesTemplateComponent
+                  key={day}
+                  dayLabel={day}
+                  mainExercises={trainingDays[day].main}
+                  accessoryExercises={trainingDays[day].accessory}
+                />
               ))}
             </Box>
           </Grid>
-          <Grid item xs={12} md={6}>
-            <Typography variant="h6">Training Days</Typography>
-            {Object.keys(trainingDays).map((day) => (
-              <TablesTemplateComponent
-                key={day}
-                dayLabel={day}
-                mainExercises={trainingDays[day].main}
-                accessoryExercises={trainingDays[day].accessory}
-              />
-            ))}
-          </Grid>
+     
         </Grid>
-
+        <Box sx={{ mt: 2, display: "flex", justifyContent: "flex-start" }}>
+              <Button
+                variant="contained"
+                onClick={handleChooseExercises}
+                sx={{ ...ButtonStylingForApp, ml: 1 }}
+              >
+                Choose Selected
+              </Button>
+              <Button
+                variant="contained"
+                onClick={onClose}
+                sx={{ ...ButtonStylingForApp, ml: 1 }}
+              >
+                Cancel
+              </Button>
+            </Box>
         <ExerciseTypeModal
           open={exerciseTypeModalOpen}
           onClose={handleCloseExerciseTypeModal}

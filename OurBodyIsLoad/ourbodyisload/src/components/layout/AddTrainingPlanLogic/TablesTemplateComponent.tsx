@@ -47,20 +47,20 @@ export const TablesTemplateComponent: React.FC<
               <TableCell sx={{ color: "#530185" }}>Sets</TableCell>
               <TableCell sx={{ color: "#530185" }}>Reps</TableCell>
               <TableCell sx={{ color: "#530185" }}>Intensity</TableCell>
-              <TableCell sx={{ color: "#530185" }}> Pattern</TableCell>
-              <TableCell sx={{ color: "#530185" }}> Plane</TableCell>
+              <TableCell sx={{ color: "#530185" }}>Pattern </TableCell>
             </TableRow>
           </TableHead>
           <Box mt={1} />
           <TableBody>
             {mainExercises.map((exercise, index) => (
               <TableRow key={index}>
-                <TableCell sx={{ color: "#530185" }}>{exercise.name}</TableCell>
+                <TableCell sx={{ color: "#530185",'@media(max-width:768px)' :{
+                 maxWidth: '2px',overflow:'auto'
+                } }}>{exercise.name}</TableCell>
                 <TableCell>{exercise.sets}</TableCell>
                 <TableCell>{exercise.reps}</TableCell>
                 <TableCell>{exercise.intensity} kg</TableCell>
                 <TableCell>{exercise.movementPattern}</TableCell>
-                <TableCell>{exercise.plane}</TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -68,22 +68,20 @@ export const TablesTemplateComponent: React.FC<
           <TableHead>
             <TableRow>
               <TableCell>Accessory </TableCell>
-              <TableCell sx={{ color: "#530185" }}>Sets</TableCell>
-              <TableCell sx={{ color: "#530185" }}>Reps</TableCell>
-              <TableCell sx={{ color: "#530185" }}>Intensity</TableCell>
-              <TableCell sx={{ color: "#530185" }}> pattern </TableCell>
-              <TableCell sx={{ color: "#530185" }}> Plane</TableCell>
+              <TableCell sx={{ color: "#530185" }}></TableCell>
+              <TableCell sx={{ color: "#530185" }}></TableCell>
+              <TableCell sx={{ color: "#530185" }}></TableCell>
+              <TableCell sx={{ color: "#530185" }}></TableCell>
             </TableRow>
           </TableHead>
           <TableBody sx={{ mt: 4 }}>
             {accessoryExercises.map((exercise, index) => (
               <TableRow key={index}>
-                <TableCell sx={{ color: "#530185" }}>{exercise.name}</TableCell>
+                <TableCell sx={{ color: "#530185" ,}}>{exercise.name}</TableCell>
                 <TableCell>{exercise.sets}</TableCell>
                 <TableCell>{exercise.reps}</TableCell>
                 <TableCell>{exercise.intensity} kg</TableCell>
                 <TableCell>{exercise.movementPattern}</TableCell>
-                <TableCell>{exercise.plane}</TableCell>
               </TableRow>
             ))}
           </TableBody>

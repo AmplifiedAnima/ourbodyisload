@@ -1,4 +1,4 @@
-import { Alert, AlertTitle, Snackbar, Typography } from "@mui/material";
+import { Alert, Snackbar, Typography } from "@mui/material";
 
 interface notificationDisplayProps {
   open: boolean;

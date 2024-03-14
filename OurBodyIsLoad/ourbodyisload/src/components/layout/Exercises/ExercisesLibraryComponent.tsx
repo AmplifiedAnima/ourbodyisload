@@ -7,7 +7,6 @@ import { AppDispatch, RootState } from "../../../store/store";
 import { Link } from "react-router-dom";
 import { authState } from "../../../interfaces/auth.interface";
 import { LoginToAccessThisPartComponent } from "../LoginToAccessThisPartComponent/LoginToAccessThisPartComponent";
-import { exerciseBlueprintsInterface } from "../../../interfaces/exercise.interface";
 
 export const ExercisesLibraryComponent = () => {
   const authState = useSelector<RootState, authState>((state) => state.auth);
@@ -106,6 +105,7 @@ export const ExercisesLibraryComponent = () => {
                       margin: "10px 0px",
                     }}
                   >
+                    
                     <Link
                       to={`http://localhost:3001/exercises/${exercise._id}`}
                     >

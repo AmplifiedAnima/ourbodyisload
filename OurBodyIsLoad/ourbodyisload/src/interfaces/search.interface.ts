@@ -7,7 +7,7 @@ export interface searchFunctionalityInterface {
   status: string;
   selectedOffer: exerciseBlueprintsInterface | null;
 }
-export interface BlogPostInterface {
+export interface blogPostInterface {
   _id: string;
   title: string;
 }

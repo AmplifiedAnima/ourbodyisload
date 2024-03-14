@@ -1,7 +1,7 @@
 import { Box, Button, Input, InputLabel, Typography } from "@mui/material";
 import React, { useState } from "react";
-import { ButtonStylingForApp } from "../../../globalStyles/ButtonStylingForApp";
-import { exerciseBlueprintsInterface } from "../../../interfaces/exercise.interface";
+import { ButtonStylingForApp } from "../../../../globalStyles/ButtonStylingForApp";
+import { exerciseBlueprintsInterface } from "../../../../interfaces/exercise.interface";
 
 interface UserOneRepMaxCounter {
   intensityInput: string;

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Modal, Button, Typography, Box, TextField } from "@mui/material";
-import { exerciseBlueprintsInterface } from "../../../interfaces/exercise.interface";
+import { exerciseBlueprintsInterface } from "../../../../interfaces/exercise.interface";
 import InputOneRepMaxCounter from "./InputOneRepMaxCounter";
-import { ButtonStylingForApp } from "../../../globalStyles/ButtonStylingForApp";
+import { ButtonStylingForApp } from "../../../../globalStyles/ButtonStylingForApp";
 interface ExerciseTypeModalProps {
   open: boolean;
   onClose: () => void;

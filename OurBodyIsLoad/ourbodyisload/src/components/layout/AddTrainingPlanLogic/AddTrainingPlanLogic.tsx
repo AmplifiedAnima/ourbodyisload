@@ -4,12 +4,7 @@ import { useEffect, useState } from "react";
 import { trainingPlanInterface } from "../../../interfaces/trainingPlan.interface";
 import { exerciseBlueprintsInterface } from "../../../interfaces/exercise.interface";
 import { cycleInterface } from "../../../interfaces/cycle.interface";
-import { searchFunctionalityInterface } from "../../../interfaces/search.interface";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
-import { fetchExercises } from "../../../store/slices/searchSlice";
-import { AppDispatch } from "../../../store/store";
-import { ModalForCreatingPeriodizedData } from "./ModalForCreatingPeriodizedData";
+import { ModalForCreatingPeriodizedData } from "./ExerciseTrainingPlanComponent/ModalForCreatingPeriodizedData";
 import { TablesTemplateComponent } from "./TablesTemplateComponent";
 import ErrorHandlerDisplayComponent from "../ErrorAndNotificationHandlers/ErrorHandlerDisplayComponent";
 import { NotificationHandlerDisplayComponent } from "../ErrorAndNotificationHandlers/NotificationHandlerDisplayComponent";
@@ -25,13 +20,8 @@ export const AddTrainingPlanLogic = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [error, setError] = useState("");
   const [openError, setOpenError] = useState(false);
-  const dispatch = useDispatch<AppDispatch>();
   const [notification, setNotification] = useState("");
   const [openNotification, setNotificationOpen] = useState(false);
-
-  useEffect(() => {
-    dispatch(fetchExercises(""));
-  }, [dispatch]);
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -47,7 +37,7 @@ export const AddTrainingPlanLogic = () => {
   const handleCloseNotification = () => {
     setNotificationOpen(false);
   };
-  
+
   const handleChooseExercises = (
     chosenExercises: exerciseBlueprintsInterface[]
   ) => {
@@ -128,7 +118,6 @@ export const AddTrainingPlanLogic = () => {
         </Button>
       </Box>
       <ModalForCreatingPeriodizedData
-
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         onChooseExercises={handleChooseExercises}
