@@ -1,7 +1,7 @@
 import { Box, Button, Input, InputLabel, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { ButtonStylingForApp } from "../../../../globalStyles/ButtonStylingForApp";
-import { exerciseBlueprintsInterface } from "../../../../interfaces/exercise.interface";
+import { ExerciseBlueprintsInterface } from "../../../../interfaces/Exercise.interface";
 
 interface UserOneRepMaxCounter {
   intensityInput: string;
@@ -12,7 +12,7 @@ interface UserOneRepMaxCounter {
   handleChangeOfRepsLifted: (
     event: React.ChangeEvent<HTMLInputElement>
   ) => void;
-  selectedExercise: exerciseBlueprintsInterface | null;
+  selectedExercise: ExerciseBlueprintsInterface | null;
 }
 
 const loadTheLoad = (repetitions: number, intensity: number) => {

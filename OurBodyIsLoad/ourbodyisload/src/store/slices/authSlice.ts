@@ -2,10 +2,10 @@ import { createSlice } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { AppDispatch } from "../store";
 import { UpdateProfileData } from "../../components/layout/EditProfileComponent/EditProfileComponent";
-import { authState } from "../../interfaces/auth.interface";
-import { errorResponse } from "../../interfaces/error.interface";
+import { AuthState } from "../../interfaces/Auth.interface";
+import { ErrorResponse } from "../../interfaces/error.interface";
 
-export const initialAuthState: authState = {
+export const initialAuthState: AuthState = {
   username: "",
   isLoggedIn: false,
   accessToken: "",
@@ -45,7 +45,7 @@ const authSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(updateProfile.rejected, (state, action) => {
       console.log("create Error payload:", action.payload);
-      const payload = action.payload as errorResponse;
+      const payload = action.payload as ErrorResponse;
       state.error = payload.error;
     });
   },

@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { exerciseBlueprintsInterface } from "../../interfaces/exercise.interface";
-import { searchFunctionalityInterface } from "../../interfaces/search.interface";
+import { ExerciseBlueprintsInterface } from "../../interfaces/Exercise.interface";
+import { SearchFunctionalityInterface } from "../../interfaces/Search.interface";
 
 export const searchQueryinitialState = {
   status: "idle",
@@ -16,7 +16,7 @@ export const searchFunctionalitySlice = createSlice({
 
   reducers: {
     updateQuery: (
-      state: searchFunctionalityInterface,
+      state: SearchFunctionalityInterface,
       action: PayloadAction<string>
     ) => {
       state.searchQuery = action.payload;
@@ -25,8 +25,8 @@ export const searchFunctionalitySlice = createSlice({
       state.selectedOffer = action.payload;
     },
     setExercises: (
-      state: searchFunctionalityInterface,
-      action: PayloadAction<exerciseBlueprintsInterface[]>
+      state: SearchFunctionalityInterface,
+      action: PayloadAction<ExerciseBlueprintsInterface[]>
     ) => {
       state.exercises = action.payload;
       state.status = "suceeded";
@@ -35,7 +35,7 @@ export const searchFunctionalitySlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(
       fetchExercises.fulfilled,
-      (state: searchFunctionalityInterface, action) => {
+      (state: SearchFunctionalityInterface, action) => {
         state.exercises = action.payload;
         state.status = "succeeded";
       }
@@ -61,7 +61,7 @@ export const fetchExercises = createAsyncThunk(
       if (!response.ok) {
         throw new Error("Error fetching posts");
       }
-      const data: exerciseBlueprintsInterface[] = await response.json();
+      const data: ExerciseBlueprintsInterface[] = await response.json();
       return data;
     } catch (error) {
       return rejectWithValue("error happend");
@@ -83,7 +83,7 @@ export const fetchPosts = createAsyncThunk(
       if (!response.ok) {
         throw new Error("Error fetching posts");
       }
-      const data: exerciseBlueprintsInterface[] = await response.json();
+      const data: ExerciseBlueprintsInterface[] = await response.json();
       return data;
     } catch (error) {
       return rejectWithValue("error happend");

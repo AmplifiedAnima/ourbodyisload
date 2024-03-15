@@ -4,7 +4,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AppDispatch, RootState } from "../../../../store/store";
 import { useSelector } from "react-redux";
 import { performLogout } from "../../../../store/slices/authSlice";
-import { authState } from "../../../../interfaces/auth.interface";
+import { AuthState } from "../../../../interfaces/Auth.interface";
 import { ButtonStylingForApp } from "../../../../globalStyles/ButtonStylingForApp";
 import { useDispatch } from "react-redux";
 import { ArrowBack } from "@mui/icons-material";
@@ -26,7 +26,7 @@ export const MenuDashboard = () => {
   const isRegistrationPage = location.pathname === "/registration-page";
   const isAboutCreatorPage = location.pathname === "/about-creator";
 
-  const authState = useSelector<RootState, authState>((state) => state.auth);
+  const authState = useSelector<RootState, AuthState>((state) => state.auth);
   const { username, isLoggedIn, avatarImageUrl } = authState;
   const dispatch = useDispatch<AppDispatch>();
 

@@ -7,22 +7,22 @@ import { AppDispatch } from "../../../store/store";
 import { ButtonStylingForApp } from "../../../globalStyles/ButtonStylingForApp";
 import { useNavigate } from "react-router-dom";
 import {
-  errorMessage,
-  formData,
-} from "../../../interfaces/registration.interface";
+  ErrorMessage,
+  FormData,
+} from "../../../interfaces/Registration.interface";
 
 export const RegistrationComponent = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<formData>();
+  } = useForm<FormData>();
   const [isSubmittedSuccessfully, setIsSubmittedSuccessfully] = useState(false);
-  const [submissionError, setSubmissionError] = useState<errorMessage | null>(
+  const [submissionError, setSubmissionError] = useState<ErrorMessage | null>(
     null
   );
   const dispatch = useDispatch<AppDispatch>();
-  const onSubmit = (data: formData) => {
+  const onSubmit = (data: FormData) => {
     dispatch(signUp(data))
       .unwrap()
       .then((response) => {

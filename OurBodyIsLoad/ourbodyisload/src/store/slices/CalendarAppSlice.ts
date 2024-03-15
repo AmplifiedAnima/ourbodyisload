@@ -1,12 +1,12 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {
-  updateUserChosenClassInterface,
-  calendarAppState,
-  preExistingClassesInterface,
-  userActivityData,
-} from "../../interfaces/calendar.interface";
+  UpdateUserChosenClassInterface,
+  CalendarAppState,
+  PreExistingClassesInterface,
+  UserActivityData,
+} from "../../interfaces/Calendar.interface";
 
-export const calendarAppInitialState: calendarAppState = {
+export const calendarAppInitialState: CalendarAppState = {
   classes: [],
   userChosenClasses: [],
   status: "idle",
@@ -23,14 +23,14 @@ export const calendarAppStateManagementSlice = createSlice({
 
   reducers: {
     setClasses: (
-      state: calendarAppState,
-      action: PayloadAction<preExistingClassesInterface[]>
+      state: CalendarAppState,
+      action: PayloadAction<PreExistingClassesInterface[]>
     ) => {
       state.classes = action.payload;
       state.status = "succeeded";
     },
     setError: (
-      state: calendarAppState,
+      state: CalendarAppState,
       action: PayloadAction<string | null>
     ) => {
       state.error = action.payload;
@@ -129,7 +129,7 @@ export const fetchUserChosenClasses = createAsyncThunk(
 export const postUserActivitiesToBackend = createAsyncThunk(
   "postUserActivitiesToBackend",
   async (
-    { activityId, scheduleTime }: userActivityData,
+    { activityId, scheduleTime }: UserActivityData,
     { rejectWithValue, dispatch }
   ) => {
     const formattedScheduleTime = scheduleTime.toISOString();
@@ -207,7 +207,7 @@ export const editUserChosenClass = createAsyncThunk(
     {
       id,
       updateUserChosenClassDto,
-    }: { id: string; updateUserChosenClassDto: updateUserChosenClassInterface },
+    }: { id: string; updateUserChosenClassDto: UpdateUserChosenClassInterface },
     { rejectWithValue, dispatch }
   ) => {
     try {

@@ -1,21 +1,20 @@
 import { Box, Button, Grid, Typography } from "@mui/material";
 import { ButtonStylingForApp } from "../../../globalStyles/ButtonStylingForApp";
 import { useEffect, useState } from "react";
-import { trainingPlanInterface } from "../../../interfaces/trainingPlan.interface";
-import { exerciseBlueprintsInterface } from "../../../interfaces/exercise.interface";
-import { cycleInterface } from "../../../interfaces/cycle.interface";
-import { ModalForCreatingPeriodizedData } from "./ExerciseTrainingPlanComponent/ModalForCreatingPeriodizedData";
+import { CycleInterface } from "../../../interfaces/cycle.interface";
 import { TablesTemplateComponent } from "./TablesTemplateComponent";
 import ErrorHandlerDisplayComponent from "../ErrorAndNotificationHandlers/ErrorHandlerDisplayComponent";
 import { NotificationHandlerDisplayComponent } from "../ErrorAndNotificationHandlers/NotificationHandlerDisplayComponent";
+import { TrainingPlanInterface } from "../../../interfaces/TrainingPlan.interface";
+import { ModalForCreatingPeriodizedData } from "./ExerciseTrainingPlanComponent/ModalForCreatingPeriodizedData";
+import { ChosenExercises } from "../../../interfaces/Exercise.interface";
 
 export const AddTrainingPlanLogic = () => {
   const [periodizedTraining, savePeriodizedTraining] =
-    useState<cycleInterface | null>();
+    useState<CycleInterface | null>();
 
-  const [userChosenExercises, setUserChosenExercises] = useState<
-    exerciseBlueprintsInterface[]
-  >([]);
+  const [userChosenExercises, setUserChosenExercises] =
+    useState<ChosenExercises>();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [error, setError] = useState("");
@@ -38,13 +37,11 @@ export const AddTrainingPlanLogic = () => {
     setNotificationOpen(false);
   };
 
-  const handleChooseExercises = (
-    chosenExercises: exerciseBlueprintsInterface[]
-  ) => {
+  const handleChooseExercises = (chosenExercises: ChosenExercises) => {
     setUserChosenExercises(chosenExercises);
   };
 
-  const fetchData = async (endpoint: string, userData: any) => {
+  const fetchData = async (endpoint: string, userData: ChosenExercises) => {
     try {
       const response = await fetch(endpoint, {
         method: "POST",
@@ -53,7 +50,7 @@ export const AddTrainingPlanLogic = () => {
         },
         body: JSON.stringify(userData),
       });
-
+      console.log(userData);
       if (response.ok) {
         const data = await response.json();
         savePeriodizedTraining(data);
@@ -76,11 +73,15 @@ export const AddTrainingPlanLogic = () => {
   };
 
   const handleCreatePeriodizedTrainingPlan = () => {
-    const payload = userChosenExercises;
-    fetchData(
-      `http://localhost:3000/training-plans/periodized-training`,
-      payload
-    );
+    let payload = userChosenExercises;
+    if (typeof payload === "undefined") {
+      payload = { timesAWeek: "0", trainingPlans: [], periodization: "" };
+    } else {
+      fetchData(
+        `http://localhost:3000/training-plans/periodized-training`,
+        payload
+      );
+    }
   };
 
   useEffect(() => {
@@ -130,7 +131,7 @@ export const AddTrainingPlanLogic = () => {
           </Typography>
           <Grid container spacing={4}>
             {periodizedTraining.trainingPlans.map(
-              (trainingPlan: trainingPlanInterface, index: number) => (
+              (trainingPlan: TrainingPlanInterface, index: number) => (
                 <Grid item xs={12} key={index}>
                   <TablesTemplateComponent
                     dayLabel={`Day ${index + 1}`}

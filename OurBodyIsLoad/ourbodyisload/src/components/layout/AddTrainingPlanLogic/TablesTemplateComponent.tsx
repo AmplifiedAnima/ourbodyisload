@@ -10,11 +10,11 @@ import {
   TableCell,
   TableBody,
 } from "@mui/material";
-import { exerciseBlueprintsInterface } from "../../../interfaces/exercise.interface";
+import { ExerciseBlueprintsInterface } from "../../../interfaces/Exercise.interface";
 
 interface TablesTemplateComponentProps {
-  mainExercises: exerciseBlueprintsInterface[];
-  accessoryExercises: exerciseBlueprintsInterface[];
+  mainExercises: ExerciseBlueprintsInterface[];
+  accessoryExercises: ExerciseBlueprintsInterface[];
   dayLabel: string;
 }
 
@@ -33,7 +33,7 @@ export const TablesTemplateComponent: React.FC<
       <TableContainer
         component={Paper}
         sx={{
-          margin: "5px 10px",
+          margin: "5px 5px",
 
           background:
             "linear-gradient(to left, rgba(235, 207, 252, 0.6) 0%, rgba(215, 174, 251, 0.3) 60%, rgba(255, 255, 255, 1) 70%)",
@@ -49,6 +49,7 @@ export const TablesTemplateComponent: React.FC<
               <TableCell sx={{ color: "#530185" }}>Intensity</TableCell>
               <TableCell sx={{ color: "#530185" }}>Pattern </TableCell>
             </TableRow>
+        
           </TableHead>
           <Box mt={1} />
           <TableBody>

@@ -2,20 +2,20 @@ import { Box, CardContent, Grid, Typography } from "@mui/material";
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchExercises } from "../../../store/slices/searchSlice";
-import { searchFunctionalityInterface } from "../../../interfaces/search.interface";
+import { SearchFunctionalityInterface } from "../../../interfaces/Search.interface";
 import { AppDispatch, RootState } from "../../../store/store";
 import { Link } from "react-router-dom";
-import { authState } from "../../../interfaces/auth.interface";
+import { AuthState } from "../../../interfaces/Auth.interface";
 import { LoginToAccessThisPartComponent } from "../LoginToAccessThisPartComponent/LoginToAccessThisPartComponent";
 
 export const ExercisesLibraryComponent = () => {
-  const authState = useSelector<RootState, authState>((state) => state.auth);
+  const authState = useSelector<RootState, AuthState>((state) => state.auth);
   const exercises = useSelector(
-    (state: { search: searchFunctionalityInterface }) => state.search.exercises
+    (state: { search: SearchFunctionalityInterface }) => state.search.exercises
   );
   const dispatch = useDispatch<AppDispatch>();
   const searchQuery = useSelector(
-    (state: { search: searchFunctionalityInterface }) =>
+    (state: { search: SearchFunctionalityInterface }) =>
       state.search.searchQuery
   );
 

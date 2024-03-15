@@ -14,17 +14,17 @@ import { AddActivityButton } from "../ActivityCardComponent/AddActivityButton";
 import { AddTrainingPlanButton } from "../AddTrainingPlanLogic/AddTrainingPlanButton";
 import { ActivityModal } from "../ActivityCardComponent/ActivityModal";
 import {
-  calendarAppState,
-  preExistingClassesInterface,
-  userChosenClassesInterface,
-} from "../../../interfaces/calendar.interface";
+  CalendarAppState,
+  PreExistingClassesInterface,
+  UserChosenClassesInterface,
+} from "../../../interfaces/Calendar.interface";
 import {
   fetchUserChosenClasses,
   fetchPreExistingClasses,
   clearError,
   resetPostSuccessFlag,
 } from "../../../store/slices/CalendarAppSlice";
-import { authState } from "../../../interfaces/auth.interface";
+import { AuthState } from "../../../interfaces/Auth.interface";
 import { ClassVideoModal } from "./ClassVideoModal";
 import { LoginToAccessThisPartComponent } from "../LoginToAccessThisPartComponent/LoginToAccessThisPartComponent";
 import { TrainingPlanModal } from "../AddTrainingPlanLogic/TrainingPlanModal";
@@ -36,19 +36,19 @@ import ErrorHandlerDisplayComponent from "../ErrorAndNotificationHandlers/ErrorH
 const CalendarComponent: React.FC = () => {
   const preExistingClasses = useSelector<
     RootState,
-    preExistingClassesInterface[]
+    PreExistingClassesInterface[]
   >((state) => state.calendarApp.classes);
 
   const userChosenClasses = useSelector<
     RootState,
-    userChosenClassesInterface[]
+    UserChosenClassesInterface[]
   >((state) => state.calendarApp.userChosenClasses);
 
-  const authState = useSelector<RootState, authState>((state) => state.auth);
+  const authState = useSelector<RootState, AuthState>((state) => state.auth);
 
-  const calendarState: calendarAppState = useSelector<
+  const calendarState: CalendarAppState = useSelector<
     RootState,
-    calendarAppState
+    CalendarAppState
   >((state) => state.calendarApp);
   const postSuccess = calendarState.postSuccess;
   const dispatch = useDispatch<AppDispatch>();
@@ -65,7 +65,7 @@ const CalendarComponent: React.FC = () => {
   const [isListView, setIsListView] = useState(false);
 
   const [selectedClass, setSelectedClass] =
-    useState<userChosenClassesInterface>();
+    useState<UserChosenClassesInterface>();
 
   useEffect(() => {
     if (authState.isLoggedIn) {

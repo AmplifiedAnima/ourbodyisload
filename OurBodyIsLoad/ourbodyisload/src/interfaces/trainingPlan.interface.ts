@@ -1,8 +1,17 @@
-import { exerciseBlueprintsInterface } from "./exercise.interface";
+import { ExerciseBlueprintsInterface } from "./Exercise.interface";
 
-export interface trainingPlanInterface {
+export interface TrainingPlanInterface {
   _id: string;
-  mainExercises: exerciseBlueprintsInterface[];
+  mainExercises: ExerciseBlueprintsInterface[];
 
-  accessoryExercises: exerciseBlueprintsInterface[];
+  accessoryExercises: ExerciseBlueprintsInterface[];
 }
+
+export type TrainingDay = {
+  main: ExerciseBlueprintsInterface[];
+  accessory: ExerciseBlueprintsInterface[];
+};
+
+export type TrainingDays = {
+  [key: string]: TrainingDay;
+};

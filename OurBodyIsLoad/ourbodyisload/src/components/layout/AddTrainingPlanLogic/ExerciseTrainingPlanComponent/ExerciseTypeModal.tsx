@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { Modal, Button, Typography, Box, TextField } from "@mui/material";
-import { exerciseBlueprintsInterface } from "../../../../interfaces/exercise.interface";
+import { ExerciseBlueprintsInterface } from "../../../../interfaces/Exercise.interface";
 import InputOneRepMaxCounter from "./InputOneRepMaxCounter";
 import { ButtonStylingForApp } from "../../../../globalStyles/ButtonStylingForApp";
 interface ExerciseTypeModalProps {
   open: boolean;
   onClose: () => void;
-  selectedExercise: exerciseBlueprintsInterface | null;
+  selectedExercise: ExerciseBlueprintsInterface | null;
   sets: string;
   reps: string;
   intensity: string;
@@ -59,9 +59,16 @@ const ExerciseTypeModal: React.FC<ExerciseTypeModalProps> = ({
 
         <Typography variant="body1" gutterBottom mb={2}>
           {selectedExercise ? (
-            <Typography sx={{ color: "purple" }}>
-              {selectedExercise.name}
-            </Typography>
+            <>
+              <Typography sx={{ color: "purple" }}>
+                {selectedExercise.name} | {selectedExercise.movementPattern}{" "}
+              </Typography>
+
+              <Typography sx={{ color: "purple" }}>
+                {" "}
+                {selectedExercise.type}{" "}
+              </Typography>
+            </>
           ) : (
             ""
           )}
@@ -104,7 +111,7 @@ const ExerciseTypeModal: React.FC<ExerciseTypeModalProps> = ({
           onChange={handleIntensityChange}
           fullWidth
           margin="normal"
-          inputProps={{ min: 0, step: 0.5 }} // Specifying intensity in kg
+          inputProps={{ min: 0, step: 0.5 }}
         />
         <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
           <Button

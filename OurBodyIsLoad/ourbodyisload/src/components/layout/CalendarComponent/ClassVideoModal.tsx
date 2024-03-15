@@ -1,4 +1,4 @@
-import { userChosenClassesInterface } from "../../../interfaces/calendar.interface";
+import { UserChosenClassesInterface } from "../../../interfaces/Calendar.interface";
 import { Box, Button, Modal, Typography } from "@mui/material";
 import { ButtonStylingForApp } from "../../../globalStyles/ButtonStylingForApp";
 import { DeleteActivityModal, EditActivityModal } from "./EditAndDeleteModal";
@@ -7,7 +7,7 @@ import { useState } from "react";
 interface ClassCommencingActivityModalProps {
   open: boolean;
   handleClose: () => void;
-  userChosenClass: userChosenClassesInterface | undefined;
+  userChosenClass: UserChosenClassesInterface | undefined;
 }
 export const ClassVideoModal: React.FC<ClassCommencingActivityModalProps> = ({
   open,

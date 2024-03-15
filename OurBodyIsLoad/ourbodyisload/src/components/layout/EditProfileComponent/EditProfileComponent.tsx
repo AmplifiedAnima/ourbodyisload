@@ -2,7 +2,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { updateProfile } from "../../../store/slices/authSlice";
-import { authState } from "../../../interfaces/auth.interface";
+import { AuthState } from "../../../interfaces/Auth.interface";
 import { Box, Button, FormControl, TextField, Typography } from "@mui/material";
 import { AppDispatch, RootState } from "../../../store/store";
 import { useSelector } from "react-redux";
@@ -17,7 +17,7 @@ export interface UpdateProfileData {
 }
 
 export const EditProfileComponent: React.FC = () => {
-  const authState = useSelector<RootState, authState>((state) => state.auth);
+  const authState = useSelector<RootState, AuthState>((state) => state.auth);
 
   const userData = {
     username: authState.username,

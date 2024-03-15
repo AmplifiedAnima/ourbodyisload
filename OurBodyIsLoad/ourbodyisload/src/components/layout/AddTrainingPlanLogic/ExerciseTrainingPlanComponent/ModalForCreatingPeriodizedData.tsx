@@ -8,7 +8,10 @@ import {
   MenuItem,
   Select,
 } from "@mui/material";
-import { exerciseBlueprintsInterface } from "../../../../interfaces/exercise.interface";
+import {
+  ExerciseBlueprintsInterface,
+  ChosenExercises,
+} from "../../../../interfaces/Exercise.interface";
 import { v4 as uuidv4 } from "uuid";
 import { ButtonStylingForApp } from "../../../../globalStyles/ButtonStylingForApp";
 import { TablesTemplateComponent } from "../TablesTemplateComponent";
@@ -21,24 +24,25 @@ import { SearchInput } from "../../HeaderComponent/SearchInput";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../../store/store";
 import { useSelector } from "react-redux";
-import { searchFunctionalityInterface } from "../../../../interfaces/search.interface";
+import { SearchFunctionalityInterface } from "../../../../interfaces/Search.interface";
+import { TrainingDays } from "../../../../interfaces/TrainingPlan.interface";
 
 interface ModalWithExercisesChoiceProps {
   isOpen: boolean;
   onClose: () => void;
-  onChooseExercises: (chosenExercises: any) => void;
+  onChooseExercises: (chosenExercises: ChosenExercises) => void;
 }
 
 export const ModalForCreatingPeriodizedData: React.FC<
   ModalWithExercisesChoiceProps
 > = ({ isOpen, onClose, onChooseExercises }) => {
   const exercises = useSelector(
-    (state: { search: searchFunctionalityInterface }) => state.search.exercises
+    (state: { search: SearchFunctionalityInterface }) => state.search.exercises
   );
 
   const [daysAWeek, setDaysAWeek] = useState("2");
   const [selectedDay, setSelectedDay] = useState("day1");
-  const [trainingDays, setTrainingDays] = useState<any>({});
+  const [trainingDays, setTrainingDays] = useState<TrainingDays>({});
   const [reps, setReps] = useState("");
   const [sets, setSets] = useState("");
   const [intensity, setIntensity] = useState<string>("");
@@ -46,18 +50,18 @@ export const ModalForCreatingPeriodizedData: React.FC<
     useState<boolean>(false);
   const [isExerciseListVisible, setIsExerciseListVisible] = useState(false);
   const [selectedExercise, setSelectedExercise] =
-    useState<exerciseBlueprintsInterface | null>(null);
+    useState<ExerciseBlueprintsInterface | null>(null);
   const [periodization, setPeriodization] = useState<string>("strength");
   const [searchingQuery, setSearchingQuery] = useState("");
 
   const dispatch = useDispatch<AppDispatch>();
   const searchQuery = useSelector(
-    (state: { search: searchFunctionalityInterface }) =>
+    (state: { search: SearchFunctionalityInterface }) =>
       state.search.searchQuery
   );
 
   useEffect(() => {
-    const updatedTrainingDays: any = {};
+    const updatedTrainingDays: TrainingDays = {};
     for (let i = 1; i <= Math.min(parseInt(daysAWeek), 3); i++) {
       updatedTrainingDays[`day${i}`] = { main: [], accessory: [] };
     }
@@ -68,7 +72,7 @@ export const ModalForCreatingPeriodizedData: React.FC<
     setSelectedDay(event.target.value as string);
   };
 
-  const handleAddExercise = (exercise: exerciseBlueprintsInterface) => {
+  const handleAddExercise = (exercise: ExerciseBlueprintsInterface) => {
     setSelectedExercise(exercise);
     setExerciseTypeModalOpen(true);
   };
@@ -108,6 +112,7 @@ export const ModalForCreatingPeriodizedData: React.FC<
         [type]: [...prev[selectedDay][type], newExercise],
       },
     }));
+
     setSelectedExercise(null);
     setExerciseTypeModalOpen(false);
   };
@@ -310,7 +315,6 @@ export const ModalForCreatingPeriodizedData: React.FC<
                 Expand the list to see exercises{" "}
               </Typography>
             )}
-            
           </Grid>
 
           <Grid item md={6} sx={{ maxHeight: "400px" }}>
@@ -319,7 +323,7 @@ export const ModalForCreatingPeriodizedData: React.FC<
               sx={{
                 height: "550px",
                 overflow: "auto",
-                margin:'5px 10px',
+                margin: "5px 10px",
                 "@media(max-width:768px)": {
                   height: "400px",
                   width: "100%",
@@ -337,24 +341,23 @@ export const ModalForCreatingPeriodizedData: React.FC<
               ))}
             </Box>
           </Grid>
-     
         </Grid>
         <Box sx={{ mt: 2, display: "flex", justifyContent: "flex-start" }}>
-              <Button
-                variant="contained"
-                onClick={handleChooseExercises}
-                sx={{ ...ButtonStylingForApp, ml: 1 }}
-              >
-                Choose Selected
-              </Button>
-              <Button
-                variant="contained"
-                onClick={onClose}
-                sx={{ ...ButtonStylingForApp, ml: 1 }}
-              >
-                Cancel
-              </Button>
-            </Box>
+          <Button
+            variant="contained"
+            onClick={handleChooseExercises}
+            sx={{ ...ButtonStylingForApp, ml: 1 }}
+          >
+            Choose Selected
+          </Button>
+          <Button
+            variant="contained"
+            onClick={onClose}
+            sx={{ ...ButtonStylingForApp, ml: 1 }}
+          >
+            Cancel
+          </Button>
+        </Box>
         <ExerciseTypeModal
           open={exerciseTypeModalOpen}
           onClose={handleCloseExerciseTypeModal}

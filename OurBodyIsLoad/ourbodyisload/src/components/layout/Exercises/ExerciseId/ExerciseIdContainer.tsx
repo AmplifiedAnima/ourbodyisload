@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import { Typography } from "@mui/material";
 import { HeaderWithoutSearch } from "../../HeaderComponent/HeaderWithoutSearch";
-import { exerciseBlueprintsInterface } from "../../../../interfaces/exercise.interface";
+import { ExerciseBlueprintsInterface } from "../../../../interfaces/Exercise.interface";
 import { useParams } from "react-router-dom";
 
 export const ExerciseIdContainer: React.FC = () => {
-  const [data, setData] = useState<exerciseBlueprintsInterface>();
+  const [data, setData] = useState<ExerciseBlueprintsInterface>();
   const [functionFinishing, setFunctionFinishing] = useState(false);
   const { id } = useParams();
 

@@ -1,13 +1,13 @@
-import { exerciseBlueprintsInterface } from "./exercise.interface";
+import { ExerciseBlueprintsInterface } from "./Exercise.interface";
 
-export interface searchFunctionalityInterface {
-  exercises: exerciseBlueprintsInterface[];
+export interface SearchFunctionalityInterface {
+  exercises: ExerciseBlueprintsInterface[];
   posts: {};
   searchQuery: string;
   status: string;
-  selectedOffer: exerciseBlueprintsInterface | null;
+  selectedOffer: ExerciseBlueprintsInterface | null;
 }
-export interface blogPostInterface {
+export interface BlogPostInterface {
   _id: string;
   title: string;
 }

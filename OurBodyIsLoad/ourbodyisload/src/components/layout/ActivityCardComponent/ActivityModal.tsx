@@ -3,7 +3,7 @@ import { ButtonStylingForApp } from "../../../globalStyles/ButtonStylingForApp";
 import { ActivityCard } from "./ActivityCard";
 import { useState } from "react";
 import { ActivityModalScheduling } from "./ActivityModalScheduling";
-import { preExistingClassesInterface } from "../../../interfaces/calendar.interface";
+import { PreExistingClassesInterface } from "../../../interfaces/Calendar.interface";
 import {
   GridContainer,
   TypographyStylingInModal,
@@ -13,7 +13,7 @@ import {
 interface ActivityModalProps {
   open: boolean;
   handleClose: () => void;
-  preExistingClassesProps: preExistingClassesInterface[] | undefined;
+  preExistingClassesProps: PreExistingClassesInterface[] | undefined;
 }
 
 export const ActivityModal: React.FC<ActivityModalProps> = ({

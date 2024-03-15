@@ -1,7 +1,7 @@
-import { trainingPlanInterface } from "./trainingPlan.interface";
+import { TrainingPlanInterface } from "./TrainingPlan.interface";
 
-export interface cycleInterface {
-  trainingPlans: trainingPlanInterface[];
+export interface CycleInterface {
+  trainingPlans: TrainingPlanInterface[];
   timesAWeek: string;
   _id: string;
 }

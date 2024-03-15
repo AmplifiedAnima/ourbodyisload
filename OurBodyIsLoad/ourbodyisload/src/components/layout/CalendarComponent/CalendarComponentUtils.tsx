@@ -1,5 +1,5 @@
 import { Box, Button, Tooltip, Typography } from "@mui/material";
-import { userChosenClassesInterface } from "../../../interfaces/calendar.interface";
+import { UserChosenClassesInterface } from "../../../interfaces/Calendar.interface";
 import {
   carsIconVariable,
   mobilityIconVariable,
@@ -26,7 +26,7 @@ interface RenderEventInsidesProps {
   isCalendarView: boolean;
   setSelectedClass: Function;
   setShowVideoClassModal: Function;
-  userChosenClasses: userChosenClassesInterface[];
+  userChosenClasses: UserChosenClassesInterface[];
 }
 
 export const renderEventInsides = ({
