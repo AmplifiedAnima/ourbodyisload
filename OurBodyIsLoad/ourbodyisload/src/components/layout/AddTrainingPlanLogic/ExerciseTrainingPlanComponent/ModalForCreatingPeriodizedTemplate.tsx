@@ -33,7 +33,7 @@ interface ModalWithExercisesChoiceProps {
   onChooseExercises: (chosenExercises: ChosenExercises) => void;
 }
 
-export const ModalForCreatingPeriodizedData: React.FC<
+export const ModalForCreatingPeriodizedTemplate: React.FC<
   ModalWithExercisesChoiceProps
 > = ({ isOpen, onClose, onChooseExercises }) => {
   const exercises = useSelector(

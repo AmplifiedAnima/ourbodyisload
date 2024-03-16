@@ -3,7 +3,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { AppDispatch } from "../store";
 import { UpdateProfileData } from "../../components/layout/EditProfileComponent/EditProfileComponent";
 import { AuthState } from "../../interfaces/Auth.interface";
-import { ErrorResponse } from "../../interfaces/error.interface";
+import { ErrorResponse } from "../../interfaces/Error.interface";
 
 export const initialAuthState: AuthState = {
   username: "",

@@ -5,7 +5,7 @@ import InputOneRepMaxCounter from "./InputOneRepMaxCounter";
 import { ButtonStylingForApp } from "../../../../globalStyles/ButtonStylingForApp";
 interface ExerciseTypeModalProps {
   open: boolean;
-  onClose: () => void;
+  onClose: any;
   selectedExercise: ExerciseBlueprintsInterface | null;
   sets: string;
   reps: string;

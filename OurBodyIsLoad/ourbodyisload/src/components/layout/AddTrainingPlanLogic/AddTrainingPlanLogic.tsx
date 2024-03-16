@@ -1,12 +1,12 @@
 import { Box, Button, Grid, Typography } from "@mui/material";
 import { ButtonStylingForApp } from "../../../globalStyles/ButtonStylingForApp";
 import { useEffect, useState } from "react";
-import { CycleInterface } from "../../../interfaces/cycle.interface";
+import { CycleInterface } from "../../../interfaces/Cycle.interface";
 import { TablesTemplateComponent } from "./TablesTemplateComponent";
 import ErrorHandlerDisplayComponent from "../ErrorAndNotificationHandlers/ErrorHandlerDisplayComponent";
 import { NotificationHandlerDisplayComponent } from "../ErrorAndNotificationHandlers/NotificationHandlerDisplayComponent";
 import { TrainingPlanInterface } from "../../../interfaces/TrainingPlan.interface";
-import { ModalForCreatingPeriodizedData } from "./ExerciseTrainingPlanComponent/ModalForCreatingPeriodizedData";
+import { ModalForCreatingPeriodizedTemplate } from "./ExerciseTrainingPlanComponent/ModalForCreatingPeriodizedTemplate";
 import { ChosenExercises } from "../../../interfaces/Exercise.interface";
 
 export const AddTrainingPlanLogic = () => {
@@ -118,7 +118,7 @@ export const AddTrainingPlanLogic = () => {
           Periodize template
         </Button>
       </Box>
-      <ModalForCreatingPeriodizedData
+      <ModalForCreatingPeriodizedTemplate
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         onChooseExercises={handleChooseExercises}
