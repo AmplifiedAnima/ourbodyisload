@@ -1,10 +1,12 @@
-import React from "react";
-import { Modal, Button, Box } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Modal, Button, Box, Grid, Typography } from "@mui/material";
 import { ChosenExercises } from "../../../../interfaces/Exercise.interface";
 import { ButtonStylingForApp } from "../../../../globalStyles/ButtonStylingForApp";
 import ExerciseTypeModal from "./ExerciseTypeModal";
 import GridWithOptionsForPeriodizationModalTemplate from "./GridWithOptionsForPeriodizationModalTemplate";
 import useExerciseHandlers from "./utils/useExerciseHandlers";
+import { ModalForCycleAssembly } from "./ModalForCycleAssembly";
+import { TablesTemplateComponent } from "../TablesTemplateComponent";
 
 interface ModalWithExercisesChoiceProps {
   isOpen: boolean;
@@ -16,10 +18,25 @@ export const ModalForCreatingPeriodizedTemplate: React.FC<
   ModalWithExercisesChoiceProps
 > = ({ isOpen, onClose, onChooseExercises }) => {
   const exerciseHandlers = useExerciseHandlers();
+  const [isAssemblyModalOpen, setIsAssemblyModalOpen] = useState(false);
 
   const handleSearchSubmit = () => {
     exerciseHandlers.setSearchingQuery(exerciseHandlers.searchingQuery);
   };
+
+  useEffect(() => {
+    console.log(`days a week `, exerciseHandlers.daysAWeek);
+    {
+      Object.keys(exerciseHandlers.trainingDays).map((day) =>
+        console.log(
+          `Main Exercise for day ${day}`,
+          exerciseHandlers.trainingDays[day].main,
+          `accesory exercise for ${day}`,
+          exerciseHandlers.trainingDays[day].accessory
+        )
+      );
+    }
+  }, [exerciseHandlers.daysAWeek, exerciseHandlers.trainingDays]);
 
   return (
     <Modal open={isOpen} onClose={onClose}>
@@ -37,7 +54,60 @@ export const ModalForCreatingPeriodizedTemplate: React.FC<
           handleSearchSubmit={handleSearchSubmit}
           exercises={exerciseHandlers.exercises}
         />
-        <Box sx={{ mt: 2, display: "flex", justifyContent: "flex-start" }}>
+        <Grid container>
+          <Grid item md={5}>
+            <Button
+              sx={{
+                ...ButtonStylingForApp,
+                mt: 2,
+              }}
+              onClick={() => setIsAssemblyModalOpen(true)}
+            >
+              Assemble training cycle
+            </Button>
+            {isAssemblyModalOpen && (
+              <ModalForCycleAssembly
+                isOpen={isAssemblyModalOpen}
+                onClose={() => setIsAssemblyModalOpen(false)}
+                exerciseHandlers={exerciseHandlers}
+              />
+            )}
+
+            <Typography variant="h6">Template</Typography>
+            <Box
+              sx={{
+                height: "550px",
+                overflow: "auto",
+                margin: "5px 10px",
+                "@media(max-width:768px)": {
+                  height: "400px",
+                  width: "100%",
+                  margin: "0px 0px",
+                },
+              }}
+            >
+              {Object.keys(exerciseHandlers.trainingDays).map((day) => (
+                <TablesTemplateComponent
+                  key={day}
+                  dayLabel={day}
+                  mainExercises={exerciseHandlers.trainingDays[day].main}
+                  accessoryExercises={
+                    exerciseHandlers.trainingDays[day].accessory
+                  }
+                />
+              ))}
+            </Box>
+          </Grid>
+        </Grid>
+
+        <Box
+          sx={{
+            mt: 2,
+            display: "flex",
+            justifyContent: "flex-start",
+            alignItems: "center",
+          }}
+        >
           <Button
             variant="contained"
             onClick={() =>

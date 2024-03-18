@@ -1,102 +1,78 @@
 import { Box, Button, Modal } from "@mui/material";
 import { ButtonStylingForApp } from "../../../../globalStyles/ButtonStylingForApp";
-import { TrainingPlanInterface } from "../../../../interfaces/TrainingPlan.interface";
-import { movementPatterns } from "./utils/assignExercisesBasedOnMovementPatterns";
 import { assignExercises } from "./utils/assignExercisesBasedOnMovementPatterns";
+import {
+  ChosenExercises,
+  ExerciseHandlersInterface,
+} from "../../../../interfaces/Exercise.interface";
+import useExerciseHandlers from "./utils/useExerciseHandlers";
 
 interface ModalForCycleAssemblyProps {
   isOpen: boolean;
   onClose: () => void;
+  exerciseHandlers: ExerciseHandlersInterface;
 }
 
 export const ModalForCycleAssembly: React.FC<ModalForCycleAssemblyProps> = ({
   isOpen,
   onClose,
+  exerciseHandlers,
 }) => {
-  //choose movement patterns
-  // choose small muscles exercises
-  //main can be 3 exercises
-  // a) squat/lunge
-  // b) hinge/uni hinge
-  // c) press/push
+  useExerciseHandlers();
+  const movementPatterns = [
+    "squat",
+    "lunge",
+    "hinge",
+    "verticalPush",
+    "horizontalPush",
+    "verticalPull",
+    "horizontalPull",
+    "rotational",
+    "GAIT",
+    "minorMusclesAccessories",
+  ];
 
-  const trainingPlanExample: { [key: string]: TrainingPlanInterface } = {
-    day1: {
-      _id: "1",
-      mainExercises: [
-        { _id: "1a", movementPattern: "" },
-        { _id: "1b", movementPattern: "" },
-      ],
-      accessoryExercises: [
-        { _id: "1c", movementPattern: "" },
-        { _id: "1d", movementPattern: "" },
-        { _id: "1e", movementPattern: "" },
-        { _id: "1c", movementPattern: "" },
-        { _id: "1d", movementPattern: "" },
-        { _id: "1e", movementPattern: "" },
-      ],
-    },
-    day2: {
-      _id: "2",
-      mainExercises: [
-        { _id: "2a", movementPattern: "" },
-        { _id: "2b", movementPattern: "" },
-      ],
-      accessoryExercises: [
-        { _id: "2c", movementPattern: "" },
-        { _id: "2d", movementPattern: "" },
-        { _id: "2e", movementPattern: "" },
-        { _id: "2c", movementPattern: "" },
-        { _id: "2d", movementPattern: "" },
-        { _id: "2e", movementPattern: "" },
-      ],
-    },
-    day3: {
-      _id: "3",
-      mainExercises: [
-        { _id: "3a", movementPattern: "" },
-        { _id: "3b", movementPattern: "" },
-      ],
-      accessoryExercises: [
-        { _id: "3c", movementPattern: "" },
-        { _id: "3d", movementPattern: "" },
-        { _id: "3e", movementPattern: "" },
-        { _id: "3c", movementPattern: "" },
-        { _id: "3d", movementPattern: "" },
-        { _id: "3e", movementPattern: "" },
-      ],
-    },
+  const handleAssembleClick = () => {
+    // Create a chosenExercises object with the provided exercises
+    const chosenExercises: ChosenExercises = {
+      timesAWeek: exerciseHandlers.daysAWeek,
+      trainingPlans: Object.keys(exerciseHandlers.trainingDays).map((day) => ({
+        day,
+        mainExercises: exerciseHandlers.trainingDays[day].main, // Ensure non-empty arrays
+        accessoryExercises: exerciseHandlers.trainingDays[day].accessory, // Ensure non-empty arrays
+      })),
+      periodization: exerciseHandlers.periodization,
+    };
+
+    // Assign exercises to training plans based on movement patterns
+    const updatedChosenExercises = assignExercises(
+      chosenExercises,
+      movementPatterns,
+      exerciseHandlers.exercises
+    );
+
+    // Perform further actions with the updated chosenExercises data, if needed
+    console.log(updatedChosenExercises);
   };
 
-  // Example usage:
-
-  const updatedTrainingPlan = assignExercises(
-    trainingPlanExample,
-    movementPatterns
-  );
-
   return (
-    <>
-      <Modal open={isOpen} onClose={onClose}>
-        <Box
-          sx={{
-            justifyContent: "center",
-            display: "flex",
-            flexDirection: "column",
-            width: "800px",
-            alignItems: "center",
-          }}
+    <Modal open={isOpen} onClose={onClose}>
+      <Box
+        sx={{
+          justifyContent: "center",
+          display: "flex",
+          flexDirection: "column",
+          width: "800px",
+          alignItems: "center",
+        }}
+      >
+        <Button
+          sx={{ ...ButtonStylingForApp, width: "auto" }}
+          onClick={handleAssembleClick}
         >
-          <Button
-            sx={{ ...ButtonStylingForApp, width: "auto" }}
-            onClick={() => {
-              console.log(updatedTrainingPlan);
-            }}
-          >
-            assemble based on Movement pattern
-          </Button>
-        </Box>
-      </Modal>
-    </>
+          Assemble based on Movement pattern
+        </Button>
+      </Box>
+    </Modal>
   );
 };

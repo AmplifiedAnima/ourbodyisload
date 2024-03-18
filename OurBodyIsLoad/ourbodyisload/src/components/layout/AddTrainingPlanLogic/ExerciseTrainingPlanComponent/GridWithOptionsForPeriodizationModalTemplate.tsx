@@ -5,7 +5,6 @@ import { SearchInput } from "../../HeaderComponent/SearchInput";
 import { TablesTemplateComponent } from "../TablesTemplateComponent";
 import { ExerciseBlueprintsInterface } from "../../../../interfaces/Exercise.interface";
 import { ExerciseHandlersInterface } from "../../../../interfaces/Exercise.interface";
-import { ModalForCycleAssembly } from "./ModalForCycleAssembly";
 
 interface GridWithOptionsForPeriodizationModalTemplateProps {
   exerciseHandlers: ExerciseHandlersInterface;
@@ -16,8 +15,6 @@ interface GridWithOptionsForPeriodizationModalTemplateProps {
 const GridWithOptionsForPeriodizationModalTemplate: React.FC<
   GridWithOptionsForPeriodizationModalTemplateProps
 > = ({ exerciseHandlers, exercises, handleSearchSubmit }) => {
-  const [isOpen, setIsOpen] = useState(false);
-
   return (
     <Box>
       <Grid container spacing={4}>
@@ -132,20 +129,7 @@ const GridWithOptionsForPeriodizationModalTemplate: React.FC<
                 : "open exercise list"}
             </Button>
           </Grid>
-          <Grid>
-            <Button
-              sx={{
-                ...ButtonStylingForApp,
-              }}
-              onClick={() => setIsOpen(true)}
-            >
-              Assemble training cycle
-            </Button>
-            <ModalForCycleAssembly
-              isOpen={isOpen}
-              onClose={() => setIsOpen(false)}
-            />
-          </Grid>
+
           {exerciseHandlers.isExerciseListVisible ? (
             <Grid
               container
@@ -191,10 +175,10 @@ const GridWithOptionsForPeriodizationModalTemplate: React.FC<
             </Typography>
           )}
         </Grid>
-
+        {/* 
         <Grid item md={6} sx={{ maxHeight: "400px" }}>
-          <Typography variant="h6">Template</Typography>
-          <Box
+        <Typography variant="h6">Template</Typography> */}
+        {/* <Box
             sx={{
               height: "550px",
               overflow: "auto",
@@ -216,8 +200,8 @@ const GridWithOptionsForPeriodizationModalTemplate: React.FC<
                 }
               />
             ))}
-          </Box>
-        </Grid>
+          </Box> */}
+        {/* </Grid> */}
       </Grid>
     </Box>
   );

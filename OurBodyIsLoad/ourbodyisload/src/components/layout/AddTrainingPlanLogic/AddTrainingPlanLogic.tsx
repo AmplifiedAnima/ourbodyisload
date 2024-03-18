@@ -40,7 +40,10 @@ export const AddTrainingPlanLogic = () => {
   const handleChooseExercises = (chosenExercises: ChosenExercises) => {
     setUserChosenExercises(chosenExercises);
   };
-
+  useEffect(() => {
+    console.log(userChosenExercises);
+  }, [userChosenExercises]);
+  
   const fetchData = async (endpoint: string, userData: ChosenExercises) => {
     try {
       const response = await fetch(endpoint, {

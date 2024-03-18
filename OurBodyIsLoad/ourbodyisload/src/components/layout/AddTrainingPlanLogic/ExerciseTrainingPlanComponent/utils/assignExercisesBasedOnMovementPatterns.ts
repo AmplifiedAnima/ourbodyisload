@@ -1,4 +1,5 @@
-import { TrainingPlanInterface } from "../../../../../interfaces/TrainingPlan.interface";
+import { ChosenExercises } from "../../../../../interfaces/Exercise.interface";
+import { ExerciseBlueprintsInterface } from "../../../../../interfaces/Exercise.interface";
 
 export const mandatoryMainPatterns = [
   "squat",
@@ -11,83 +12,113 @@ export const mandatoryMainPatterns = [
 ];
 
 export const movementPatterns = [
-  "squat",
-  "lunge",
-  "hinge",
-  "verticalPush",
-  "horizontalPush",
-  "verticalPull",
-  "horizontalPull",
+  ...mandatoryMainPatterns,
   "rotational",
   "GAIT",
   "minorMusclesAccessories",
 ];
 
 export const assignExercises = (
-  trainingPlan: { [key: string]: TrainingPlanInterface },
-  movementPatterns: string[]
+  chosenExercises: ChosenExercises,
+  movementPatterns: string[],
+  exercises: ExerciseBlueprintsInterface[]
 ) => {
-  // Define the mandatory main patterns for at least one day
+  console.log("chosenExercises:", chosenExercises);
+  console.log("movementPatterns:", movementPatterns);
+  console.log("exercises:", exercises);
 
-  // Step 1: Assign mandatory movement patterns to main exercises
-  const days = Object.keys(trainingPlan);
-  mandatoryMainPatterns.forEach((pattern, index) => {
-    const dayKey = days[index % days.length]; // Cycle through days for each pattern
-    const dayPlan = trainingPlan[dayKey];
-    let mainExerciseAssigned = false;
-    // Check if the day already has the pattern, if not, assign it to the first available main exercise
-    for (const exercise of dayPlan.mainExercises) {
-      if (exercise.movementPattern === "") {
-        exercise.movementPattern = pattern;
-        mainExerciseAssigned = true;
-        break;
+  const { trainingPlans } = chosenExercises;
+  console.log("trainingPlans:", trainingPlans);
+
+  if (!trainingPlans) {
+    console.error("Training plans are undefined!");
+    return chosenExercises;
+  }
+
+  // Create a copy of the exercises array
+  let assignedExercises: ExerciseBlueprintsInterface[] = [...exercises];
+
+  // Assign exercises to training plans based on movement patterns
+  trainingPlans.forEach((plan, index) => {
+    console.log(`Plan ${index + 1}:`, plan);
+    const { day, mainExercises, accessoryExercises } = plan;
+
+    if (!day || !mainExercises || !accessoryExercises) {
+      console.error("Incomplete plan detected:", plan);
+      return;
+    }
+
+    // Assign movement patterns to main exercises
+    mainExercises.forEach((exercise, index) => {
+      console.log(`Main exercise ${index + 1} for day ${day}:`, exercise);
+      const matchingExercise = assignedExercises.find(
+        (ex) => ex._id === exercise._id
+      );
+      if (!matchingExercise) {
+        console.error(
+          `Exercise not found for main exercise ${index + 1} for day ${day}:`,
+          exercise
+        );
+        return;
       }
-    }
-    // If none of the main exercises was available, we can assign the pattern to the first main exercise by force
-    if (!mainExerciseAssigned) {
-      dayPlan.mainExercises[0].movementPattern = pattern;
-    }
-  });
+      const patternToAssign = movementPatterns.shift();
+      if (patternToAssign) {
+        console.log(
+          `Assigning pattern '${patternToAssign}' to main exercise ${
+            index + 1
+          } for day ${day}`
+        );
+        matchingExercise.movementPattern = patternToAssign;
+      }
+    });
 
-  // Step 2: Gather remaining unused patterns
-  let remainingPatterns = movementPatterns.filter((pattern) => {
-    return !mandatoryMainPatterns.includes(pattern);
-  });
-
-  // Step 3: Assign remaining patterns to accessory exercises
-  Object.values(trainingPlan).forEach((dayPlan) => {
-    // Track assigned patterns to avoid repetition in the same day
-    let dayAssignedPatterns = new Set(
-      dayPlan.mainExercises.map((ex) => ex.movementPattern)
-    );
-
-    dayPlan.accessoryExercises.forEach((exercise) => {
-      if (!exercise.movementPattern) {
-        // Get the first unused pattern for the accessory exercise
-        let patternToAssign: any;
-        while (remainingPatterns.length > 0) {
-          patternToAssign = remainingPatterns.shift();
-          if (!dayAssignedPatterns.has(patternToAssign)) {
-            break;
-          }
-        }
-
-        // If we've run out of unique patterns, cycle through the list again
-        if (!patternToAssign) {
-          patternToAssign = movementPatterns.find(
-            (p) => !dayAssignedPatterns.has(p)
-          );
-          remainingPatterns = movementPatterns.filter(
-            (p) => p !== patternToAssign
-          );
-        }
-
-        exercise.movementPattern = patternToAssign;
-        dayAssignedPatterns.add(patternToAssign);
+    // Assign movement patterns to accessory exercises
+    accessoryExercises.forEach((exercise, index) => {
+      console.log(`Accessory exercise ${index + 1} for day ${day}:`, exercise);
+      const matchingExercise = assignedExercises.find(
+        (ex) => ex._id === exercise._id
+      );
+      if (!matchingExercise) {
+        console.error(
+          `Exercise not found for accessory exercise ${
+            index + 1
+          } for day ${day}:`,
+          exercise
+        );
+        return;
+      }
+      const patternToAssign = movementPatterns.shift();
+      if (patternToAssign) {
+        console.log(
+          `Assigning pattern '${patternToAssign}' to accessory exercise ${
+            index + 1
+          } for day ${day}`
+        );
+        matchingExercise.movementPattern = patternToAssign;
       }
     });
   });
 
-  // Return the modified training plan with the patterns assigned
-  return trainingPlan;
+  // Assign remaining exercises to unassigned training days based on movement patterns
+  let remainingExercises = assignedExercises.filter(
+    (exercise) => !exercise.movementPattern
+  );
+  let remainingIndex = 0;
+  trainingPlans.forEach((plan) => {
+    if (!plan.mainExercises || !plan.accessoryExercises) {
+      const remainingMainExercises = remainingExercises.splice(0, 1);
+      plan.mainExercises = remainingMainExercises;
+      remainingIndex++;
+    }
+    if (!plan.accessoryExercises) {
+      const remainingAccessoryExercises = remainingExercises.splice(0, 1);
+      plan.accessoryExercises = remainingAccessoryExercises;
+      remainingIndex++;
+    }
+    if (remainingIndex >= remainingExercises.length) return;
+  });
+
+  console.log("Updated assignedExercises:", assignedExercises);
+
+  return chosenExercises;
 };
