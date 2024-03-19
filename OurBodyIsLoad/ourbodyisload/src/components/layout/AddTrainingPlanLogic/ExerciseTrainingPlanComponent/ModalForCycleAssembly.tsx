@@ -1,36 +1,25 @@
 import { Box, Button, Modal } from "@mui/material";
 import { ButtonStylingForApp } from "../../../../globalStyles/ButtonStylingForApp";
-import { assignExercises } from "./utils/assignExercisesBasedOnMovementPatterns";
+import {
+  assignExercises,
+  movementPatterns,
+} from "./utils/assignExercisesBasedOnMovementPatterns";
 import {
   ChosenExercises,
   ExerciseHandlersInterface,
 } from "../../../../interfaces/Exercise.interface";
 import useExerciseHandlers from "./utils/useExerciseHandlers";
 
-interface ModalForCycleAssemblyProps {
+interface ModalForAutoCompletingTheTrainingPlanAssembleProps {
   isOpen: boolean;
   onClose: () => void;
   exerciseHandlers: ExerciseHandlersInterface;
 }
 
-export const ModalForCycleAssembly: React.FC<ModalForCycleAssemblyProps> = ({
-  isOpen,
-  onClose,
-  exerciseHandlers,
-}) => {
+export const ModalForAutoCompletingTheTrainingPlanAssemble: React.FC<
+  ModalForAutoCompletingTheTrainingPlanAssembleProps
+> = ({ isOpen, onClose, exerciseHandlers }) => {
   useExerciseHandlers();
-  const movementPatterns = [
-    "squat",
-    "lunge",
-    "hinge",
-    "verticalPush",
-    "horizontalPush",
-    "verticalPull",
-    "horizontalPull",
-    "rotational",
-    "GAIT",
-    "minorMusclesAccessories",
-  ];
 
   const handleAssembleClick = () => {
     // Create a chosenExercises object with the provided exercises
@@ -71,6 +60,12 @@ export const ModalForCycleAssembly: React.FC<ModalForCycleAssemblyProps> = ({
           onClick={handleAssembleClick}
         >
           Assemble based on Movement pattern
+        </Button>
+        <Button
+          sx={{ ...ButtonStylingForApp, width: "auto" }}
+          onClick={handleAssembleClick}
+        >
+          Assemble based on bioenergetics
         </Button>
       </Box>
     </Modal>

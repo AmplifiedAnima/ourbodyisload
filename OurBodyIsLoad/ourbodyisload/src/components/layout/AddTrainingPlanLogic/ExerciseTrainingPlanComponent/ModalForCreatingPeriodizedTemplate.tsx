@@ -5,7 +5,7 @@ import { ButtonStylingForApp } from "../../../../globalStyles/ButtonStylingForAp
 import ExerciseTypeModal from "./ExerciseTypeModal";
 import GridWithOptionsForPeriodizationModalTemplate from "./GridWithOptionsForPeriodizationModalTemplate";
 import useExerciseHandlers from "./utils/useExerciseHandlers";
-import { ModalForCycleAssembly } from "./ModalForCycleAssembly";
+import { ModalForAutoCompletingTheTrainingPlanAssemble } from "./ModalForCycleAssembly";
 import { TablesTemplateComponent } from "../TablesTemplateComponent";
 
 interface ModalWithExercisesChoiceProps {
@@ -66,7 +66,7 @@ export const ModalForCreatingPeriodizedTemplate: React.FC<
               Assemble training cycle
             </Button>
             {isAssemblyModalOpen && (
-              <ModalForCycleAssembly
+              <ModalForAutoCompletingTheTrainingPlanAssemble
                 isOpen={isAssemblyModalOpen}
                 onClose={() => setIsAssemblyModalOpen(false)}
                 exerciseHandlers={exerciseHandlers}
