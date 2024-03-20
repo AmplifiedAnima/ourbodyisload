@@ -1,8 +1,4 @@
-import {
-  useState,
-  ChangeEvent,
-  useEffect,
-} from "react";
+import { useState, ChangeEvent, useEffect } from "react";
 import {
   ExerciseBlueprintsInterface,
   ExerciseHandlersInterface,
@@ -31,6 +27,7 @@ const useExerciseHandlers: () => ExerciseHandlersInterface = () => {
   const [searchingQuery, setSearchingQuery] = useState<string>("");
   const [exerciseTypeModalOpen, setExerciseTypeModalOpen] =
     useState<boolean>(false);
+
   const dispatch = useDispatch<AppDispatch>();
   const exercises = useSelector(
     (state: { search: SearchFunctionalityInterface }) => state.search.exercises
@@ -51,11 +48,6 @@ const useExerciseHandlers: () => ExerciseHandlersInterface = () => {
     }
     setTrainingDays(updatedTrainingDays);
   }, [daysAWeek]);
-
-  useEffect(() => {
-    const type = typeof useExerciseHandlers;
-    console.log("Type of useExerciseHandlers:", type);
-  }, []);
 
   const handleDaySelectionChange = (event: SelectChangeEvent<string>) => {
     setSelectedDay(event.target.value);

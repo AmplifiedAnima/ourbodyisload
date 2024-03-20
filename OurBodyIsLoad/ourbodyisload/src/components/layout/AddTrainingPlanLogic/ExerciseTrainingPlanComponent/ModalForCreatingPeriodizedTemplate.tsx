@@ -5,7 +5,7 @@ import { ButtonStylingForApp } from "../../../../globalStyles/ButtonStylingForAp
 import ExerciseTypeModal from "./ExerciseTypeModal";
 import GridWithOptionsForPeriodizationModalTemplate from "./GridWithOptionsForPeriodizationModalTemplate";
 import useExerciseHandlers from "./utils/useExerciseHandlers";
-import { ModalForAutoCompletingTheTrainingPlanAssemble } from "./ModalForCycleAssembly";
+import { ModalForMicroCycleAssembly } from "./ModalForMicroCycleAssembly";
 import { TablesTemplateComponent } from "../TablesTemplateComponent";
 
 interface ModalWithExercisesChoiceProps {
@@ -23,20 +23,9 @@ export const ModalForCreatingPeriodizedTemplate: React.FC<
   const handleSearchSubmit = () => {
     exerciseHandlers.setSearchingQuery(exerciseHandlers.searchingQuery);
   };
-
   useEffect(() => {
-    console.log(`days a week `, exerciseHandlers.daysAWeek);
-    {
-      Object.keys(exerciseHandlers.trainingDays).map((day) =>
-        console.log(
-          `Main Exercise for day ${day}`,
-          exerciseHandlers.trainingDays[day].main,
-          `accesory exercise for ${day}`,
-          exerciseHandlers.trainingDays[day].accessory
-        )
-      );
-    }
-  }, [exerciseHandlers.daysAWeek, exerciseHandlers.trainingDays]);
+    console.log("Exercise training days updated:", onChooseExercises);
+  }, [onChooseExercises]);
 
   return (
     <Modal open={isOpen} onClose={onClose}>
@@ -66,7 +55,7 @@ export const ModalForCreatingPeriodizedTemplate: React.FC<
               Assemble training cycle
             </Button>
             {isAssemblyModalOpen && (
-              <ModalForAutoCompletingTheTrainingPlanAssemble
+              <ModalForMicroCycleAssembly
                 isOpen={isAssemblyModalOpen}
                 onClose={() => setIsAssemblyModalOpen(false)}
                 exerciseHandlers={exerciseHandlers}
