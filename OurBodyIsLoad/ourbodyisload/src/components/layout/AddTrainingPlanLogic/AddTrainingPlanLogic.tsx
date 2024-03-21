@@ -40,10 +40,7 @@ export const AddTrainingPlanLogic = () => {
   const handleChooseExercises = (chosenExercises: ChosenExercises) => {
     setUserChosenExercises(chosenExercises);
   };
-  useEffect(() => {
-    console.log(userChosenExercises);
-  }, [userChosenExercises]);
-  
+
   const fetchData = async (endpoint: string, userData: ChosenExercises) => {
     try {
       const response = await fetch(endpoint, {
@@ -86,11 +83,14 @@ export const AddTrainingPlanLogic = () => {
       );
     }
   };
-
-  useEffect(() => {
-    console.log(userChosenExercises);
-  }, [userChosenExercises]);
-
+  const fakeIdDelete = "iitwiuetiwheith";
+  const fakeIdUpdate = "iitwiuetiwheith";
+  const handleDelete = (id: string) => {
+    console.log(id);
+  };
+  const handleUpdate = (id: string) => {
+    console.log(id);
+  };
   return (
     <>
       <Box sx={{ display: "flex", justifyContent: "right" }}>
@@ -140,6 +140,8 @@ export const AddTrainingPlanLogic = () => {
                     dayLabel={`Day ${index + 1}`}
                     mainExercises={trainingPlan.mainExercises}
                     accessoryExercises={trainingPlan.accessoryExercises}
+                    onDelete={() => handleDelete(fakeIdDelete)}
+                    onUpdate={() => handleUpdate(fakeIdUpdate)}
                   />
                 </Grid>
               )

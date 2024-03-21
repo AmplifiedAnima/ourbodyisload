@@ -23,7 +23,6 @@ export interface ChosenExercises {
   periodization: string;
 }
 
-
 export interface ExerciseHandlersInterface {
   exercises: ExerciseBlueprintsInterface[];
   selectedDay: string;
@@ -50,6 +49,11 @@ export interface ExerciseHandlersInterface {
   handleIntensityChange: (event: ChangeEvent<HTMLInputElement>) => void;
   handlePeriodizationChange: (event: SelectChangeEvent<string>) => void;
   handleInputValue: (event: ChangeEvent<HTMLInputElement>) => void;
+  handleDeleteExercise: (id: string) => void;
+  handleUpdateExercise: (
+    id: string,
+    updatedExercise: ExerciseBlueprintsInterface
+  ) => void;
   setSearchingQuery: Dispatch<SetStateAction<string>>;
   setSets: Dispatch<SetStateAction<string>>;
   setReps: Dispatch<SetStateAction<string>>;

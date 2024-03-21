@@ -9,25 +9,41 @@ import {
   TableRow,
   TableCell,
   TableBody,
+  IconButton,
 } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import EditIcon from "@mui/icons-material/Edit"; // Import the EditIcon
 import { ExerciseBlueprintsInterface } from "../../../interfaces/Exercise.interface";
 
 interface TablesTemplateComponentProps {
   mainExercises: ExerciseBlueprintsInterface[];
   accessoryExercises: ExerciseBlueprintsInterface[];
   dayLabel: string;
+  onDelete: (id: string) => void;
+  onUpdate: (id: string, updatedExercise: ExerciseBlueprintsInterface) => void; // Add onUpdate callback
 }
 
 export const TablesTemplateComponent: React.FC<
   TablesTemplateComponentProps
-> = ({ mainExercises, accessoryExercises, dayLabel }) => {
+> = ({ mainExercises, accessoryExercises, dayLabel, onDelete, onUpdate }) => {
+  const handleDelete = (id: string) => {
+    onDelete(id);
+  };
+
+  const handleUpdate = (
+    id: string,
+    updatedExercise: ExerciseBlueprintsInterface
+  ) => {
+    onUpdate(id, updatedExercise);
+  };
+
   return (
     <Box sx={{ margin: "10px", width: "auto" }}>
       <Typography
         variant="subtitle1"
         sx={{ color: "#530185", margin: "15px 20px" }}
       >
-        {`Training day ${dayLabel.replace(/[^\d]/g, "")}`}{" "}
+        {`Training day ${dayLabel.replace(/[^\d]/g, "")}`}
       </Typography>
 
       <TableContainer
@@ -42,45 +58,67 @@ export const TablesTemplateComponent: React.FC<
         <Table aria-label="simple table" size="small">
           <TableHead>
             <TableRow>
-              <TableCell sx={{ color: "#530185" }}>Main exercise</TableCell>
+              <TableCell sx={{ color: "#530185" }}>Exercise</TableCell>
               <TableCell sx={{ color: "#530185" }}>Sets</TableCell>
               <TableCell sx={{ color: "#530185" }}>Reps</TableCell>
               <TableCell sx={{ color: "#530185" }}>Intensity</TableCell>
-              <TableCell sx={{ color: "#530185" }}>Pattern </TableCell>
+              <TableCell sx={{ color: "#530185" }}>Pattern</TableCell>
+              <TableCell sx={{ color: "#530185" }}>Actions</TableCell>
             </TableRow>
           </TableHead>
 
           <TableBody>
+            {/* Render main exercises */}
             {mainExercises.map((exercise, index) => (
-              <>
-                <TableRow key={index}>
-                  <TableCell sx={{ color: "#530185" }}>
-                    {exercise.name}
-                  </TableCell>
-                  <TableCell>{exercise.sets}</TableCell>
-                  <TableCell>{exercise.reps}</TableCell>
-                  <TableCell>{exercise.intensity} kg</TableCell>
-                  <TableCell>{exercise.movementPattern}</TableCell>
-                </TableRow>
-              </>
+              <TableRow key={index}>
+                <TableCell sx={{ color: "#530185" }}>
+                  {exercise.name}
+                </TableCell>
+                <TableCell>{exercise.sets}</TableCell>
+                <TableCell>{exercise.reps}</TableCell>
+                <TableCell>{exercise.intensity} kg</TableCell>
+                <TableCell>{exercise.movementPattern}</TableCell>
+                <TableCell>
+                  <IconButton onClick={() => handleDelete(exercise._id)}>
+                    <CloseIcon />
+                  </IconButton>
+                  <IconButton
+                    onClick={() => handleUpdate(exercise._id, exercise)} // Pass the updated exercise to handleUpdate
+                  >
+                    <EditIcon />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
             ))}
           </TableBody>
-          <TableRow sx={{ height: "10px" }} />
-          <TableBody>
-            <TableRow>
+
+          <TableRow>
               <TableCell colSpan={5}>
                 <Typography variant="subtitle1" sx={{ color: "#530185" }}>
                   Accessory
                 </Typography>
               </TableCell>
             </TableRow>
+          <TableBody>
             {accessoryExercises.map((exercise, index) => (
               <TableRow key={index}>
-                <TableCell sx={{ color: "#530185" }}>{exercise.name}</TableCell>
+                <TableCell sx={{ color: "#530185" }}>
+                  {exercise.name}
+                </TableCell>
                 <TableCell>{exercise.sets}</TableCell>
                 <TableCell>{exercise.reps}</TableCell>
                 <TableCell>{exercise.intensity} kg</TableCell>
                 <TableCell>{exercise.movementPattern}</TableCell>
+                <TableCell>
+                  <IconButton onClick={() => handleDelete(exercise._id)}>
+                    <CloseIcon />
+                  </IconButton>
+                  <IconButton
+                    onClick={() => handleUpdate(exercise._id, exercise)} // Pass the updated exercise to handleUpdate
+                  >
+                    <EditIcon />
+                  </IconButton>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

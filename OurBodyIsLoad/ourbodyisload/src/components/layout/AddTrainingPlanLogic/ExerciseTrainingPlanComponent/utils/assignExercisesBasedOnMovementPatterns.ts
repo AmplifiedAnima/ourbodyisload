@@ -3,7 +3,8 @@ import {
   ExerciseHandlersInterface,
 } from "../../../../../interfaces/Exercise.interface";
 import { ExerciseBlueprintsInterface } from "../../../../../interfaces/Exercise.interface";
-import { v4 as uuidv4} from 'uuid'
+import { v4 as uuidv4 } from "uuid";
+
 export const mandatoryMainPatterns = [
   "Squat",
   "Lunge",
@@ -26,10 +27,6 @@ export const assignExercises = (
   movementPatterns: string[],
   exerciseHandlers: ExerciseHandlersInterface
 ): ChosenExercises => {
-  console.log("chosenExercises:", chosenExercises);
-  console.log("movementPatterns:", movementPatterns);
-  console.log("exercises handlers :", exerciseHandlers);
-
   const { trainingPlans } = chosenExercises;
   if (!trainingPlans) {
     console.error("Training plans are undefined!");
@@ -40,9 +37,13 @@ export const assignExercises = (
   const { exercises } = exerciseHandlers;
 
   // Function to create a new exercise based on a movement pattern
-  const createExerciseFromPattern = (pattern: string): ExerciseBlueprintsInterface | null => {
+  const createExerciseFromPattern = (
+    pattern: string
+  ): ExerciseBlueprintsInterface | null => {
     // Find an existing exercise with the matching movement pattern
-    const matchingExercise = exercises.find((exercise) => exercise.movementPattern === pattern);
+    const matchingExercise = exercises.find(
+      (exercise) => exercise.movementPattern === pattern
+    );
     if (matchingExercise) {
       // Clone the existing exercise and generate a unique ID
       return {
@@ -60,15 +61,21 @@ export const assignExercises = (
     const { mainExercises, accessoryExercises } = trainingPlan;
 
     // Filter main exercises that do not match any movement pattern
-    const newMainExercises = mainExercises.filter((exercise) => !movementPatterns.includes(exercise.movementPattern));
+    const newMainExercises = mainExercises.filter(
+      (exercise) => !movementPatterns.includes(exercise.movementPattern)
+    );
 
     // Filter accessory exercises that do not match any movement pattern
-    const newAccessoryExercises = accessoryExercises.filter((exercise) => !movementPatterns.includes(exercise.movementPattern));
+    const newAccessoryExercises = accessoryExercises.filter(
+      (exercise) => !movementPatterns.includes(exercise.movementPattern)
+    );
 
     // Assign new exercises based on movement patterns
     movementPatterns.forEach((pattern) => {
       // Add new main exercises
-      if (!mainExercises.some((exercise) => exercise.movementPattern === pattern)) {
+      if (
+        !mainExercises.some((exercise) => exercise.movementPattern === pattern)
+      ) {
         const newMainExercise = createExerciseFromPattern(pattern);
         if (newMainExercise) {
           newMainExercises.push(newMainExercise);
@@ -76,7 +83,11 @@ export const assignExercises = (
       }
 
       // Add new accessory exercises
-      if (!accessoryExercises.some((exercise) => exercise.movementPattern === pattern)) {
+      if (
+        !accessoryExercises.some(
+          (exercise) => exercise.movementPattern === pattern
+        )
+      ) {
         const newAccessoryExercise = createExerciseFromPattern(pattern);
         if (newAccessoryExercise) {
           newAccessoryExercises.push(newAccessoryExercise);
@@ -84,7 +95,6 @@ export const assignExercises = (
       }
     });
 
-    // Return the updated training plan
     return {
       ...trainingPlan,
       mainExercises: newMainExercises,

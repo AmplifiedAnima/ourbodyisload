@@ -120,6 +120,31 @@ const useExerciseHandlers: () => ExerciseHandlersInterface = () => {
     event.preventDefault();
     setSearchingQuery(event.target.value);
   };
+  const handleDeleteExercise = (id: string) => {
+    setTrainingDays((prevTrainingDays) => {
+      // Filter out the exercise with the given id from all days
+      const updatedTrainingDays = Object.fromEntries(
+        Object.entries(prevTrainingDays).map(([day, exercises]) => [
+          day,
+          {
+            main: exercises.main.filter((exercise) => exercise._id !== id),
+            accessory: exercises.accessory.filter(
+              (exercise) => exercise._id !== id
+            ),
+          },
+        ])
+      );
+      return updatedTrainingDays;
+    });
+  };
+//updating function to be updating exercise
+  const handleUpdateExercise = (
+    id: string,
+    updatedExercise: ExerciseBlueprintsInterface
+  ) => {
+    console.log(id, updatedExercise);
+  };
+
   return {
     exercises,
     selectedDay,
@@ -154,6 +179,8 @@ const useExerciseHandlers: () => ExerciseHandlersInterface = () => {
     setTrainingDays,
     setDaysAWeek,
     setIsExerciseListVisible,
+    handleDeleteExercise,
+    handleUpdateExercise,
   };
 };
 

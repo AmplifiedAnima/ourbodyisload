@@ -23,9 +23,6 @@ export const ModalForCreatingPeriodizedTemplate: React.FC<
   const handleSearchSubmit = () => {
     exerciseHandlers.setSearchingQuery(exerciseHandlers.searchingQuery);
   };
-  useEffect(() => {
-    console.log("Exercise training days updated:", onChooseExercises);
-  }, [onChooseExercises]);
 
   return (
     <Modal open={isOpen} onClose={onClose}>
@@ -83,6 +80,8 @@ export const ModalForCreatingPeriodizedTemplate: React.FC<
                   accessoryExercises={
                     exerciseHandlers.trainingDays[day].accessory
                   }
+                  onDelete={exerciseHandlers.handleDeleteExercise}
+                  onUpdate={exerciseHandlers.handleUpdateExercise}
                 />
               ))}
             </Box>
