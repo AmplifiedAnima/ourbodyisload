@@ -7,6 +7,8 @@ import GridWithOptionsForPeriodizationModalTemplate from "./GridWithOptionsForPe
 import useExerciseHandlers from "./utils/useExerciseHandlers";
 import { ModalForMicroCycleAssembly } from "./ModalForMicroCycleAssembly";
 import { TablesTemplateComponent } from "../TablesTemplateComponent";
+import { useDispatch } from "react-redux";
+import { updateQuery } from "../../../../store/slices/searchSlice";
 
 interface ModalWithExercisesChoiceProps {
   isOpen: boolean;
@@ -19,11 +21,16 @@ export const ModalForCreatingPeriodizedTemplate: React.FC<
 > = ({ isOpen, onClose, onChooseExercises }) => {
   const exerciseHandlers = useExerciseHandlers();
   const [isAssemblyModalOpen, setIsAssemblyModalOpen] = useState(false);
+  const dispatch = useDispatch();
 
   const handleSearchSubmit = () => {
     exerciseHandlers.setSearchingQuery(exerciseHandlers.searchingQuery);
+    dispatch(updateQuery(exerciseHandlers.searchingQuery));
+    console.log(exerciseHandlers.searchingQuery);
   };
-
+  useEffect(() => {
+    console.log(exerciseHandlers.trainingDays);
+  }, [exerciseHandlers]);
   return (
     <Modal open={isOpen} onClose={onClose}>
       <Box
@@ -35,13 +42,12 @@ export const ModalForCreatingPeriodizedTemplate: React.FC<
           overflowY: "auto",
         }}
       >
-        <GridWithOptionsForPeriodizationModalTemplate
-          exerciseHandlers={exerciseHandlers}
-          handleSearchSubmit={handleSearchSubmit}
-          exercises={exerciseHandlers.exercises}
-        />
         <Grid container>
-          <Grid item md={5}>
+          <Grid item md={12} sx={{ maxWidth: "auto" }}>
+            <GridWithOptionsForPeriodizationModalTemplate
+              exerciseHandlers={exerciseHandlers}
+              handleSearchSubmit={handleSearchSubmit}
+            />
             <Button
               sx={{
                 ...ButtonStylingForApp,
@@ -58,13 +64,16 @@ export const ModalForCreatingPeriodizedTemplate: React.FC<
                 exerciseHandlers={exerciseHandlers}
               />
             )}
+          </Grid>
 
+          <Grid item xs={10}>
             <Typography variant="h6">Template</Typography>
             <Box
               sx={{
                 height: "550px",
                 overflow: "auto",
                 margin: "5px 10px",
+                maxWidth: "100vw",
                 "@media(max-width:768px)": {
                   height: "400px",
                   width: "100%",
@@ -113,6 +122,7 @@ export const ModalForCreatingPeriodizedTemplate: React.FC<
             Cancel
           </Button>
         </Box>
+
         <ExerciseTypeModal
           open={exerciseHandlers.exerciseTypeModalOpen}
           onClose={exerciseHandlers.handleCloseExerciseTypeModal}

@@ -8,6 +8,7 @@ import { NotificationHandlerDisplayComponent } from "../ErrorAndNotificationHand
 import { TrainingPlanInterface } from "../../../interfaces/TrainingPlan.interface";
 import { ModalForCreatingPeriodizedTemplate } from "./ExerciseTrainingPlanComponent/ModalForCreatingPeriodizedTemplate";
 import { ChosenExercises } from "../../../interfaces/Exercise.interface";
+import useExerciseHandlers from "./ExerciseTrainingPlanComponent/utils/useExerciseHandlers";
 
 export const AddTrainingPlanLogic = () => {
   const [periodizedTraining, savePeriodizedTraining] =
@@ -22,6 +23,7 @@ export const AddTrainingPlanLogic = () => {
   const [notification, setNotification] = useState("");
   const [openNotification, setNotificationOpen] = useState(false);
 
+  const exerciseHandlers = useExerciseHandlers()
   const handleOpenModal = () => {
     setIsModalOpen(true);
   };
@@ -83,6 +85,7 @@ export const AddTrainingPlanLogic = () => {
       );
     }
   };
+  //deal with the CRUD later
   const fakeIdDelete = "iitwiuetiwheith";
   const fakeIdUpdate = "iitwiuetiwheith";
   const handleDelete = (id: string) => {
@@ -135,13 +138,14 @@ export const AddTrainingPlanLogic = () => {
           <Grid container spacing={4}>
             {periodizedTraining.trainingPlans.map(
               (trainingPlan: TrainingPlanInterface, index: number) => (
+             
                 <Grid item xs={12} key={index}>
                   <TablesTemplateComponent
                     dayLabel={`Day ${index + 1}`}
                     mainExercises={trainingPlan.mainExercises}
                     accessoryExercises={trainingPlan.accessoryExercises}
-                    onDelete={() => handleDelete(fakeIdDelete)}
-                    onUpdate={() => handleUpdate(fakeIdUpdate)}
+                    onDelete={exerciseHandlers.handleDeleteExercise}
+                    onUpdate={exerciseHandlers.handleUpdateExercise}
                   />
                 </Grid>
               )

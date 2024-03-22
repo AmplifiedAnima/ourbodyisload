@@ -121,23 +121,24 @@ const useExerciseHandlers: () => ExerciseHandlersInterface = () => {
     setSearchingQuery(event.target.value);
   };
   const handleDeleteExercise = (id: string) => {
+    console.log(id)
     setTrainingDays((prevTrainingDays) => {
-      // Filter out the exercise with the given id from all days
-      const updatedTrainingDays = Object.fromEntries(
-        Object.entries(prevTrainingDays).map(([day, exercises]) => [
-          day,
-          {
-            main: exercises.main.filter((exercise) => exercise._id !== id),
-            accessory: exercises.accessory.filter(
-              (exercise) => exercise._id !== id
-            ),
-          },
-        ])
-      );
+      const updatedTrainingDays = { ...prevTrainingDays };
+
+      // Iterate through each day
+      Object.keys(updatedTrainingDays).forEach((day) => {
+        updatedTrainingDays[day].main = updatedTrainingDays[day].main.filter(
+          (exercise) => exercise._id !== id
+        );
+        updatedTrainingDays[day].accessory = updatedTrainingDays[
+          day
+        ].accessory.filter((exercise) => exercise._id !== id);
+      });
+
       return updatedTrainingDays;
     });
   };
-//updating function to be updating exercise
+
   const handleUpdateExercise = (
     id: string,
     updatedExercise: ExerciseBlueprintsInterface

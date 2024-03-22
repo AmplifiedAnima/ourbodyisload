@@ -1,20 +1,22 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Grid, Typography, Button, Select, MenuItem, Box } from "@mui/material";
 import { ButtonStylingForApp } from "../../../../globalStyles/ButtonStylingForApp";
 import { SearchInput } from "../../HeaderComponent/SearchInput";
-import { TablesTemplateComponent } from "../TablesTemplateComponent";
-import { ExerciseBlueprintsInterface } from "../../../../interfaces/Exercise.interface";
+
 import { ExerciseHandlersInterface } from "../../../../interfaces/Exercise.interface";
 
 interface GridWithOptionsForPeriodizationModalTemplateProps {
   exerciseHandlers: ExerciseHandlersInterface;
-  exercises: ExerciseBlueprintsInterface[];
   handleSearchSubmit: () => void;
 }
 
 const GridWithOptionsForPeriodizationModalTemplate: React.FC<
   GridWithOptionsForPeriodizationModalTemplateProps
-> = ({ exerciseHandlers, exercises, handleSearchSubmit }) => {
+> = ({ exerciseHandlers, handleSearchSubmit }) => {
+  useEffect(() => {
+    console.log(exerciseHandlers.searchingQuery);
+  }, [handleSearchSubmit]);
+
   return (
     <Box>
       <Grid container spacing={4}>
@@ -129,32 +131,39 @@ const GridWithOptionsForPeriodizationModalTemplate: React.FC<
                 : "open exercise list"}
             </Button>
           </Grid>
-
           {exerciseHandlers.isExerciseListVisible ? (
             <Grid
               container
-              spacing={2}
+              spacing={4}
               sx={{
-                width: "550px",
+                minWidth: "100vw",
+                maxWidth: "auto",
                 height: "300px",
                 overflow: "auto",
+                fontSize: "14px",
                 "@media(max-width:768px)": {
                   width: "100%",
                 },
               }}
             >
-              {exercises.map((exercise) => (
+              {exerciseHandlers.exercises.map((exercise) => (
                 <React.Fragment key={exercise._id}>
-                  <Grid item xs={4}>
-                    <Typography>{exercise.name}</Typography>
+                  <Grid item xs={5}>
+                    <Typography sx={{ whiteSpace: "nowrap", fontSize: "14px" }}>
+                      {exercise.name}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={1.5}>
+                    <Typography sx={{ fontSize: "14px" }}>
+                      {exercise.type}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={3}>
+                    <Typography sx={{ fontSize: "14px" }}>
+                      {exercise.movementPattern}
+                    </Typography>
                   </Grid>
                   <Grid item xs={2}>
-                    <Typography>{exercise.type}</Typography>
-                  </Grid>
-                  <Grid item xs={3}>
-                    <Typography>{exercise.movementPattern}</Typography>
-                  </Grid>
-                  <Grid item xs={3}>
                     <Button
                       variant="outlined"
                       size="small"
@@ -175,33 +184,6 @@ const GridWithOptionsForPeriodizationModalTemplate: React.FC<
             </Typography>
           )}
         </Grid>
-        {/* 
-        <Grid item md={6} sx={{ maxHeight: "400px" }}>
-        <Typography variant="h6">Template</Typography> */}
-        {/* <Box
-            sx={{
-              height: "550px",
-              overflow: "auto",
-              margin: "5px 10px",
-              "@media(max-width:768px)": {
-                height: "400px",
-                width: "100%",
-                margin: "0px 0px",
-              },
-            }}
-          >
-            {Object.keys(exerciseHandlers.trainingDays).map((day) => (
-              <TablesTemplateComponent
-                key={day}
-                dayLabel={day}
-                mainExercises={exerciseHandlers.trainingDays[day].main}
-                accessoryExercises={
-                  exerciseHandlers.trainingDays[day].accessory
-                }
-              />
-            ))}
-          </Box> */}
-        {/* </Grid> */}
       </Grid>
     </Box>
   );

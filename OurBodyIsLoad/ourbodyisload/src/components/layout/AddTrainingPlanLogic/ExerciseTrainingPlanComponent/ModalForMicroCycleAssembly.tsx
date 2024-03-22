@@ -46,6 +46,8 @@ export const ModalForMicroCycleAssembly: React.FC<
     });
 
     exerciseHandlers.setTrainingDays(updatedTrainingDays);
+    console.log(updatedTrainingDays);
+    onClose();
   };
 
   return (

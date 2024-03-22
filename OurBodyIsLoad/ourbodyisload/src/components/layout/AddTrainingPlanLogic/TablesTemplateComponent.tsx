@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  Box,
   Typography,
   TableContainer,
   Paper,
@@ -29,19 +28,26 @@ export const TablesTemplateComponent: React.FC<
   const handleDelete = (id: string) => {
     onDelete(id);
   };
-
   const handleUpdate = (
     id: string,
     updatedExercise: ExerciseBlueprintsInterface
   ) => {
     onUpdate(id, updatedExercise);
   };
-
+  let totalTonnageMainExercises = 0;
+  let totalTonnageAccesories = 0;
   return (
-    <Box sx={{ margin: "10px", width: "auto" }}>
+    <>
       <Typography
         variant="subtitle1"
-        sx={{ color: "#530185", margin: "15px 20px" }}
+        sx={{
+          color: "#530185",
+          margin: "15px 20px",
+          fontSize: { xs: "14px", sm: "16px" },
+          "@media (max-width:768px)": {
+            fontSize: "12px",
+          },
+        }}
       >
         {`Training day ${dayLabel.replace(/[^\d]/g, "")}`}
       </Typography>
@@ -52,78 +58,295 @@ export const TablesTemplateComponent: React.FC<
           margin: "5px 5px",
           background:
             "linear-gradient(to left, rgba(235, 207, 252, 0.6) 0%, rgba(215, 174, 251, 0.3) 60%, rgba(255, 255, 255, 1) 70%)",
-          width: "auto",
         }}
       >
         <Table aria-label="simple table" size="small">
           <TableHead>
             <TableRow>
-              <TableCell sx={{ color: "#530185" }}>Exercise</TableCell>
-              <TableCell sx={{ color: "#530185" }}>Sets</TableCell>
-              <TableCell sx={{ color: "#530185" }}>Reps</TableCell>
-              <TableCell sx={{ color: "#530185" }}>Intensity</TableCell>
-              <TableCell sx={{ color: "#530185" }}>Pattern</TableCell>
-              <TableCell sx={{ color: "#530185" }}>Actions</TableCell>
+              <TableCell
+                sx={{
+                  fontWeight: "bold",
+                  color: "#530185",
+                  "@media (max-width:768px)": { fontSize: "12px" },
+                }}
+              >
+                MAIN EXERCISE
+              </TableCell>
+              <TableCell
+                sx={{
+                  color: "#530185",
+                  fontWeight: "bold",
+                  "@media (max-width:768px)": { fontSize: "12px" },
+                }}
+              >
+                Sets
+              </TableCell>
+              <TableCell
+                sx={{
+                  color: "#530185",
+                  fontWeight: "bold",
+                  "@media (max-width:768px)": { fontSize: "12px" },
+                }}
+              >
+                Reps
+              </TableCell>
+              <TableCell
+                sx={{
+                  color: "#530185",
+                  fontWeight: "bold",
+                  "@media (max-width:768px)": { fontSize: "12px" },
+                }}
+              >
+                Intensity
+              </TableCell>
+              <TableCell
+                sx={{
+                  color: "#530185",
+                  fontWeight: "bold",
+                  "@media (max-width:768px)": { fontSize: "12px" },
+                }}
+              >
+                Pattern
+              </TableCell>
+              <TableCell
+                sx={{
+                  color: "#530185",
+                  fontWeight: "bold",
+                  "@media (max-width:768px)": { fontSize: "12px" },
+                }}
+              >
+                Load{" "}
+              </TableCell>
+              <TableCell
+                sx={{
+                  color: "#530185",
+                  fontWeight: "bold",
+                  "@media (max-width:768px)": { fontSize: "12px" },
+                }}
+              >
+                Actions
+              </TableCell>
             </TableRow>
           </TableHead>
 
-          <TableBody>
-            {/* Render main exercises */}
+          <TableBody sx={{ width: "auto", whiteSpace: "nowrap" }}>
             {mainExercises.map((exercise, index) => (
               <TableRow key={index}>
-                <TableCell sx={{ color: "#530185" }}>
+                <TableCell
+                  sx={{
+                    color: "#530185",
+                    whiteSpace: "nowrap",
+                    "@media (max-width:768px)": { fontSize: "12px" },
+                  }}
+                >
                   {exercise.name}
                 </TableCell>
-                <TableCell>{exercise.sets}</TableCell>
-                <TableCell>{exercise.reps}</TableCell>
-                <TableCell>{exercise.intensity} kg</TableCell>
-                <TableCell>{exercise.movementPattern}</TableCell>
+                <TableCell
+                  sx={{
+                    color: "#530185",
+                    "@media (max-width:768px)": { fontSize: "12px" },
+                  }}
+                >
+                  {exercise.sets}
+                </TableCell>
+                <TableCell
+                  sx={{
+                    color: "#530185",
+                    "@media (max-width:768px)": { fontSize: "12px" },
+                  }}
+                >
+                  {exercise.reps}
+                </TableCell>
+                <TableCell
+                  sx={{
+                    color: "#530185",
+                    "@media (max-width:768px)": { fontSize: "12px" },
+                  }}
+                >
+                  {exercise.intensity} kg
+                </TableCell>
+                <TableCell
+                  sx={{
+                    color: "#530185",
+                    "@media (max-width:768px)": { fontSize: "12px" },
+                  }}
+                >
+                  {exercise.movementPattern}
+                </TableCell>
+                <TableCell
+                  sx={{
+                    color: "#530185",
+                    "@media (max-width:768px)": { fontSize: "12px" },
+                  }}
+                >
+                  {Number(exercise.sets) *
+                    Number(exercise.reps) *
+                    Number(exercise.intensity)}{" "}
+                  kg
+                </TableCell>
                 <TableCell>
                   <IconButton onClick={() => handleDelete(exercise._id)}>
                     <CloseIcon />
                   </IconButton>
                   <IconButton
-                    onClick={() => handleUpdate(exercise._id, exercise)} // Pass the updated exercise to handleUpdate
+                    onClick={() => handleUpdate(exercise._id, exercise)}
                   >
                     <EditIcon />
                   </IconButton>
                 </TableCell>
               </TableRow>
             ))}
+
+            <TableRow>
+              <TableCell
+                sx={{
+                  color: "#530185",
+                  whiteSpace: "nowrap",
+                  fontWeight: "bold",
+                  padding: "30px 15px",
+                  "@media (max-width:768px)": {
+                    fontSize: "12px",
+                  },
+                }}
+              >
+                MAIN EXERCISES TOTAL LOAD
+              </TableCell>
+              <TableCell />
+              <TableCell />
+              <TableCell />
+              <TableCell />
+              <TableCell sx={{ fontWeight: "bold", color: "#530185" }}>
+                {mainExercises.map((exercise, index) => {
+                  const singleExercise = mainExercises[index];
+                  const tonnage =
+                    Number(singleExercise.sets) *
+                    Number(singleExercise.reps) *
+                    Number(singleExercise.intensity);
+
+                  totalTonnageMainExercises += tonnage;
+                  return null;
+                })}
+                {totalTonnageMainExercises} kg
+              </TableCell>
+            </TableRow>
           </TableBody>
 
           <TableRow>
-              <TableCell colSpan={5}>
-                <Typography variant="subtitle1" sx={{ color: "#530185" }}>
-                  Accessory
-                </Typography>
-              </TableCell>
-            </TableRow>
+            <TableCell colSpan={5}>
+              <Typography
+                variant="subtitle1"
+                sx={{ color: "#530185", fontWeight: "bold" }}
+              >
+                ACCESORY EXERCISE
+              </Typography>
+            </TableCell>
+          </TableRow>
           <TableBody>
             {accessoryExercises.map((exercise, index) => (
               <TableRow key={index}>
-                <TableCell sx={{ color: "#530185" }}>
+                <TableCell
+                  sx={{
+                    color: "#530185",
+                    whiteSpace: "nowrap",
+                    "@media (max-width:768px)": { fontSize: "12px" },
+                  }}
+                >
                   {exercise.name}
                 </TableCell>
-                <TableCell>{exercise.sets}</TableCell>
-                <TableCell>{exercise.reps}</TableCell>
-                <TableCell>{exercise.intensity} kg</TableCell>
-                <TableCell>{exercise.movementPattern}</TableCell>
-                <TableCell>
+                <TableCell
+                  sx={{
+                    whiteSpace: "nowrap",
+                    "@media (max-width:768px)": { fontSize: "12px" },
+                  }}
+                >
+                  {exercise.sets}
+                </TableCell>
+                <TableCell
+                  sx={{
+                    color: "#530185",
+                    whiteSpace: "nowrap",
+                    "@media (max-width:768px)": { fontSize: "12px" },
+                  }}
+                >
+                  {exercise.reps}
+                </TableCell>
+                <TableCell
+                  sx={{
+                    color: "#530185",
+                    whiteSpace: "nowrap",
+                    "@media (max-width:768px)": { fontSize: "12px" },
+                  }}
+                >
+                  {exercise.intensity} kg
+                </TableCell>
+                <TableCell
+                  sx={{
+                    color: "#530185",
+                    whiteSpace: "nowrap",
+                    "@media (max-width:768px)": { fontSize: "12px" },
+                  }}
+                >
+                  {exercise.movementPattern}
+                </TableCell>
+                <TableCell sx={{ color: "#530185" }}>
+                  {Number(exercise.sets) *
+                    Number(exercise.reps) *
+                    Number(exercise.intensity)}{" "}
+                  kg
+                </TableCell>
+                <TableCell
+                  sx={{
+                    color: "#530185",
+                    whiteSpace: "nowrap",
+                    "@media (max-width:768px)": { fontSize: "12px" },
+                  }}
+                >
                   <IconButton onClick={() => handleDelete(exercise._id)}>
                     <CloseIcon />
                   </IconButton>
                   <IconButton
-                    onClick={() => handleUpdate(exercise._id, exercise)} // Pass the updated exercise to handleUpdate
+                    onClick={() => handleUpdate(exercise._id, exercise)}
                   >
                     <EditIcon />
                   </IconButton>
                 </TableCell>
               </TableRow>
             ))}
+
+            <TableRow>
+              <TableCell
+                sx={{
+                  color: "#530185",
+                  whiteSpace: "nowrap",
+                  fontWeight: "bold",
+                  padding: "30px 15px",
+                  "@media (max-width:768px)": {
+                    fontSize: "12px",
+                  },
+                }}
+              >
+                ACCESORY TOTAL LOAD
+              </TableCell>
+              <TableCell />
+              <TableCell />
+              <TableCell />
+              <TableCell />
+              <TableCell sx={{ fontWeight: "bold", color: "#530185" }}>
+                {accessoryExercises.map((exercise, index) => {
+                  const singleExercise = accessoryExercises[index];
+                  const tonnage =
+                    Number(singleExercise.sets) *
+                    Number(singleExercise.reps) *
+                    Number(singleExercise.intensity);
+                  totalTonnageAccesories += tonnage;
+                  return null;
+                })}
+                {totalTonnageAccesories} kg
+              </TableCell>
+            </TableRow>
           </TableBody>
         </Table>
       </TableContainer>
-    </Box>
+    </>
   );
 };
