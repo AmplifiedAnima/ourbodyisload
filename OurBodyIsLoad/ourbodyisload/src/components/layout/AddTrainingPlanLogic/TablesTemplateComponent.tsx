@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Typography,
   TableContainer,
@@ -9,10 +9,10 @@ import {
   TableCell,
   TableBody,
   IconButton,
-} from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import EditIcon from "@mui/icons-material/Edit"; // Import the EditIcon
-import { ExerciseBlueprintsInterface } from "../../../interfaces/Exercise.interface";
+} from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import EditIcon from '@mui/icons-material/Edit'; // Import the EditIcon
+import { ExerciseBlueprintsInterface } from '../../../interfaces/Exercise.interface';
 
 interface TablesTemplateComponentProps {
   mainExercises: ExerciseBlueprintsInterface[];
@@ -41,23 +41,23 @@ export const TablesTemplateComponent: React.FC<
       <Typography
         variant="subtitle1"
         sx={{
-          color: "#530185",
-          margin: "15px 20px",
-          fontSize: { xs: "14px", sm: "16px" },
-          "@media (max-width:768px)": {
-            fontSize: "12px",
+          color: '#530185',
+          margin: '15px 20px',
+          fontSize: { xs: '14px', sm: '16px' },
+          '@media (max-width:768px)': {
+            fontSize: '12px',
           },
         }}
       >
-        {`Training day ${dayLabel.replace(/[^\d]/g, "")}`}
+        {`Training day ${dayLabel.replace(/[^\d]/g, '')}`}
       </Typography>
 
       <TableContainer
         component={Paper}
         sx={{
-          margin: "5px 5px",
+          margin: '20px',
           background:
-            "linear-gradient(to left, rgba(235, 207, 252, 0.6) 0%, rgba(215, 174, 251, 0.3) 60%, rgba(255, 255, 255, 1) 70%)",
+            'linear-gradient(to left, rgba(235, 207, 252, 0.6) 0%, rgba(215, 174, 251, 0.3) 60%, rgba(255, 255, 255, 1) 70%)',
         }}
       >
         <Table aria-label="simple table" size="small">
@@ -65,63 +65,63 @@ export const TablesTemplateComponent: React.FC<
             <TableRow>
               <TableCell
                 sx={{
-                  fontWeight: "bold",
-                  color: "#530185",
-                  "@media (max-width:768px)": { fontSize: "12px" },
+                  fontWeight: 'bold',
+                  color: '#530185',
+                  '@media (max-width:768px)': { fontSize: '10px' },
                 }}
               >
                 MAIN EXERCISE
               </TableCell>
               <TableCell
                 sx={{
-                  color: "#530185",
-                  fontWeight: "bold",
-                  "@media (max-width:768px)": { fontSize: "12px" },
+                  color: '#530185',
+                  fontWeight: 'bold',
+                  '@media (max-width:768px)': { fontSize: '10px' },
                 }}
               >
                 Sets
               </TableCell>
               <TableCell
                 sx={{
-                  color: "#530185",
-                  fontWeight: "bold",
-                  "@media (max-width:768px)": { fontSize: "12px" },
+                  color: '#530185',
+                  fontWeight: 'bold',
+                  '@media (max-width:768px)': { fontSize: '10px' },
                 }}
               >
                 Reps
               </TableCell>
               <TableCell
                 sx={{
-                  color: "#530185",
-                  fontWeight: "bold",
-                  "@media (max-width:768px)": { fontSize: "12px" },
+                  color: '#530185',
+                  fontWeight: 'bold',
+                  '@media (max-width:768px)': { fontSize: '10px' },
                 }}
               >
                 Intensity
               </TableCell>
               <TableCell
                 sx={{
-                  color: "#530185",
-                  fontWeight: "bold",
-                  "@media (max-width:768px)": { fontSize: "12px" },
+                  color: '#530185',
+                  fontWeight: 'bold',
+                  '@media (max-width:768px)': { fontSize: '10px' },
                 }}
               >
                 Pattern
               </TableCell>
               <TableCell
                 sx={{
-                  color: "#530185",
-                  fontWeight: "bold",
-                  "@media (max-width:768px)": { fontSize: "12px" },
+                  color: '#530185',
+                  fontWeight: 'bold',
+                  '@media (max-width:768px)': { fontSize: '10px' },
                 }}
               >
-                Load{" "}
+                Load{' '}
               </TableCell>
               <TableCell
                 sx={{
-                  color: "#530185",
-                  fontWeight: "bold",
-                  "@media (max-width:768px)": { fontSize: "12px" },
+                  color: '#530185',
+                  fontWeight: 'bold',
+                  '@media (max-width:768px)': { fontSize: '10px' },
                 }}
               >
                 Actions
@@ -129,59 +129,59 @@ export const TablesTemplateComponent: React.FC<
             </TableRow>
           </TableHead>
 
-          <TableBody sx={{ width: "auto", whiteSpace: "nowrap" }}>
+          <TableBody sx={{ width: 'auto', whiteSpace: 'nowrap' }}>
             {mainExercises.map((exercise, index) => (
               <TableRow key={index}>
                 <TableCell
                   sx={{
-                    color: "#530185",
-                    whiteSpace: "nowrap",
-                    "@media (max-width:768px)": { fontSize: "12px" },
+                    color: '#530185',
+                    whiteSpace: 'nowrap',
+                    '@media (max-width:768px)': { fontSize: '12px' },
                   }}
                 >
                   {exercise.name}
                 </TableCell>
                 <TableCell
                   sx={{
-                    color: "#530185",
-                    "@media (max-width:768px)": { fontSize: "12px" },
+                    color: '#530185',
+                    '@media (max-width:768px)': { fontSize: '10px' },
                   }}
                 >
                   {exercise.sets}
                 </TableCell>
                 <TableCell
                   sx={{
-                    color: "#530185",
-                    "@media (max-width:768px)": { fontSize: "12px" },
+                    color: '#530185',
+                    '@media (max-width:768px)': { fontSize: '10px' },
                   }}
                 >
                   {exercise.reps}
                 </TableCell>
                 <TableCell
                   sx={{
-                    color: "#530185",
-                    "@media (max-width:768px)": { fontSize: "12px" },
+                    color: '#530185',
+                    '@media (max-width:768px)': { fontSize: '10px' },
                   }}
                 >
                   {exercise.intensity} kg
                 </TableCell>
                 <TableCell
                   sx={{
-                    color: "#530185",
-                    "@media (max-width:768px)": { fontSize: "12px" },
+                    color: '#530185',
+                    '@media (max-width:768px)': { fontSize: '10px' },
                   }}
                 >
                   {exercise.movementPattern}
                 </TableCell>
                 <TableCell
                   sx={{
-                    color: "#530185",
-                    "@media (max-width:768px)": { fontSize: "12px" },
+                    color: '#530185',
+                    '@media (max-width:768px)': { fontSize: '10px' },
                   }}
                 >
                   {Number(exercise.sets) *
                     Number(exercise.reps) *
-                    Number(exercise.intensity)}{" "}
+                    Number(exercise.intensity)}{' '}
                   kg
                 </TableCell>
                 <TableCell>
@@ -200,13 +200,11 @@ export const TablesTemplateComponent: React.FC<
             <TableRow>
               <TableCell
                 sx={{
-                  color: "#530185",
-                  whiteSpace: "nowrap",
-                  fontWeight: "bold",
-                  padding: "30px 15px",
-                  "@media (max-width:768px)": {
-                    fontSize: "12px",
-                  },
+                  color: '#530185',
+                  whiteSpace: 'nowrap',
+                  fontWeight: 'bold',
+                  padding: '30px 15px',
+                  '@media (max-width:768px)': { fontSize: '10px' },
                 }}
               >
                 MAIN EXERCISES TOTAL LOAD
@@ -215,7 +213,7 @@ export const TablesTemplateComponent: React.FC<
               <TableCell />
               <TableCell />
               <TableCell />
-              <TableCell sx={{ fontWeight: "bold", color: "#530185" }}>
+              <TableCell sx={{ fontWeight: 'bold', color: '#530185' }}>
                 {mainExercises.map((exercise, index) => {
                   const singleExercise = mainExercises[index];
                   const tonnage =
@@ -235,7 +233,11 @@ export const TablesTemplateComponent: React.FC<
             <TableCell colSpan={5}>
               <Typography
                 variant="subtitle1"
-                sx={{ color: "#530185", fontWeight: "bold" }}
+                sx={{
+                  color: '#530185',
+                  fontWeight: 'bold',
+                  '@media (max-width:768px)': { fontSize: '10px' },
+                }}
               >
                 ACCESORY EXERCISE
               </Typography>
@@ -246,59 +248,59 @@ export const TablesTemplateComponent: React.FC<
               <TableRow key={index}>
                 <TableCell
                   sx={{
-                    color: "#530185",
-                    whiteSpace: "nowrap",
-                    "@media (max-width:768px)": { fontSize: "12px" },
+                    color: '#530185',
+                    whiteSpace: 'nowrap',
+                    '@media (max-width:768px)': { fontSize: '10px' },
                   }}
                 >
                   {exercise.name}
                 </TableCell>
                 <TableCell
                   sx={{
-                    whiteSpace: "nowrap",
-                    "@media (max-width:768px)": { fontSize: "12px" },
+                    whiteSpace: 'nowrap',
+                    '@media (max-width:768px)': { fontSize: '10px' },
                   }}
                 >
                   {exercise.sets}
                 </TableCell>
                 <TableCell
                   sx={{
-                    color: "#530185",
-                    whiteSpace: "nowrap",
-                    "@media (max-width:768px)": { fontSize: "12px" },
+                    color: '#530185',
+                    whiteSpace: 'nowrap',
+                    '@media (max-width:768px)': { fontSize: '10px' },
                   }}
                 >
                   {exercise.reps}
                 </TableCell>
                 <TableCell
                   sx={{
-                    color: "#530185",
-                    whiteSpace: "nowrap",
-                    "@media (max-width:768px)": { fontSize: "12px" },
+                    color: '#530185',
+                    whiteSpace: 'nowrap',
+                    '@media (max-width:768px)': { fontSize: '10px' },
                   }}
                 >
                   {exercise.intensity} kg
                 </TableCell>
                 <TableCell
                   sx={{
-                    color: "#530185",
-                    whiteSpace: "nowrap",
-                    "@media (max-width:768px)": { fontSize: "12px" },
+                    color: '#530185',
+                    whiteSpace: 'nowrap',
+                    '@media (max-width:768px)': { fontSize: '10px' },
                   }}
                 >
                   {exercise.movementPattern}
                 </TableCell>
-                <TableCell sx={{ color: "#530185" }}>
+                <TableCell sx={{ color: '#530185' }}>
                   {Number(exercise.sets) *
                     Number(exercise.reps) *
-                    Number(exercise.intensity)}{" "}
+                    Number(exercise.intensity)}{' '}
                   kg
                 </TableCell>
                 <TableCell
                   sx={{
-                    color: "#530185",
-                    whiteSpace: "nowrap",
-                    "@media (max-width:768px)": { fontSize: "12px" },
+                    color: '#530185',
+                    whiteSpace: 'nowrap',
+                    '@media (max-width:768px)': { fontSize: '10px' },
                   }}
                 >
                   <IconButton onClick={() => handleDelete(exercise._id)}>
@@ -316,12 +318,12 @@ export const TablesTemplateComponent: React.FC<
             <TableRow>
               <TableCell
                 sx={{
-                  color: "#530185",
-                  whiteSpace: "nowrap",
-                  fontWeight: "bold",
-                  padding: "30px 15px",
-                  "@media (max-width:768px)": {
-                    fontSize: "12px",
+                  color: '#530185',
+                  whiteSpace: 'nowrap',
+                  fontWeight: 'bold',
+                  padding: '30px 15px',
+                  '@media (max-width:768px)': {
+                    fontSize: '12px',
                   },
                 }}
               >
@@ -331,7 +333,7 @@ export const TablesTemplateComponent: React.FC<
               <TableCell />
               <TableCell />
               <TableCell />
-              <TableCell sx={{ fontWeight: "bold", color: "#530185" }}>
+              <TableCell sx={{ fontWeight: 'bold', color: '#530185' }}>
                 {accessoryExercises.map((exercise, index) => {
                   const singleExercise = accessoryExercises[index];
                   const tonnage =

@@ -44,8 +44,14 @@ export interface ExerciseHandlersInterface {
   ) => void;
   handleCloseExerciseTypeModal: () => void;
   handleSetExerciseType: (type: "main" | "accessory") => void;
-  handleSetsChange: (event: ChangeEvent<HTMLInputElement>) => void;
-  handleRepsChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  handleSetsChange: (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    exercise: ExerciseBlueprintsInterface
+  ) => void;
+  handleRepsChange: (
+    event:  React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    exercise: ExerciseBlueprintsInterface
+  ) => void;
   handleIntensityChange: (event: ChangeEvent<HTMLInputElement>) => void;
   handlePeriodizationChange: (event: SelectChangeEvent<string>) => void;
   handleInputValue: (event: ChangeEvent<HTMLInputElement>) => void;

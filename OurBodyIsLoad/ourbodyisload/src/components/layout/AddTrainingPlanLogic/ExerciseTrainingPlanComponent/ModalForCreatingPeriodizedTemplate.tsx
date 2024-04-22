@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { Modal, Button, Box, Grid, Typography } from "@mui/material";
-import { ChosenExercises } from "../../../../interfaces/Exercise.interface";
-import { ButtonStylingForApp } from "../../../../globalStyles/ButtonStylingForApp";
-import ExerciseTypeModal from "./ExerciseTypeModal";
-import GridWithOptionsForPeriodizationModalTemplate from "./GridWithOptionsForPeriodizationModalTemplate";
-import useExerciseHandlers from "./utils/useExerciseHandlers";
-import { ModalForMicroCycleAssembly } from "./ModalForMicroCycleAssembly";
-import { TablesTemplateComponent } from "../TablesTemplateComponent";
-import { useDispatch } from "react-redux";
-import { updateQuery } from "../../../../store/slices/searchSlice";
+import React, { useEffect, useState } from 'react';
+import { Modal, Button, Box, Grid, Typography } from '@mui/material';
+import { ChosenExercises } from '../../../../interfaces/Exercise.interface';
+import { ButtonStylingForApp } from '../../../../globalStyles/ButtonStylingForApp';
+import ExerciseTypeModal from './ExerciseTypeModal';
+import GridWithOptionsForPeriodizationModalTemplate from './GridWithOptionsForPeriodizationModalTemplate';
+import useExerciseHandlers from './utils/useExerciseHandlers';
+import { ModalForMicroCycleAssembly } from './ModalForMicroCycleAssembly';
+import { TablesTemplateComponent } from '../TablesTemplateComponent';
+import { useDispatch } from 'react-redux';
+import { updateQuery } from '../../../../store/slices/searchSlice';
 
 interface ModalWithExercisesChoiceProps {
   isOpen: boolean;
@@ -35,19 +35,19 @@ export const ModalForCreatingPeriodizedTemplate: React.FC<
     <Modal open={isOpen} onClose={onClose}>
       <Box
         sx={{
-          width: "100vw",
-          height: "100vh",
-          bgcolor: "background.paper",
+          width: '100vw',
+          height: '100vh',
+          bgcolor: 'background.paper',
           p: 4,
-          overflowY: "auto",
+          overflowY: 'auto',
         }}
       >
-        <Grid container>
-          <Grid item md={12} sx={{ maxWidth: "auto" }}>
-            <GridWithOptionsForPeriodizationModalTemplate
-              exerciseHandlers={exerciseHandlers}
-              handleSearchSubmit={handleSearchSubmit}
-            />
+        <GridWithOptionsForPeriodizationModalTemplate
+          exerciseHandlers={exerciseHandlers}
+          handleSearchSubmit={handleSearchSubmit}
+        />
+        <Grid>
+          <Grid item md={12} sx={{ maxWidth: 'auto' }}>
             <Button
               sx={{
                 ...ButtonStylingForApp,
@@ -70,18 +70,22 @@ export const ModalForCreatingPeriodizedTemplate: React.FC<
             <Typography variant="h6">Template</Typography>
             <Box
               sx={{
-                height: "550px",
-                overflow: "auto",
-                margin: "5px 10px",
-                maxWidth: "100vw",
-                "@media(max-width:768px)": {
-                  height: "400px",
-                  width: "100%",
-                  margin: "0px 0px",
+                height: { xs: '400px', sm: '550px' }, // 'xs' for phones, 'sm' for tablets and small desktops
+                overflow: 'auto',
+                width: '100%', // Ensures full width on smaller devices
+                maxWidth: { xs: '100%', sm: '768px', md: '1400px' }, // Responsive max width
+
+                '@media (max-width:768px)': {
+                  maxWidth: '500px', // Ensure Box doesn't exceed the screen size on small devices
+                  width: '90%',
+                },
+                '@media (min-width:769px)': {
+                  height: '550px', // Larger height for larger devices
+                  width: '90%',
                 },
               }}
             >
-              {Object.keys(exerciseHandlers.trainingDays).map((day) => (
+              {Object.keys(exerciseHandlers.trainingDays).map(day => (
                 <TablesTemplateComponent
                   key={day}
                   dayLabel={day}
@@ -100,9 +104,9 @@ export const ModalForCreatingPeriodizedTemplate: React.FC<
         <Box
           sx={{
             mt: 2,
-            display: "flex",
-            justifyContent: "flex-start",
-            alignItems: "center",
+            display: 'flex',
+            justifyContent: 'flex-start',
+            alignItems: 'center',
           }}
         >
           <Button

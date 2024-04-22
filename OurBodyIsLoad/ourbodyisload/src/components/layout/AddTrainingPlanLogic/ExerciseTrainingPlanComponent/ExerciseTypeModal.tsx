@@ -10,8 +10,14 @@ interface ExerciseTypeModalProps {
   sets: string;
   reps: string;
   intensity: string;
-  handleSetsChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  handleRepsChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleSetsChange: (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    exercise: ExerciseBlueprintsInterface
+  ) => void;
+  handleRepsChange: (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    exercise: ExerciseBlueprintsInterface
+  ) => void;
   handleIntensityChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleSetExerciseType: (type: "main" | "accessory") => void;
 }
@@ -82,7 +88,11 @@ const ExerciseTypeModal: React.FC<ExerciseTypeModalProps> = ({
           type="number"
           value={sets}
           placeholder={selectedExercise ? selectedExercise.sets : ""}
-          onChange={handleSetsChange}
+          onChange={(event) => {
+            if (selectedExercise) {
+              handleSetsChange(event, selectedExercise);
+            }
+          }}
           fullWidth
           margin="normal"
           inputProps={{ min: 1, max: 10 }}
@@ -94,7 +104,11 @@ const ExerciseTypeModal: React.FC<ExerciseTypeModalProps> = ({
           label="Reps"
           type="number"
           value={reps}
-          onChange={handleRepsChange}
+          onChange={(event) => {
+            if (selectedExercise) {
+              handleRepsChange(event, selectedExercise);
+            }
+          }}
           placeholder={selectedExercise ? selectedExercise.reps : ""}
           fullWidth
           margin="normal"

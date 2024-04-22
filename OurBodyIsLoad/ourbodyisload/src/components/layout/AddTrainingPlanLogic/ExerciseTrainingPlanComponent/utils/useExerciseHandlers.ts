@@ -54,6 +54,12 @@ const useExerciseHandlers: () => ExerciseHandlersInterface = () => {
   };
   const handleAddExercise = (exercise: ExerciseBlueprintsInterface) => {
     setSelectedExercise(exercise);
+    // Only set default values if user hasn't already provided values
+    setSets((currentSets) => currentSets || exercise.sets || "");
+    setReps((currentReps) => currentReps || exercise.reps || "");
+    setIntensity(
+      (currentIntensity) => currentIntensity || exercise.intensity || ""
+    );
     setExerciseTypeModalOpen(true);
   };
 
@@ -100,12 +106,26 @@ const useExerciseHandlers: () => ExerciseHandlersInterface = () => {
     setExerciseTypeModalOpen(false);
   };
 
-  const handleSetsChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setSets(event.target.value);
+  const handleSetsChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    exercise: ExerciseBlueprintsInterface
+  ) => {
+    if (event.target.value !== "") {
+      setSets(event.target.value);
+    } else {
+      setReps(exercise.sets);
+    }
   };
 
-  const handleRepsChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setReps(event.target.value);
+  const handleRepsChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    exercise: ExerciseBlueprintsInterface
+  ) => {
+    if (event.target.value !== "") {
+      setReps(event.target.value);
+    } else {
+      setReps(exercise.reps);
+    }
   };
 
   const handleIntensityChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -121,7 +141,7 @@ const useExerciseHandlers: () => ExerciseHandlersInterface = () => {
     setSearchingQuery(event.target.value);
   };
   const handleDeleteExercise = (id: string) => {
-    console.log(id)
+    console.log(id);
     setTrainingDays((prevTrainingDays) => {
       const updatedTrainingDays = { ...prevTrainingDays };
 
