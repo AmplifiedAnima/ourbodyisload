@@ -20,43 +20,16 @@ import {
 } from '../../../../interfaces/Exercise.interface';
 import { TrainingDays } from '../../../../interfaces/TrainingPlan.interface';
 import { useState } from 'react';
+import {
+  biomotorAbilitiesToChoose,
+  toolsForTrainingUsage,
+} from './utils/modalForCreatingPeriodizedTemplateUtils';
 
 interface ModalForMicroCycleAssemblyProps {
   isOpen: boolean;
   onClose: () => void;
   exerciseHandlers: ExerciseHandlersInterface;
 }
-const biomotorAbilitiesToChoose = [
-  'Strength',
-  'Power - plyometry',
-  'Power - light Balistics',
-  'Power - medium Balistics',
-  'Power - heavy Balistics',
-  'Power endurance',
-  'Speed',
-  'Speed Strength',
-  'Speed Endurance',
-  'Hypertrophy',
-  'Mobility',
-];
-const toolsForTrainingUsage = [
-  'barbell',
-  'landmine',
-  'safety bar',
-  'trap bar',
-  'dumbells',
-  'dumbell',
-  'ketlebells',
-  'kettlebell',
-  'gymnastic rings',
-  'pull-up bar',
-  'dips bars',
-  'parelettes',
-  'medicine ball',
-  'swiss ball',
-  'bicycle',
-  'bodyweight',
-];
 
 export const ModalForMicroCycleAssembly: React.FC<
   ModalForMicroCycleAssemblyProps
@@ -115,11 +88,7 @@ export const ModalForMicroCycleAssembly: React.FC<
       secondaryAbility,
     ]);
 
-    exerciseHandlers.setToolsAvailableToUserForTraining([
-      'barbell',
-      'med-ball',
-      'bodyweight',
-    ]);
+    exerciseHandlers.setToolsAvailableToUserForTraining(toolsForTrainingUsage);
 
     exerciseHandlers.setTrainingDays(updatedTrainingDays);
     console.log(exerciseHandlers.biomotorAbilitiesUserWantsToTarget);
@@ -155,8 +124,8 @@ export const ModalForMicroCycleAssembly: React.FC<
           displayEmpty
         >
           {biomotorAbilitiesToChoose.map(ability => (
-            <MenuItem key={ability} value={ability}>
-              {ability}
+            <MenuItem key={ability.name} value={ability.name}>
+              {ability.name} - {ability.intensity}
             </MenuItem>
           ))}
         </Select>
@@ -168,14 +137,11 @@ export const ModalForMicroCycleAssembly: React.FC<
           onChange={handleSecondaryChange}
           displayEmpty
         >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
           {biomotorAbilitiesToChoose
-            .filter(ability => ability !== primaryAbility) // Filter out the selected primary ability
+            .filter(ability => ability.name !== primaryAbility) // Filter out the selected primary ability
             .map(ability => (
-              <MenuItem key={ability} value={ability}>
-                {ability}
+              <MenuItem key={ability.name} value={ability.name}>
+                {ability.name} - {ability.intensity}
               </MenuItem>
             ))}
         </Select>
