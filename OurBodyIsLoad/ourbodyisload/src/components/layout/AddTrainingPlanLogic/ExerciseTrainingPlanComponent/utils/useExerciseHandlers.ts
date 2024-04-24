@@ -1,30 +1,39 @@
-import { useState, ChangeEvent, useEffect } from "react";
+import { useState, ChangeEvent, useEffect } from 'react';
 import {
   ExerciseBlueprintsInterface,
   ExerciseHandlersInterface,
-} from "../../../../../interfaces/Exercise.interface";
-import { ChosenExercises } from "../../../../../interfaces/Exercise.interface";
-import { TrainingDays } from "../../../../../interfaces/TrainingPlan.interface";
-import { v4 as uuidv4 } from "uuid";
-import { SelectChangeEvent } from "@mui/material";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
-import { fetchExercises } from "../../../../../store/slices/searchSlice";
-import { SearchFunctionalityInterface } from "../../../../../interfaces/Search.interface";
-import { AppDispatch } from "../../../../../store/store";
+} from '../../../../../interfaces/Exercise.interface';
+import { ChosenExercises } from '../../../../../interfaces/Exercise.interface';
+import { TrainingDays } from '../../../../../interfaces/TrainingPlan.interface';
+import { v4 as uuidv4 } from 'uuid';
+import { SelectChangeEvent } from '@mui/material';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { fetchExercises } from '../../../../../store/slices/searchSlice';
+import { SearchFunctionalityInterface } from '../../../../../interfaces/Search.interface';
+import { AppDispatch } from '../../../../../store/store';
 
 const useExerciseHandlers: () => ExerciseHandlersInterface = () => {
-  const [selectedDay, setSelectedDay] = useState<string>("day1");
+  const [selectedDay, setSelectedDay] = useState<string>('day1');
   const [selectedExercise, setSelectedExercise] =
     useState<ExerciseBlueprintsInterface | null>(null);
-  const [daysAWeek, setDaysAWeek] = useState<string>("2");
+  const [daysAWeek, setDaysAWeek] = useState<string>('2');
   const [isExerciseListVisible, setIsExerciseListVisible] = useState(false);
   const [trainingDays, setTrainingDays] = useState<TrainingDays>({});
-  const [sets, setSets] = useState<string>("");
-  const [reps, setReps] = useState<string>("");
-  const [intensity, setIntensity] = useState<string>("");
-  const [periodization, setPeriodization] = useState<string>("strength");
-  const [searchingQuery, setSearchingQuery] = useState<string>("");
+  const [sets, setSets] = useState<string>('');
+  const [reps, setReps] = useState<string>('');
+  const [intensity, setIntensity] = useState<string>('');
+  const [exerciseTempo, setExerciseTempo] = useState<string>('1-1-1');
+  const [periodization, setPeriodization] = useState<string>('undulating');
+  const [durationInWeeksOfTrainingPlan, setDurationInWeeksOfTrainingPlan] =
+    useState('3');
+  const [toolsAvailableToUserForTraining, setToolsAvailableToUserForTraining] =
+    useState<string[]>([]);
+  const [
+    biomotorAbilitiesUserWantsToTarget,
+    setBiomotorAbilitiesUserWantsToTarget,
+  ] = useState<string[]>([]);
+  const [searchingQuery, setSearchingQuery] = useState<string>('');
   const [exerciseTypeModalOpen, setExerciseTypeModalOpen] =
     useState<boolean>(false);
 
@@ -55,10 +64,10 @@ const useExerciseHandlers: () => ExerciseHandlersInterface = () => {
   const handleAddExercise = (exercise: ExerciseBlueprintsInterface) => {
     setSelectedExercise(exercise);
     // Only set default values if user hasn't already provided values
-    setSets((currentSets) => currentSets || exercise.sets || "");
-    setReps((currentReps) => currentReps || exercise.reps || "");
+    setSets(currentSets => currentSets || exercise.sets || '');
+    setReps(currentReps => currentReps || exercise.reps || '');
     setIntensity(
-      (currentIntensity) => currentIntensity || exercise.intensity || ""
+      currentIntensity => currentIntensity || exercise.intensity || ''
     );
     setExerciseTypeModalOpen(true);
   };
@@ -69,12 +78,14 @@ const useExerciseHandlers: () => ExerciseHandlersInterface = () => {
   ) => {
     const chosenExercisesData = {
       timesAWeek: daysAWeek,
-      trainingPlans: Object.keys(trainingDays).map((day) => ({
+      trainingPlans: Object.keys(trainingDays).map(day => ({
         day,
         mainExercises: trainingDays[day].main,
         accessoryExercises: trainingDays[day].accessory,
       })),
       periodization,
+      durationInWeeksOfTrainingPlan,
+      biomotorAbilitiesUserWantsToTarget,
     };
     console.log(chosenExercisesData);
     onChooseExercises(chosenExercisesData);
@@ -86,7 +97,7 @@ const useExerciseHandlers: () => ExerciseHandlersInterface = () => {
     setExerciseTypeModalOpen(false);
   };
 
-  const handleSetExerciseType = (type: "main" | "accessory") => {
+  const handleSetExerciseType = (type: 'main' | 'accessory') => {
     if (!selectedDay || !selectedExercise) return;
     const newExercise = {
       ...selectedExercise,
@@ -95,7 +106,7 @@ const useExerciseHandlers: () => ExerciseHandlersInterface = () => {
       reps,
       intensity,
     };
-    setTrainingDays((prev) => ({
+    setTrainingDays(prev => ({
       ...prev,
       [selectedDay]: {
         ...prev[selectedDay],
@@ -110,7 +121,7 @@ const useExerciseHandlers: () => ExerciseHandlersInterface = () => {
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     exercise: ExerciseBlueprintsInterface
   ) => {
-    if (event.target.value !== "") {
+    if (event.target.value !== '') {
       setSets(event.target.value);
     } else {
       setReps(exercise.sets);
@@ -121,7 +132,7 @@ const useExerciseHandlers: () => ExerciseHandlersInterface = () => {
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     exercise: ExerciseBlueprintsInterface
   ) => {
-    if (event.target.value !== "") {
+    if (event.target.value !== '') {
       setReps(event.target.value);
     } else {
       setReps(exercise.reps);
@@ -142,17 +153,17 @@ const useExerciseHandlers: () => ExerciseHandlersInterface = () => {
   };
   const handleDeleteExercise = (id: string) => {
     console.log(id);
-    setTrainingDays((prevTrainingDays) => {
+    setTrainingDays(prevTrainingDays => {
       const updatedTrainingDays = { ...prevTrainingDays };
 
       // Iterate through each day
-      Object.keys(updatedTrainingDays).forEach((day) => {
+      Object.keys(updatedTrainingDays).forEach(day => {
         updatedTrainingDays[day].main = updatedTrainingDays[day].main.filter(
-          (exercise) => exercise._id !== id
+          exercise => exercise._id !== id
         );
         updatedTrainingDays[day].accessory = updatedTrainingDays[
           day
-        ].accessory.filter((exercise) => exercise._id !== id);
+        ].accessory.filter(exercise => exercise._id !== id);
       });
 
       return updatedTrainingDays;
@@ -173,12 +184,16 @@ const useExerciseHandlers: () => ExerciseHandlersInterface = () => {
     sets,
     reps,
     intensity,
+    exerciseTempo,
     periodization,
     searchingQuery,
     daysAWeek,
     trainingDays,
     exerciseTypeModalOpen,
     isExerciseListVisible,
+    durationInWeeksOfTrainingPlan,
+    toolsAvailableToUserForTraining,
+    biomotorAbilitiesUserWantsToTarget,
     handleDaySelectionChange,
     handleAddExercise,
     handleChooseExercises,
@@ -193,6 +208,7 @@ const useExerciseHandlers: () => ExerciseHandlersInterface = () => {
     setSets,
     setReps,
     setIntensity,
+    setExerciseTempo,
     setPeriodization,
     setExerciseTypeModalOpen,
     setSelectedExercise,
@@ -200,6 +216,9 @@ const useExerciseHandlers: () => ExerciseHandlersInterface = () => {
     setTrainingDays,
     setDaysAWeek,
     setIsExerciseListVisible,
+    setDurationInWeeksOfTrainingPlan,
+    setToolsAvailableToUserForTraining,
+    setBiomotorAbilitiesUserWantsToTarget,
     handleDeleteExercise,
     handleUpdateExercise,
   };

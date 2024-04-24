@@ -56,6 +56,7 @@ export const TablesTemplateComponent: React.FC<
         component={Paper}
         sx={{
           margin: '20px',
+          width: '95%',
           background:
             'linear-gradient(to left, rgba(235, 207, 252, 0.6) 0%, rgba(215, 174, 251, 0.3) 60%, rgba(255, 255, 255, 1) 70%)',
         }}

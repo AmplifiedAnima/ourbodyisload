@@ -4,4 +4,6 @@ export class createSingleExerciseDto {
   sets: string;
   reps: string;
   intensity: string;
+  tempo?: string;
+  toolsUsedInExercise?: string;
 }

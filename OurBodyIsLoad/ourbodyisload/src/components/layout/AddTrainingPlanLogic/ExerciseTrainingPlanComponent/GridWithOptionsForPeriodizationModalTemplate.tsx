@@ -6,6 +6,7 @@ import { SearchInput } from '../../HeaderComponent/SearchInput';
 import { ExerciseHandlersInterface } from '../../../../interfaces/Exercise.interface';
 import arrowRight from './assets/arrow-right-circle.svg';
 import arrowLeft from './assets/arrow-left-circle.svg';
+import { TablesTemplateComponent } from '../TablesTemplateComponent';
 
 interface GridWithOptionsForPeriodizationModalTemplateProps {
   exerciseHandlers: ExerciseHandlersInterface;
@@ -102,9 +103,9 @@ const GridWithOptionsForPeriodizationModalTemplate: React.FC<
               height: '30px',
             }}
           >
-            <MenuItem value="strength">Strength</MenuItem>
-            <MenuItem value="hypertrophy">Hypertrophy</MenuItem>
-            <MenuItem value="power">Power</MenuItem>
+            <MenuItem value="power">Conjugate</MenuItem>
+            <MenuItem value="strength">Undulating</MenuItem>
+            <MenuItem value="hypertrophy">Linear</MenuItem>
           </Select>
         </Grid>
         <Grid container>

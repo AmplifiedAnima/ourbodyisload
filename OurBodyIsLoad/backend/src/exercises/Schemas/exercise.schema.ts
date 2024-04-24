@@ -8,10 +8,13 @@ export class ExerciseBlueprint {
   @Prop({ nullable: true })
   name: string;
 
-  @Prop({ default: 'Default', nullable: true })
+  @Prop({ nullable: true })
+  toolsUsedInExercise: string;
+
+  @Prop({ default: 'default', nullable: true })
   sets: string;
 
-  @Prop({ default: 'Default', nullable: true })
+  @Prop({ default: 'default', nullable: true })
   reps: string;
 
   @Prop({ nullable: true })
@@ -19,6 +22,12 @@ export class ExerciseBlueprint {
 
   @Prop({ nullable: true })
   movementPattern: string;
+
+  @Prop({ nullable: true })
+  exerciseTempo?: string;
+
+  @Prop({ nullable: true })
+  pauseDuration?: string;
 
   @Prop({ nullable: true })
   plane: string;

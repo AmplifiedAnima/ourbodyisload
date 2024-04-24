@@ -71,8 +71,9 @@ export const ModalForCreatingPeriodizedTemplate: React.FC<
             <Box
               sx={{
                 height: { xs: '400px', sm: '550px' }, // 'xs' for phones, 'sm' for tablets and small desktops
-                overflow: 'auto',
-                width: '100%', // Ensures full width on smaller devices
+                overflowY: 'auto', // Enables scrolling only vertically when necessary
+                overflowX: 'hidden',
+
                 maxWidth: { xs: '100%', sm: '768px', md: '1400px' }, // Responsive max width
 
                 '@media (max-width:768px)': {
