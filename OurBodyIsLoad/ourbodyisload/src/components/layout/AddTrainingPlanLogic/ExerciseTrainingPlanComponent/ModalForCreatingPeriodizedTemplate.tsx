@@ -9,6 +9,7 @@ import { ModalForMicroCycleAssembly } from './ModalForMicroCycleAssembly';
 import { TablesTemplateComponent } from '../TablesTemplateComponent';
 import { useDispatch } from 'react-redux';
 import { updateQuery } from '../../../../store/slices/searchSlice';
+import { HeaderWithoutSearch } from '../../HeaderComponent/HeaderWithoutSearch';
 
 interface ModalWithExercisesChoiceProps {
   isOpen: boolean;
@@ -38,6 +39,7 @@ export const ModalForCreatingPeriodizedTemplate: React.FC<
           width: '100vw',
           height: '100vh',
           bgcolor: 'background.paper',
+
           p: 4,
           overflowY: 'auto',
         }}
@@ -62,6 +64,7 @@ export const ModalForCreatingPeriodizedTemplate: React.FC<
                 isOpen={isAssemblyModalOpen}
                 onClose={() => setIsAssemblyModalOpen(false)}
                 exerciseHandlers={exerciseHandlers}
+                handleSearchSubmit={handleSearchSubmit}
               />
             )}
           </Grid>
@@ -128,18 +131,7 @@ export const ModalForCreatingPeriodizedTemplate: React.FC<
           </Button>
         </Box>
 
-        <ExerciseTypeModal
-          open={exerciseHandlers.exerciseTypeModalOpen}
-          onClose={exerciseHandlers.handleCloseExerciseTypeModal}
-          selectedExercise={exerciseHandlers.selectedExercise}
-          sets={exerciseHandlers.sets}
-          reps={exerciseHandlers.reps}
-          intensity={exerciseHandlers.intensity}
-          handleSetsChange={exerciseHandlers.handleSetsChange}
-          handleRepsChange={exerciseHandlers.handleRepsChange}
-          handleIntensityChange={exerciseHandlers.handleIntensityChange}
-          handleSetExerciseType={exerciseHandlers.handleSetExerciseType}
-        />
+        <ExerciseTypeModal exerciseHandlers={exerciseHandlers} />
       </Box>
     </Modal>
   );

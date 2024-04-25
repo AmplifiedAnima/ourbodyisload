@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Grid, Typography, Button, Select, MenuItem, Box } from '@mui/material';
 import { ButtonStylingForApp } from '../../../../globalStyles/ButtonStylingForApp';
 import { SearchInput } from '../../HeaderComponent/SearchInput';
@@ -6,7 +6,7 @@ import { SearchInput } from '../../HeaderComponent/SearchInput';
 import { ExerciseHandlersInterface } from '../../../../interfaces/Exercise.interface';
 import arrowRight from './assets/arrow-right-circle.svg';
 import arrowLeft from './assets/arrow-left-circle.svg';
-import { TablesTemplateComponent } from '../TablesTemplateComponent';
+import ExerciseListComponent from './ExerciseListComponent';
 
 interface GridWithOptionsForPeriodizationModalTemplateProps {
   exerciseHandlers: ExerciseHandlersInterface;
@@ -108,108 +108,11 @@ const GridWithOptionsForPeriodizationModalTemplate: React.FC<
             <MenuItem value="hypertrophy">Linear</MenuItem>
           </Select>
         </Grid>
-        <Grid container>
-          <Grid item>
-            <Typography variant="h6" mb={1}>
-              Available Exercises
-            </Typography>
-            {exerciseHandlers.isExerciseListVisible && (
-              <SearchInput
-                handleInputValue={exerciseHandlers.handleInputValue}
-                onHandleSearchSubmit={handleSearchSubmit}
-                searchQuery={exerciseHandlers.searchingQuery}
-              />
-            )}
-            <Button
-              onClick={() => {
-                exerciseHandlers.setIsExerciseListVisible(
-                  (prev: boolean) => !prev
-                );
-              }}
-              sx={{ ...ButtonStylingForApp }}
-            >
-              {exerciseHandlers.isExerciseListVisible
-                ? 'close'
-                : 'open exercise list'}
-            </Button>
-
-            {exerciseHandlers.isExerciseListVisible ? (
-              <Grid
-                container
-                spacing={4}
-                sx={{
-                  minWidth: '100vw',
-                  maxWidth: 'auto',
-                  height: '300px',
-                  overflow: 'auto',
-                  fontSize: '14px',
-                  '@media (max-width:768px)': {
-                    width: '90%',
-                  },
-                }}
-              >
-                {exerciseHandlers.exercises.map(exercise => (
-                  <React.Fragment key={exercise._id}>
-                    <Grid item xs={8} md={3} mt={isMobile ? 2 : 0}>
-                      <Typography
-                        sx={{ whiteSpace: 'nowrap', fontSize: '14px' }}
-                      >
-                        {exercise.name}
-                      </Typography>
-                    </Grid>
-
-                    <Grid
-                      item
-                      xs={1.5}
-                      sx={{
-                        '@media (max-width:768px)': {
-                          display: 'none',
-                        },
-                      }}
-                    >
-                      <Typography sx={{ fontSize: '14px' }}>
-                        {exercise.type}
-                      </Typography>
-                    </Grid>
-
-                    <Grid
-                      item
-                      xs={3}
-                      sx={{
-                        '@media (max-width:768px)': {
-                          display: 'none',
-                        },
-                      }}
-                    >
-                      <Typography
-                        sx={{
-                          fontSize: '14px',
-                        }}
-                      >
-                        {exercise.movementPattern}
-                      </Typography>
-                    </Grid>
-
-                    <Grid item xs={2}>
-                      <Button
-                        variant="outlined"
-                        size="small"
-                        onClick={() =>
-                          exerciseHandlers.handleAddExercise(exercise)
-                        }
-                        sx={{ ...ButtonStylingForApp, ml: 1, height: '25px' }}
-                      >
-                        ADD
-                      </Button>
-                    </Grid>
-                  </React.Fragment>
-                ))}
-              </Grid>
-            ) : (
-              <Typography variant="body1">Expand</Typography>
-            )}
-          </Grid>
-        </Grid>
+        <ExerciseListComponent
+          isMobile={isMobile}
+          exerciseHandlers={exerciseHandlers}
+          handleSearchSubmit={handleSearchSubmit}
+        />
       </Grid>
     </Box>
   );

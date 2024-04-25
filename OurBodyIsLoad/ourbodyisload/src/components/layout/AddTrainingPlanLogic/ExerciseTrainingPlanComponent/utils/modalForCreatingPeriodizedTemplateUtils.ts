@@ -79,10 +79,10 @@ export const biomotorAbilitiesToChoose = [
   },
   {
     name: 'Mobility',
-    intensity: 'Variable % 1RM',
+    intensity: '',
     duration: 'Varies',
     energySystem: 'Oxidative',
-    contribution: '>60% Aerobic',
+    contribution: '',
   },
 ];
 

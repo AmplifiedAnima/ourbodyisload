@@ -15,11 +15,17 @@ export const mandatoryMainPatterns = [
   'Horizontal Pull',
   'Rotational',
 ];
-
-export const movementPatterns = [
-  ...mandatoryMainPatterns,
+export const trainingModalities = [
   'GAIT',
   'Minor Muscles Accessories(calves)',
+  'Minor Muscles Accessories(rotator-cuff)',
+  'Minor Muscles Accessories(leg-adduction)',
+  'Minor Muscles Accessories(leg-abduction)',
+  'Minor Muscles Accessories(traps)',
+];
+export const movementPatterns = [
+  ...mandatoryMainPatterns,
+  ...trainingModalities,
 ];
 
 export const assignExercises = (

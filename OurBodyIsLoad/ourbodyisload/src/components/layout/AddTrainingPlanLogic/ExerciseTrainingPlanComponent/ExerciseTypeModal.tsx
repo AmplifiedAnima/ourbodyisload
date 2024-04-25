@@ -1,38 +1,15 @@
 import React, { useState } from 'react';
 import { Modal, Button, Typography, Box, TextField } from '@mui/material';
-import { ExerciseBlueprintsInterface } from '../../../../interfaces/Exercise.interface';
+import { ExerciseHandlersInterface } from '../../../../interfaces/Exercise.interface';
 import InputOneRepMaxCounter from './InputOneRepMaxCounter';
 import { ButtonStylingForApp } from '../../../../globalStyles/ButtonStylingForApp';
+
 interface ExerciseTypeModalProps {
-  open: boolean;
-  onClose: () => void;
-  selectedExercise: ExerciseBlueprintsInterface | null;
-  sets: string;
-  reps: string;
-  intensity: string;
-  handleSetsChange: (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-    exercise: ExerciseBlueprintsInterface
-  ) => void;
-  handleRepsChange: (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-    exercise: ExerciseBlueprintsInterface
-  ) => void;
-  handleIntensityChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  handleSetExerciseType: (type: 'main' | 'accessory') => void;
+  exerciseHandlers: ExerciseHandlersInterface;
 }
 
 const ExerciseTypeModal: React.FC<ExerciseTypeModalProps> = ({
-  open,
-  onClose,
-  selectedExercise,
-  sets,
-  reps,
-  intensity,
-  handleSetsChange,
-  handleRepsChange,
-  handleIntensityChange,
-  handleSetExerciseType,
+  exerciseHandlers,
 }) => {
   const [oneRepMaxIntensity, setOneRepMaxIntensity] = useState('');
   const [oneRepMaxEstimateLifted, setOneRepMaxEstimateLifted] = useState('');
@@ -44,7 +21,10 @@ const ExerciseTypeModal: React.FC<ExerciseTypeModalProps> = ({
     setOneRepMaxEstimateLifted(event.target.value);
   };
   return (
-    <Modal open={open} onClose={onClose}>
+    <Modal
+      open={exerciseHandlers.exerciseTypeModalOpen}
+      onClose={exerciseHandlers.handleCloseExerciseTypeModal}
+    >
       <Box
         sx={{
           position: 'absolute',
@@ -66,19 +46,20 @@ const ExerciseTypeModal: React.FC<ExerciseTypeModalProps> = ({
           reps={oneRepMaxEstimateLifted}
           handleChangeOfIntensityInput={handleOneRepMaxIntensityEstimate}
           handleChangeOfRepsLifted={handleOneRepMaxWeightsLiftedEstimate}
-          selectedExercise={selectedExercise}
+          selectedExercise={exerciseHandlers.selectedExercise}
         />
 
         <Typography variant="body1" gutterBottom mb={2}>
-          {selectedExercise ? (
+          {exerciseHandlers.selectedExercise ? (
             <>
               <Typography sx={{ color: 'purple' }}>
-                {selectedExercise.name} | {selectedExercise.movementPattern}{' '}
+                {exerciseHandlers.selectedExercise.name} |{' '}
+                {exerciseHandlers.selectedExercise.movementPattern}{' '}
               </Typography>
 
               <Typography sx={{ color: 'purple' }}>
                 {' '}
-                {selectedExercise.type}{' '}
+                {exerciseHandlers.selectedExercise.type}{' '}
               </Typography>
             </>
           ) : (
@@ -92,11 +73,18 @@ const ExerciseTypeModal: React.FC<ExerciseTypeModalProps> = ({
         <TextField
           label="Sets"
           type="number"
-          value={sets}
-          placeholder={selectedExercise ? selectedExercise.sets : ''}
+          value={exerciseHandlers.sets}
+          placeholder={
+            exerciseHandlers.selectedExercise
+              ? exerciseHandlers.selectedExercise.sets
+              : ''
+          }
           onChange={event => {
-            if (selectedExercise) {
-              handleSetsChange(event, selectedExercise);
+            if (exerciseHandlers.selectedExercise) {
+              exerciseHandlers.handleSetsChange(
+                event,
+                exerciseHandlers.selectedExercise
+              );
             }
           }}
           fullWidth
@@ -109,13 +97,20 @@ const ExerciseTypeModal: React.FC<ExerciseTypeModalProps> = ({
         <TextField
           label="Reps"
           type="number"
-          value={reps}
+          value={exerciseHandlers.reps}
           onChange={event => {
-            if (selectedExercise) {
-              handleRepsChange(event, selectedExercise);
+            if (exerciseHandlers.selectedExercise) {
+              exerciseHandlers.handleRepsChange(
+                event,
+                exerciseHandlers.selectedExercise
+              );
             }
           }}
-          placeholder={selectedExercise ? selectedExercise.reps : ''}
+          placeholder={
+            exerciseHandlers.selectedExercise
+              ? exerciseHandlers.selectedExercise.reps
+              : ''
+          }
           fullWidth
           margin="normal"
           inputProps={{ min: 1, max: 20 }}
@@ -126,9 +121,13 @@ const ExerciseTypeModal: React.FC<ExerciseTypeModalProps> = ({
         <TextField
           label="Intensity (kg)"
           type="number"
-          value={intensity}
-          placeholder={selectedExercise ? selectedExercise.intensity : ''}
-          onChange={handleIntensityChange}
+          value={exerciseHandlers.intensity}
+          placeholder={
+            exerciseHandlers.selectedExercise
+              ? exerciseHandlers.selectedExercise.intensity
+              : ''
+          }
+          onChange={exerciseHandlers.handleIntensityChange}
           fullWidth
           margin="normal"
           inputProps={{ min: 0, step: 0.5 }}
@@ -136,14 +135,14 @@ const ExerciseTypeModal: React.FC<ExerciseTypeModalProps> = ({
         <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
           <Button
             variant="outlined"
-            onClick={() => handleSetExerciseType('main')}
+            onClick={() => exerciseHandlers.handleSetExerciseType('main')}
             sx={{ ...ButtonStylingForApp, margin: '10px' }}
           >
             Add as main
           </Button>
           <Button
             variant="outlined"
-            onClick={() => handleSetExerciseType('accessory')}
+            onClick={() => exerciseHandlers.handleSetExerciseType('accessory')}
             sx={{ ...ButtonStylingForApp }}
           >
             Add as accessory

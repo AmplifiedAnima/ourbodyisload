@@ -12,6 +12,7 @@ import {
 import { ButtonStylingForApp } from '../../../../globalStyles/ButtonStylingForApp';
 import {
   assignExercises,
+  mandatoryMainPatterns,
   movementPatterns,
 } from './utils/assignExercisesBasedOnMovementPatterns';
 import {
@@ -24,21 +25,32 @@ import {
   biomotorAbilitiesToChoose,
   toolsForTrainingUsage,
 } from './utils/modalForCreatingPeriodizedTemplateUtils';
-
 interface ModalForMicroCycleAssemblyProps {
   isOpen: boolean;
   onClose: () => void;
   exerciseHandlers: ExerciseHandlersInterface;
+  handleSearchSubmit: () => void;
 }
 
 export const ModalForMicroCycleAssembly: React.FC<
   ModalForMicroCycleAssemblyProps
-> = ({ isOpen, onClose, exerciseHandlers }) => {
+> = ({ isOpen, onClose, exerciseHandlers, handleSearchSubmit }) => {
   const [primaryAbility, setPrimaryAbility] = useState('');
   const [secondaryAbility, setSecondaryAbility] = useState('');
 
   const [selectedTools, setSelectedTools] = useState<string[]>([]);
 
+  const [selectedPatterns, setSelectedPatterns] = useState<string[]>([]);
+  const maxPatterns = 3;
+
+  const handlePatternChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const pattern = event.target.name;
+    if (selectedPatterns.includes(pattern)) {
+      setSelectedPatterns(prev => prev.filter(p => p !== pattern));
+    } else if (selectedPatterns.length < maxPatterns) {
+      setSelectedPatterns(prev => [...prev, pattern]);
+    }
+  };
   const handleToolChange = (event: any) => {
     const tool = event.target.name;
     setSelectedTools(prevSelectedTools =>
@@ -98,85 +110,110 @@ export const ModalForMicroCycleAssembly: React.FC<
 
   return (
     <Modal open={isOpen} onClose={onClose}>
-      <Box
-        sx={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          width: 'auto', // Adjusted to 'auto' for padding to define the size
-          bgcolor: 'background.paper',
-          p: 4, // Increased padding for better spacing
-          borderRadius: 2,
-          boxShadow: 24,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center', // Added for better alignment
-          gap: 2, // Adds space between child elements
-        }}
-      >
-        <Typography variant="body1" gutterBottom mb={0.5}>
-          choose primary bio-motor ability
-        </Typography>
-        <Select
-          value={primaryAbility}
-          onChange={handlePrimaryChange}
-          displayEmpty
+      <>
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: 'auto', // Adjusted to 'auto' for padding to define the size
+            bgcolor: 'background.paper',
+            p: 4, // Increased padding for better spacing
+            borderRadius: 2,
+            boxShadow: 24,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center', // Added for better alignment
+            gap: 2, // Adds space between child elements
+          }}
         >
-          {biomotorAbilitiesToChoose.map(ability => (
-            <MenuItem key={ability.name} value={ability.name}>
-              {ability.name} - {ability.intensity}
-            </MenuItem>
-          ))}
-        </Select>
-        <Typography variant="body1" gutterBottom mb={0.5}>
-          choose secondary bio-motor ability
-        </Typography>
-        <Select
-          value={secondaryAbility}
-          onChange={handleSecondaryChange}
-          displayEmpty
-        >
-          {biomotorAbilitiesToChoose
-            .filter(ability => ability.name !== primaryAbility) // Filter out the selected primary ability
-            .map(ability => (
+          <Typography variant="body1" gutterBottom mb={0.5}>
+            choose primary bio-motor ability
+          </Typography>
+          <Select
+            value={primaryAbility}
+            onChange={handlePrimaryChange}
+            displayEmpty
+          >
+            {biomotorAbilitiesToChoose.map(ability => (
               <MenuItem key={ability.name} value={ability.name}>
                 {ability.name} - {ability.intensity}
               </MenuItem>
             ))}
-        </Select>
+          </Select>
+          <Typography variant="body1" gutterBottom mb={0.5}>
+            choose secondary bio-motor ability
+          </Typography>
+          <Select
+            value={secondaryAbility}
+            onChange={handleSecondaryChange}
+            displayEmpty
+          >
+            {biomotorAbilitiesToChoose
+              .filter(ability => ability.name !== primaryAbility) // Filter out the selected primary ability
+              .map(ability => (
+                <MenuItem key={ability.name} value={ability.name}>
+                  {ability.name} - {ability.intensity}
+                </MenuItem>
+              ))}
+          </Select>
 
-        <Typography variant="body1" gutterBottom mb={0.5}>
-          choose tools available to use
-        </Typography>
-        <FormGroup
-          sx={{
-            height: '200px',
-            overflowY: 'auto',
-          }}
-        >
-          {toolsForTrainingUsage.map(tool => (
-            <FormControlLabel
-              key={tool}
-              control={
-                <Checkbox
-                  checked={selectedTools.includes(tool)}
-                  onChange={handleToolChange}
-                  name={tool}
-                />
-              }
-              label={tool}
-            />
-          ))}
-        </FormGroup>
-
-        <Button
-          sx={{ ...ButtonStylingForApp, width: 'auto' }}
-          onClick={handleAssembleClick}
-        >
-          Assemble based on Movement pattern
-        </Button>
-      </Box>
+          <Typography variant="body1" gutterBottom mb={0.5}>
+            choose tools available to use
+          </Typography>
+          <FormGroup
+            sx={{
+              height: '200px',
+              overflowY: 'auto',
+            }}
+          >
+            {toolsForTrainingUsage.map(tool => (
+              <FormControlLabel
+                key={tool}
+                control={
+                  <Checkbox
+                    checked={selectedTools.includes(tool)}
+                    onChange={handleToolChange}
+                    name={tool}
+                  />
+                }
+                label={tool}
+              />
+            ))}
+          </FormGroup>
+          <Typography variant="body1">
+            {' '}
+            Choose movement pattern on main exercises
+          </Typography>
+          <FormGroup
+            sx={{
+              height: '200px',
+              overflowY: 'auto',
+            }}
+          >
+            {mandatoryMainPatterns.map(pattern => (
+              <FormControlLabel
+                key={pattern}
+                control={
+                  <Checkbox
+                    checked={selectedPatterns.includes(pattern)}
+                    onChange={handlePatternChange}
+                    name={pattern}
+                  />
+                }
+                label={pattern}
+              />
+            ))}
+          </FormGroup>
+          <Button
+            sx={{ ...ButtonStylingForApp, width: 'auto' }}
+            onClick={handleAssembleClick}
+          >
+            Assemble based on Movement pattern
+          </Button>
+        </Box>
+      </>
     </Modal>
   );
 };
