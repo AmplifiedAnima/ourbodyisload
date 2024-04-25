@@ -103,5 +103,8 @@ export const toolsForTrainingUsage = [
     'swiss ball',
     'bicycle',
     'bodyweight',
+    'treadmill',
+    'airbike',
+    'rowing machine',
   ];
   

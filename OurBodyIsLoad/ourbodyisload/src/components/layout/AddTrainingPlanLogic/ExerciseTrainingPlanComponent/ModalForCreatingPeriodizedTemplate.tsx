@@ -5,7 +5,7 @@ import { ButtonStylingForApp } from '../../../../globalStyles/ButtonStylingForAp
 import ExerciseTypeModal from './ExerciseTypeModal';
 import GridWithOptionsForPeriodizationModalTemplate from './GridWithOptionsForPeriodizationModalTemplate';
 import useExerciseHandlers from './utils/useExerciseHandlers';
-import { ModalForMicroCycleAssembly } from './ModalForMicroCycleAssembly';
+import { ModalForMicroCycleAssembly } from './ModalForMicroCycleAssembly/ModalForMicroCycleAssembly';
 import { TablesTemplateComponent } from '../TablesTemplateComponent';
 import { useDispatch } from 'react-redux';
 import { updateQuery } from '../../../../store/slices/searchSlice';
@@ -70,7 +70,6 @@ export const ModalForCreatingPeriodizedTemplate: React.FC<
           </Grid>
 
           <Grid item xs={10}>
-            <Typography variant="h6">Template</Typography>
             <Box
               sx={{
                 height: { xs: '400px', sm: '550px' }, // 'xs' for phones, 'sm' for tablets and small desktops

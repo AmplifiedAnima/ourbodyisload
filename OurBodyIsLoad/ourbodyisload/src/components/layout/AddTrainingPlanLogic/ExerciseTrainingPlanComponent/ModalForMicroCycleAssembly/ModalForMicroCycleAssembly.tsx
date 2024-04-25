@@ -9,22 +9,23 @@ import {
   Select,
   Typography,
 } from '@mui/material';
-import { ButtonStylingForApp } from '../../../../globalStyles/ButtonStylingForApp';
+import { ButtonStylingForApp } from '../../../../../globalStyles/ButtonStylingForApp';
 import {
   assignExercises,
   mandatoryMainPatterns,
   movementPatterns,
-} from './utils/assignExercisesBasedOnMovementPatterns';
+} from '../utils/assignExercisesBasedOnMovementPatterns';
 import {
   ChosenExercises,
   ExerciseHandlersInterface,
-} from '../../../../interfaces/Exercise.interface';
-import { TrainingDays } from '../../../../interfaces/TrainingPlan.interface';
-import { useState } from 'react';
+} from '../../../../../interfaces/Exercise.interface';
+import { TrainingDays } from '../../../../../interfaces/TrainingPlan.interface';
+import { ChangeEvent, useState } from 'react';
 import {
   biomotorAbilitiesToChoose,
   toolsForTrainingUsage,
-} from './utils/modalForCreatingPeriodizedTemplateUtils';
+} from '../utils/modalForCreatingPeriodizedTemplateUtils';
+import { CustomSelect } from './CustomSelectComponent';
 interface ModalForMicroCycleAssemblyProps {
   isOpen: boolean;
   onClose: () => void;
@@ -40,17 +41,10 @@ export const ModalForMicroCycleAssembly: React.FC<
 
   const [selectedTools, setSelectedTools] = useState<string[]>([]);
 
-  const [selectedPatterns, setSelectedPatterns] = useState<string[]>([]);
-  const maxPatterns = 3;
+  const [numberOfMainExercises, setNumberOfMainExercises] = useState(1);
+  const [numberOfAccessoryExercises, setNumberOfAccessoryExercises] =
+    useState(3);
 
-  const handlePatternChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const pattern = event.target.name;
-    if (selectedPatterns.includes(pattern)) {
-      setSelectedPatterns(prev => prev.filter(p => p !== pattern));
-    } else if (selectedPatterns.length < maxPatterns) {
-      setSelectedPatterns(prev => [...prev, pattern]);
-    }
-  };
   const handleToolChange = (event: any) => {
     const tool = event.target.name;
     setSelectedTools(prevSelectedTools =>
@@ -107,7 +101,13 @@ export const ModalForMicroCycleAssembly: React.FC<
     console.log(updatedTrainingDays);
     onClose();
   };
+  const handleMainExercisesChange = (event: any) => {
+    setNumberOfMainExercises(event.target.value);
+  };
 
+  const handleAccessoryExercisesChange = (event: any) => {
+    setNumberOfAccessoryExercises(event.target.value);
+  };
   return (
     <Modal open={isOpen} onClose={onClose}>
       <>
@@ -128,37 +128,55 @@ export const ModalForMicroCycleAssembly: React.FC<
             gap: 2, // Adds space between child elements
           }}
         >
-          <Typography variant="body1" gutterBottom mb={0.5}>
-            choose primary bio-motor ability
-          </Typography>
-          <Select
+          <CustomSelect
+            label="Choose primary bio-motor ability"
             value={primaryAbility}
             onChange={handlePrimaryChange}
-            displayEmpty
-          >
-            {biomotorAbilitiesToChoose.map(ability => (
-              <MenuItem key={ability.name} value={ability.name}>
-                {ability.name} - {ability.intensity}
-              </MenuItem>
-            ))}
-          </Select>
-          <Typography variant="body1" gutterBottom mb={0.5}>
-            choose secondary bio-motor ability
-          </Typography>
-          <Select
+            options={biomotorAbilitiesToChoose.map(ability => ({
+              label: `${ability.name} - ${ability.intensity}`,
+              value: ability.name,
+            }))}
+          />
+
+          <CustomSelect
+            label="Choose secondary bio-motor ability"
             value={secondaryAbility}
             onChange={handleSecondaryChange}
-            displayEmpty
+            options={biomotorAbilitiesToChoose
+              .filter(ability => ability.name !== primaryAbility)
+              .map(ability => ({
+                label: `${ability.name} - ${ability.intensity}`,
+                value: ability.name,
+              }))}
+          />
+          <Box
+            sx={{
+              display: 'flex',
+              width: '100%',
+              justifyContent: 'space-between',
+              gap: 2,
+            }}
           >
-            {biomotorAbilitiesToChoose
-              .filter(ability => ability.name !== primaryAbility) // Filter out the selected primary ability
-              .map(ability => (
-                <MenuItem key={ability.name} value={ability.name}>
-                  {ability.name} - {ability.intensity}
-                </MenuItem>
-              ))}
-          </Select>
+            <CustomSelect
+              label="Set the number of main exercises"
+              value={numberOfMainExercises}
+              onChange={handleMainExercisesChange}
+              options={[1, 2, 3, 4].map(option => ({
+                label: option.toString(),
+                value: option,
+              }))}
+            />
 
+            <CustomSelect
+              label="Set the number of accessory exercises"
+              value={numberOfAccessoryExercises}
+              onChange={handleAccessoryExercisesChange}
+              options={[1, 2, 3, 4, 5, 7, 8].map(option => ({
+                label: option.toString(),
+                value: option,
+              }))}
+            />
+          </Box>
           <Typography variant="body1" gutterBottom mb={0.5}>
             choose tools available to use
           </Typography>
@@ -182,30 +200,7 @@ export const ModalForMicroCycleAssembly: React.FC<
               />
             ))}
           </FormGroup>
-          <Typography variant="body1">
-            {' '}
-            Choose movement pattern on main exercises
-          </Typography>
-          <FormGroup
-            sx={{
-              height: '200px',
-              overflowY: 'auto',
-            }}
-          >
-            {mandatoryMainPatterns.map(pattern => (
-              <FormControlLabel
-                key={pattern}
-                control={
-                  <Checkbox
-                    checked={selectedPatterns.includes(pattern)}
-                    onChange={handlePatternChange}
-                    name={pattern}
-                  />
-                }
-                label={pattern}
-              />
-            ))}
-          </FormGroup>
+
           <Button
             sx={{ ...ButtonStylingForApp, width: 'auto' }}
             onClick={handleAssembleClick}
