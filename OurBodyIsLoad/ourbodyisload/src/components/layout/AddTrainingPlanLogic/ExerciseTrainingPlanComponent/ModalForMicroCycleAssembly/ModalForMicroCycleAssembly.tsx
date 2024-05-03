@@ -4,27 +4,23 @@ import {
   Checkbox,
   FormControlLabel,
   FormGroup,
-  MenuItem,
   Modal,
-  Select,
   Typography,
 } from '@mui/material';
 import { ButtonStylingForApp } from '../../../../../globalStyles/ButtonStylingForApp';
-import {
-  assignExercises,
-  mandatoryMainPatterns,
-  movementPatterns,
-} from '../utils/assignExercisesBasedOnMovementPatterns';
+import { movementPatterns } from '../utils/assignExercisedBasedOnMovementPatternsVariables';
+import { assignExercises } from '../utils/assignExercisesBasedOnMovementPatterns';
 import {
   ChosenExercises,
+  ExerciseBlueprintsInterface,
   ExerciseHandlersInterface,
 } from '../../../../../interfaces/Exercise.interface';
 import { TrainingDays } from '../../../../../interfaces/TrainingPlan.interface';
-import { ChangeEvent, useState } from 'react';
+import { useState } from 'react';
 import {
   biomotorAbilitiesToChoose,
   toolsForTrainingUsage,
-} from '../utils/modalForCreatingPeriodizedTemplateUtils';
+} from './modalForCreatingPeriodizedTemplateUtils';
 import { CustomSelect } from './CustomSelectComponent';
 interface ModalForMicroCycleAssemblyProps {
   isOpen: boolean;
@@ -72,13 +68,20 @@ export const ModalForMicroCycleAssembly: React.FC<
       })),
       periodization: exerciseHandlers.periodization,
     };
+    exerciseHandlers.setBiomotorAbilitiesUserWantsToTarget([
+      primaryAbility,
+      secondaryAbility,
+    ]);
+    exerciseHandlers.setToolsAvailableToUserForTraining(selectedTools);
 
     const updatedChosenExercises = assignExercises(
       chosenExercises,
       movementPatterns,
       exerciseHandlers,
-      exerciseHandlers.biomotorAbilitiesUserWantsToTarget,
-      exerciseHandlers.toolsAvailableToUserForTraining
+      [primaryAbility, secondaryAbility],
+      selectedTools,
+      numberOfMainExercises,
+      numberOfAccessoryExercises
     );
 
     const updatedTrainingDays: TrainingDays = {};
@@ -94,10 +97,7 @@ export const ModalForMicroCycleAssembly: React.FC<
       secondaryAbility,
     ]);
 
-    exerciseHandlers.setToolsAvailableToUserForTraining(toolsForTrainingUsage);
-
     exerciseHandlers.setTrainingDays(updatedTrainingDays);
-    console.log(exerciseHandlers.biomotorAbilitiesUserWantsToTarget);
     console.log(updatedTrainingDays);
     onClose();
   };
@@ -133,7 +133,7 @@ export const ModalForMicroCycleAssembly: React.FC<
             value={primaryAbility}
             onChange={handlePrimaryChange}
             options={biomotorAbilitiesToChoose.map(ability => ({
-              label: `${ability.name} - ${ability.intensity}`,
+              label: `${ability.name}  ${ability.intensity}  ${ability.energySystem}`,
               value: ability.name,
             }))}
           />
@@ -145,7 +145,7 @@ export const ModalForMicroCycleAssembly: React.FC<
             options={biomotorAbilitiesToChoose
               .filter(ability => ability.name !== primaryAbility)
               .map(ability => ({
-                label: `${ability.name} - ${ability.intensity}`,
+                label: `${ability.name} ${ability.intensity} `,
                 value: ability.name,
               }))}
           />
@@ -158,7 +158,7 @@ export const ModalForMicroCycleAssembly: React.FC<
             }}
           >
             <CustomSelect
-              label="Set the number of main exercises"
+              label="Set the number of main exercises per unit"
               value={numberOfMainExercises}
               onChange={handleMainExercisesChange}
               options={[1, 2, 3, 4].map(option => ({
@@ -168,7 +168,7 @@ export const ModalForMicroCycleAssembly: React.FC<
             />
 
             <CustomSelect
-              label="Set the number of accessory exercises"
+              label="Set the number of accessory per unit"
               value={numberOfAccessoryExercises}
               onChange={handleAccessoryExercisesChange}
               options={[1, 2, 3, 4, 5, 7, 8].map(option => ({

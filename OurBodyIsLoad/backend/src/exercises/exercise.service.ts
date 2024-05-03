@@ -66,4 +66,16 @@ export class exerciseService {
     const exercise = this.exerciseModels.create(createExerciseDto);
     return exercise;
   }
+  async createManyExercises(
+    createExercisesDto: createSingleExerciseDto[],
+  ): Promise<ExerciseBlueprint[]> {
+    // Inserts multiple exercises at once
+    if (!Array.isArray(createExercisesDto) || createExercisesDto.length === 0) {
+      throw new Error(
+        'Input must be an array of exercises with at least one element',
+      );
+    }
+    const exercises = await this.exerciseModels.insertMany(createExercisesDto);
+    return exercises as ExerciseBlueprint[];
+  }
 }

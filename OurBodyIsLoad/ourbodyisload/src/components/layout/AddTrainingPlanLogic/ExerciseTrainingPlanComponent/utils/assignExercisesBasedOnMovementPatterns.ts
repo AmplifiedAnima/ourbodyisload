@@ -5,113 +5,125 @@ import {
 import { ExerciseBlueprintsInterface } from '../../../../../interfaces/Exercise.interface';
 import { v4 as uuidv4 } from 'uuid';
 
-export const mandatoryMainPatterns = [
-  'Squat',
-  'Lunge',
-  'Hinge',
-  'Vertical Push',
-  'Horizontal Push',
-  'Vertical Pull',
-  'Horizontal Pull',
-  'Rotational',
-];
-export const trainingModalities = [
-  'GAIT',
-  'Minor Muscles Accessories(calves)',
-  'Minor Muscles Accessories(rotator-cuff)',
-  'Minor Muscles Accessories(leg-adduction)',
-  'Minor Muscles Accessories(leg-abduction)',
-  'Minor Muscles Accessories(traps)',
-];
-export const movementPatterns = [
-  ...mandatoryMainPatterns,
-  ...trainingModalities,
-];
-
 export const assignExercises = (
   chosenExercises: ChosenExercises,
   movementPatterns: string[],
   exerciseHandlers: ExerciseHandlersInterface,
   biomotorAbilitiesUserWantsToTarget: string[],
-  toolsUserHaveForDisposal: string[]
+  toolsUserHaveForDisposal: string[],
+  numberOfMainExercisesPerUnit: number,
+  numberOfAccesoryExercisesPerUnit: number
 ): ChosenExercises => {
   const { trainingPlans } = chosenExercises;
   if (!trainingPlans) {
     console.error('Training plans are undefined!');
     return chosenExercises;
   }
-  console.log(biomotorAbilitiesUserWantsToTarget);
-  console.log(toolsUserHaveForDisposal);
-  // Get existing exercises from the exerciseHandlers
-  const { exercises } = exerciseHandlers;
 
-  // Function to create a new exercise based on a movement pattern
+  const { exercises } = exerciseHandlers;
   const createExerciseFromPattern = (
-    pattern: string
+    pattern: string,
+    availableTools: string[]
   ): ExerciseBlueprintsInterface | null => {
-    // Find an existing exercise with the matching movement pattern
-    const matchingExercise = exercises.find(
-      exercise => exercise.movementPattern === pattern
-    );
+    const matchingExercise = exercises.find(exercise => {
+      console.log(
+        `Checking exercise for pattern "${pattern}" with required tools:`,
+        exercise.toolsUsedInExercise
+      );
+
+      if (exercise.movementPattern !== pattern) {
+        return false;
+      }
+
+      // Ensure toolsUsedInExercise is always treated as an array, defaulting to an empty array if not set
+      const requiredTools = Array.isArray(exercise.toolsUsedInExercise)
+        ? exercise.toolsUsedInExercise
+        : [];
+
+      if (requiredTools.length === 0) {
+        // If no specific tools are required, the exercise is considered universal
+        return true;
+      }
+
+      // Check if all required tools of the exercise are included in the available tools
+      return requiredTools.every(tool => availableTools.includes(tool));
+    });
+
     if (matchingExercise) {
-      // Clone the existing exercise and generate a unique ID
+      console.log(`Selected matching exercise: ${matchingExercise.name}`);
       return {
         ...matchingExercise,
-        _id: uuidv4(), // Generate a unique ID here
+        _id: uuidv4(), // Generate a unique ID
       };
-    } else {
-      // If no matching exercise found, return null
-      return null;
     }
+    return null;
   };
 
-  // Iterate over each training plan
   const updatedTrainingPlans = trainingPlans.map(trainingPlan => {
     const { mainExercises, accessoryExercises } = trainingPlan;
 
-    // Filter main exercises that do not match any movement pattern
-    const newMainExercises = mainExercises.filter(
-      exercise => !movementPatterns.includes(exercise.movementPattern)
-    );
+    const newMainExercises = [];
+    const newAccessoryExercises = [];
 
-    // Filter accessory exercises that do not match any movement pattern
-    const newAccessoryExercises = accessoryExercises.filter(
-      exercise => !movementPatterns.includes(exercise.movementPattern)
-    );
-
-    // Assign new exercises based on movement patterns
+    // Process each movement pattern to assign appropriate exercises
     movementPatterns.forEach(pattern => {
-      // Add new main exercises
       if (
+        newMainExercises.length < numberOfMainExercisesPerUnit &&
         !mainExercises.some(exercise => exercise.movementPattern === pattern)
       ) {
-        const newMainExercise = createExerciseFromPattern(pattern);
+        const newMainExercise = createExerciseFromPattern(
+          pattern,
+          toolsUserHaveForDisposal
+        );
         if (newMainExercise) {
           newMainExercises.push(newMainExercise);
         }
       }
 
-      // Add new accessory exercises
       if (
+        newAccessoryExercises.length < numberOfAccesoryExercisesPerUnit &&
         !accessoryExercises.some(
           exercise => exercise.movementPattern === pattern
         )
       ) {
-        const newAccessoryExercise = createExerciseFromPattern(pattern);
+        const newAccessoryExercise = createExerciseFromPattern(
+          pattern,
+          toolsUserHaveForDisposal
+        );
         if (newAccessoryExercise) {
           newAccessoryExercises.push(newAccessoryExercise);
         }
       }
     });
 
+    // Ensure that the number of exercises does not exceed the planned amount
+    if (newMainExercises.length < numberOfMainExercisesPerUnit) {
+      newMainExercises.push(
+        ...mainExercises.slice(
+          0,
+          numberOfMainExercisesPerUnit - newMainExercises.length
+        )
+      );
+    }
+    if (newAccessoryExercises.length < numberOfAccesoryExercisesPerUnit) {
+      newAccessoryExercises.push(
+        ...accessoryExercises.slice(
+          0,
+          numberOfAccesoryExercisesPerUnit - newAccessoryExercises.length
+        )
+      );
+    }
+
     return {
       ...trainingPlan,
-      mainExercises: newMainExercises,
-      accessoryExercises: newAccessoryExercises,
+      mainExercises: newMainExercises.slice(0, numberOfMainExercisesPerUnit),
+      accessoryExercises: newAccessoryExercises.slice(
+        0,
+        numberOfAccesoryExercisesPerUnit
+      ),
     };
   });
 
-  // Return the chosen exercises with updated training plans
   return {
     ...chosenExercises,
     trainingPlans: updatedTrainingPlans,

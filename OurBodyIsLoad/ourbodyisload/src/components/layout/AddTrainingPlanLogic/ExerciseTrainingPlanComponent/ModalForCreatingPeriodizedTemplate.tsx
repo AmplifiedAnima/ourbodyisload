@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Modal, Button, Box, Grid, Typography } from '@mui/material';
+import { Modal, Button, Box, Grid } from '@mui/material';
 import { ChosenExercises } from '../../../../interfaces/Exercise.interface';
 import { ButtonStylingForApp } from '../../../../globalStyles/ButtonStylingForApp';
 import ExerciseTypeModal from './ExerciseTypeModal';
@@ -9,7 +9,6 @@ import { ModalForMicroCycleAssembly } from './ModalForMicroCycleAssembly/ModalFo
 import { TablesTemplateComponent } from '../TablesTemplateComponent';
 import { useDispatch } from 'react-redux';
 import { updateQuery } from '../../../../store/slices/searchSlice';
-import { HeaderWithoutSearch } from '../../HeaderComponent/HeaderWithoutSearch';
 
 interface ModalWithExercisesChoiceProps {
   isOpen: boolean;
@@ -44,50 +43,49 @@ export const ModalForCreatingPeriodizedTemplate: React.FC<
           overflowY: 'auto',
         }}
       >
-        <GridWithOptionsForPeriodizationModalTemplate
-          exerciseHandlers={exerciseHandlers}
-          handleSearchSubmit={handleSearchSubmit}
-        />
         <Grid>
-          <Grid item md={12} sx={{ maxWidth: 'auto' }}>
-            <Button
-              sx={{
-                ...ButtonStylingForApp,
-                mt: 2,
-              }}
-              onClick={() => setIsAssemblyModalOpen(true)}
-            >
-              Assemble training cycle
-            </Button>
-            {isAssemblyModalOpen && (
-              <ModalForMicroCycleAssembly
-                isOpen={isAssemblyModalOpen}
-                onClose={() => setIsAssemblyModalOpen(false)}
-                exerciseHandlers={exerciseHandlers}
-                handleSearchSubmit={handleSearchSubmit}
-              />
-            )}
-          </Grid>
-
           <Grid item xs={10}>
             <Box
               sx={{
-                height: { xs: '400px', sm: '550px' }, // 'xs' for phones, 'sm' for tablets and small desktops
-                overflowY: 'auto', // Enables scrolling only vertically when necessary
+                height: { xs: '400px', sm: '550px' },
+                overflowY: 'auto',
                 overflowX: 'hidden',
 
-                maxWidth: { xs: '100%', sm: '768px', md: '1400px' }, // Responsive max width
+                maxWidth: { xs: '100%', sm: '768px', md: '1400px' },
 
                 '@media (max-width:768px)': {
-                  maxWidth: '500px', // Ensure Box doesn't exceed the screen size on small devices
+                  maxWidth: '500px',
                   width: '90%',
                 },
                 '@media (min-width:769px)': {
-                  height: '550px', // Larger height for larger devices
+                  height: '550px',
                   width: '90%',
                 },
               }}
             >
+              <GridWithOptionsForPeriodizationModalTemplate
+                exerciseHandlers={exerciseHandlers}
+                handleSearchSubmit={handleSearchSubmit}
+              />
+              <Grid item md={12} sx={{ maxWidth: 'auto' }}>
+                <Button
+                  sx={{
+                    ...ButtonStylingForApp,
+                    mt: 2,
+                  }}
+                  onClick={() => setIsAssemblyModalOpen(true)}
+                >
+                  Assemble training cycle
+                </Button>
+                {isAssemblyModalOpen && (
+                  <ModalForMicroCycleAssembly
+                    isOpen={isAssemblyModalOpen}
+                    onClose={() => setIsAssemblyModalOpen(false)}
+                    exerciseHandlers={exerciseHandlers}
+                    handleSearchSubmit={handleSearchSubmit}
+                  />
+                )}
+              </Grid>
               {Object.keys(exerciseHandlers.trainingDays).map(day => (
                 <TablesTemplateComponent
                   key={day}

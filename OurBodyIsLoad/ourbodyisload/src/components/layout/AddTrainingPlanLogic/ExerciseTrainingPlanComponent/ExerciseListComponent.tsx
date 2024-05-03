@@ -18,7 +18,7 @@ const ExerciseListComponent: React.FC<ExerciseListComponentProps> = ({
   return (
     <Grid container>
       <Grid item>
-        <Typography variant="h6" mb={1}>
+        <Typography variant="body1" mb={1}>
           Available Exercises
         </Typography>
         {exerciseHandlers.isExerciseListVisible && (

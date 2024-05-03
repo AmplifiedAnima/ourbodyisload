@@ -32,4 +32,13 @@ export class exerciseController {
   ): Promise<ExerciseBlueprint> {
     return this.exerciseServicePrivate.createExercise(createSingleExercise);
   }
+
+  @Post('/many-create-exercises')
+  async createMultipleExercises(
+    @Body() createExercisesDtoArray: createSingleExerciseDto[],
+  ): Promise<ExerciseBlueprint[]> {
+    return this.exerciseServicePrivate.createManyExercises(
+      createExercisesDtoArray,
+    );
+  }
 }

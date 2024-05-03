@@ -11,6 +11,8 @@ export interface ExerciseBlueprintsInterface {
   movementPattern: string;
   plane: string;
   type: string;
+  toolsUsedInExercise?: string[];
+  tempo?: string;
 }
 
 export interface ChosenExercises {

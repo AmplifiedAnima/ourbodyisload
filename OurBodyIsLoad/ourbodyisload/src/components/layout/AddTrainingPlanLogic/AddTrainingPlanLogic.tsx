@@ -1,6 +1,6 @@
 import { Box, Button, Grid, Typography } from "@mui/material";
 import { ButtonStylingForApp } from "../../../globalStyles/ButtonStylingForApp";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import { CycleInterface } from "../../../interfaces/Cycle.interface";
 import { TablesTemplateComponent } from "./TablesTemplateComponent";
 import ErrorHandlerDisplayComponent from "../ErrorAndNotificationHandlers/ErrorHandlerDisplayComponent";
@@ -43,7 +43,7 @@ export const AddTrainingPlanLogic = () => {
     setUserChosenExercises(chosenExercises);
   };
 
-  const fetchData = async (endpoint: string, userData: ChosenExercises) => {
+  const postUserMicrocycle = async (endpoint: string, userData: ChosenExercises) => {
     try {
       const response = await fetch(endpoint, {
         method: "POST",
@@ -58,7 +58,7 @@ export const AddTrainingPlanLogic = () => {
         savePeriodizedTraining(data);
 
         console.log(`reponse`, data);
-        setNotification("you created a periodized training structure ! ");
+        setNotification("training plan saved ! ");
         setNotificationOpen(true);
 
         console.log(userChosenExercises);
@@ -79,7 +79,7 @@ export const AddTrainingPlanLogic = () => {
     if (typeof payload === "undefined") {
       payload = { timesAWeek: "0", trainingPlans: [], periodization: "" };
     } else {
-      fetchData(
+      postUserMicrocycle(
         `http://localhost:3000/training-plans/periodized-training`,
         payload
       );
@@ -121,7 +121,7 @@ export const AddTrainingPlanLogic = () => {
           onClick={handleCreatePeriodizedTrainingPlan}
           sx={{ ...ButtonStylingForApp, margin: "0px 10px" }}
         >
-          Periodize template
+          Save training plan
         </Button>
       </Box>
       <ModalForCreatingPeriodizedTemplate

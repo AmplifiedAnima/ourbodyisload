@@ -1,7 +1,5 @@
 import React, { useEffect } from 'react';
 import { Grid, Typography, Button, Select, MenuItem, Box } from '@mui/material';
-import { ButtonStylingForApp } from '../../../../globalStyles/ButtonStylingForApp';
-import { SearchInput } from '../../HeaderComponent/SearchInput';
 
 import { ExerciseHandlersInterface } from '../../../../interfaces/Exercise.interface';
 import arrowRight from './assets/arrow-right-circle.svg';
@@ -86,26 +84,6 @@ const GridWithOptionsForPeriodizationModalTemplate: React.FC<
                 </MenuItem>
               );
             })}
-          </Select>
-
-          <Typography variant="body1" gutterBottom mb={0.5}>
-            Periodization
-          </Typography>
-          <Select
-            value={exerciseHandlers.periodization}
-            onChange={exerciseHandlers.handlePeriodizationChange}
-            displayEmpty
-            fullWidth
-            variant="outlined"
-            sx={{
-              mb: 4,
-              width: '200px',
-              height: '30px',
-            }}
-          >
-            <MenuItem value="power">Conjugate</MenuItem>
-            <MenuItem value="strength">Undulating</MenuItem>
-            <MenuItem value="hypertrophy">Linear</MenuItem>
           </Select>
         </Grid>
         <ExerciseListComponent
